@@ -3,6 +3,8 @@ import 'package:flutter_nav2_oop/nav2/models/tab_nav_state.dart';
 import 'package:flutter_nav2_oop/nav2/routing/route_path.dart';
 import 'package:flutter_nav2_oop/nav2/screens/tabbed_nav_screen.dart';
 
+import 'no_animation_transition_delegate.dart';
+
 class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<RoutePath> {
   final GlobalKey<NavigatorState> navigatorKey;
@@ -31,7 +33,7 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
 
     return Navigator(
       key: navigatorKey,
-      //transitionDelegate: NoAnimationTransitionDelegate(),
+      transitionDelegate: NoAnimationTransitionDelegate(),
       pages: pageStack,
       onPopPage: onBackButtonPress,
     );
