@@ -6,7 +6,7 @@ class RoutePath {
   final String resource;
   final int navTabIndex;
 
-  RoutePath({
+  const RoutePath({
     required this.navTabIndex,
     required this.resource
   });

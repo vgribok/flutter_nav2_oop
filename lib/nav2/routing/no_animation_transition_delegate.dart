@@ -1,7 +1,8 @@
 import 'package:flutter/widgets.dart';
 
-// ...
-
+/// Disables default pop-from-screen-bottom page transition animation.
+///
+/// Lifted from https://api.flutter.dev/flutter/widgets/TransitionDelegate-class.html
 class NoAnimationTransitionDelegate extends TransitionDelegate<void> {
   @override
   Iterable<RouteTransitionRecord> resolve({

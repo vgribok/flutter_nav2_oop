@@ -10,7 +10,7 @@ class NavAwareRouteInfoParser extends RouteInformationParser<RoutePath> {
   final List<RoutePathFactory> routeParsers;
   final TabNavState navState;
 
-  NavAwareRouteInfoParser({required this.navState, required this.routeParsers});
+  const NavAwareRouteInfoParser({required this.navState, required this.routeParsers});
 
   @override
   Future<RoutePath> parseRouteInformation(RouteInformation routeInformation) {

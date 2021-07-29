@@ -4,7 +4,7 @@ abstract class DetailsRoutePath<T> extends RoutePath {
 
   final T id;
 
-  DetailsRoutePath({
+  const DetailsRoutePath({
     required int navTabIndex,
     required this.id,
     required String resource

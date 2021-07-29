@@ -15,13 +15,13 @@ class BooksListScreen extends TabbedNavScreen {
   static int get selectedBookId => selectedBook.value == null ? -1 : books.indexOf(selectedBook.value!);
   static set selectedBookId(int bookId) => selectedBook.value = books[bookId];
 
-  static final List<Book> books = [
+  static const List<Book> books = [
     Book('Stranger in a Strange Land', 'Robert A. Heinlein'),
     Book('Foundation', 'Isaac Asimov'),
     Book('Fahrenheit 451', 'Ray Bradbury'),
   ];
 
-  BooksListScreen({required TabNavState navState}) :
+  const BooksListScreen({required TabNavState navState}) :
     super(
         pageTitle: 'Books',
         tabIndex: navTabIndex,

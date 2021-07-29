@@ -6,7 +6,7 @@ class NotFoundRoutePath extends RoutePath {
 
   final Uri notFoundUri;
 
-  NotFoundRoutePath({required this.notFoundUri, required int navTabIndex}) :
+  const NotFoundRoutePath({required this.notFoundUri, required int navTabIndex}) :
     super(navTabIndex: navTabIndex, resource: '404-page-not-found');
 
   @override

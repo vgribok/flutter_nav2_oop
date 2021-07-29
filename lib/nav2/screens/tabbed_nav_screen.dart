@@ -16,7 +16,7 @@ abstract class TabbedNavScreen extends StatelessWidget {
   static TabItemBuilder tabItemBuilder = buildTabItem;
   static AppBarBuilder appBarBuilder = buildAppBar;
 
-  TabbedNavScreen(
+  const TabbedNavScreen(
       {
         String? pageTitle,
         required int tabIndex,

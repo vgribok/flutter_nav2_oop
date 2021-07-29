@@ -9,12 +9,14 @@ class TabInfo {
   final IconData icon;
   final String? title;
   final TabRootScreenFactory rootScreenFactory;
+  //final List<ChangeNotifier>? stateItems;
 
-  TabInfo ({
+  const TabInfo ({
     required this.icon,
     this.title,
     required this.id,
-    required this.rootScreenFactory
+    required this.rootScreenFactory,
+    //this.stateItems
   });
 
   Iterable<TabbedNavScreen> screenStack(TabNavState navState) sync* {
