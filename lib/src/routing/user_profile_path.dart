@@ -6,7 +6,7 @@ class UserProfilePath extends RoutePath {
 
   static const String resourceName = 'profile';
 
-  UserProfilePath() : super(
+  const UserProfilePath() : super(
       navTabIndex: UserProfileScreen.navTabIndex,
       resource: resourceName
   );

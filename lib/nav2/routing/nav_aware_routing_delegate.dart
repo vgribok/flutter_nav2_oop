@@ -10,17 +10,13 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
   final GlobalKey<NavigatorState> navigatorKey;
 
   final TabNavState navState;
-  final List<ChangeNotifier> _stateItems;
 
   NavAwareRouterDelegate({
     required this.navState,
-    required List<ChangeNotifier>? stateItems,
   }) :
-    navigatorKey = GlobalKey<NavigatorState>(),
-    _stateItems = [...?stateItems]
+    navigatorKey = GlobalKey<NavigatorState>()
   {
     navState.addListener(notifyListeners);
-    _stateItems.forEach((stateItem) => stateItem.addListener(notifyListeners));
   }
 
   @override
@@ -57,5 +53,5 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
 
   @override
   Future<void> setNewRoutePath(RoutePath path) =>
-      path.configureState(navState, _stateItems);
+      path.configureStateFromUri(navState);
 }

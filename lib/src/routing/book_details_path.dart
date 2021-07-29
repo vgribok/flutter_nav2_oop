@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_nav2_oop/nav2/models/tab_nav_state.dart';
 import 'package:flutter_nav2_oop/nav2/routing/details_route_path.dart';
 import 'package:flutter_nav2_oop/nav2/routing/route_path.dart';
@@ -11,9 +10,9 @@ import 'book_list_path.dart';
 
 class BookDetailsPath extends DetailsRoutePath {
 
-  static final String resourceName = BookListPath.resourceName; // 'books'
+  static const String resourceName = BookListPath.resourceName; // 'books'
 
-  BookDetailsPath({required int bookId}) : super(
+  const BookDetailsPath({required int bookId}) : super(
     navTabIndex: BookDetailsScreen.navTabIndex,
     resource: resourceName,
     id: bookId
@@ -31,12 +30,9 @@ class BookDetailsPath extends DetailsRoutePath {
     return null;
   }
 
-  ValueNotifier<Book?> selectedBook(Iterable<ChangeNotifier> stateItems) =>
-      myState<ValueNotifier<Book?>>(stateItems);
-
   @override
-  Future<void> configureState(TabNavState navState, List<ChangeNotifier> stateItems) {
-    selectedBook(stateItems).value = BooksListScreen.books[id];
-    return super.configureState(navState, stateItems);
+  Future<void> configureStateFromUri(TabNavState navState) {
+    navState.selectedBook.value = Books.allBooks[id];
+    return super.configureStateFromUri(navState);
   }
 }

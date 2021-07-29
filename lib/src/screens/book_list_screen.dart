@@ -10,17 +10,6 @@ class BooksListScreen extends TabbedNavScreen {
 
   static const int navTabIndex = 0;
 
-  static final ValueNotifier<Book?> selectedBook = ValueNotifier(null);
-
-  static int get selectedBookId => selectedBook.value == null ? -1 : books.indexOf(selectedBook.value!);
-  static set selectedBookId(int bookId) => selectedBook.value = books[bookId];
-
-  static const List<Book> books = [
-    Book('Stranger in a Strange Land', 'Robert A. Heinlein'),
-    Book('Foundation', 'Isaac Asimov'),
-    Book('Fahrenheit 451', 'Ray Bradbury'),
-  ];
-
   const BooksListScreen({required TabNavState navState}) :
     super(
         pageTitle: 'Books',
@@ -32,22 +21,27 @@ class BooksListScreen extends TabbedNavScreen {
   Widget buildBody(BuildContext context) =>
       ListView(
           children: [
-            for (var book in books)
+            for (var book in Books.allBooks)
               ListTile(
                 title: Text(book.title),
                 subtitle: Text(book.author),
-                onTap: () => selectedBook.value = book,
+                onTap: () => Books.selectedBook.value = book,
               )
           ]
       );
 
   static bool isValidBookId(int bookId) {
-    return bookId >= 0 && bookId < books.length;
+    return bookId >= 0 && bookId < Books.allBooks.length;
   }
 
   @override
   TabbedNavScreen? get topScreen =>
-      selectedBook.value == null ? null : BookDetailsScreen(selectedBook: selectedBook, selectedBookId: selectedBookId, navState: navState);
+      Books.selectedBook.value == null ? null :
+        BookDetailsScreen(
+            selectedBook: navState.selectedBook.value!,
+            selectedBookId: navState.selectedBookId,
+            navState: navState
+        );
 
   @override
   RoutePath get routePath => BookListPath();

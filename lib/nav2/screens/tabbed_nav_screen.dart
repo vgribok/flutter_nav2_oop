@@ -27,7 +27,7 @@ abstract class TabbedNavScreen extends StatelessWidget {
 
   int get tabIndex => _tabIndex;
 
-  TabInfo get tab => navState.tabs[tabIndex];
+  TabInfo get tab => navState[tabIndex];
 
   String get pageTitle => _pageTitle ?? tab.title ?? tab.id;
 
@@ -43,10 +43,9 @@ abstract class TabbedNavScreen extends StatelessWidget {
           appBar: appBarBuilder(this, context, pageTitle),
           body: buildBody(context),
           bottomNavigationBar: BottomNavigationBar(
-            items: [
-              for(TabInfo tabInfo in navState.tabs)
-                tabItemBuilder(this, context, tabInfo)
-            ],
+            items:
+              navState.mapTabs((tabInfo) =>
+                  tabItemBuilder(this, context, tabInfo)).toList(),
             currentIndex: navState.selectedTabIndex,
             onTap: (newTabIndex) => navState.setSelectedTabIndex(newTabIndex, byUser: true)
           )

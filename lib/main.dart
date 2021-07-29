@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_nav2_oop/nav2/models/tab_info.dart';
 import 'package:flutter_nav2_oop/nav2/models/tab_nav_state.dart';
 import 'package:flutter_nav2_oop/nav2/routing/nav_aware_app_state.dart';
+import 'package:flutter_nav2_oop/src/models/book.dart';
 import 'package:flutter_nav2_oop/src/routing/book_details_path.dart';
 import 'package:flutter_nav2_oop/src/routing/book_list_path.dart';
 import 'package:flutter_nav2_oop/src/routing/settings_path.dart';
@@ -27,13 +28,16 @@ class _BooksAppState extends NavAwareAppState<BooksApp> {
       navState: TabNavState.instance,
       tabs: [
         TabInfo(id: 'Books', icon: Icons.home, title: 'Books',
-            rootScreenFactory: (nvState) => BooksListScreen(navState: nvState)),
+          stateItems: [Books.selectedBook],
+          rootScreenFactory: (nvState) => BooksListScreen(navState: nvState)
+        ),
         TabInfo(id: 'User', icon: Icons.person, title: 'User',
-            rootScreenFactory: (nvState) => UserProfileScreen(navState: nvState)),
+          rootScreenFactory: (nvState) => UserProfileScreen(navState: nvState)
+        ),
         TabInfo(id: 'Settings', icon: Icons.settings, title: 'Settings',
-            rootScreenFactory: (nvState) => SettingsScreen(navState: nvState))
+          rootScreenFactory: (nvState) => SettingsScreen(navState: nvState)
+        )
       ],
-      stateItems: [BooksListScreen.selectedBook],
       routeParsers: [
         BookListPath.fromUri,
         BookDetailsPath.fromUri,

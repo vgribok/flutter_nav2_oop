@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_nav2_oop/nav2/models/tab_nav_state.dart';
 import 'package:flutter_nav2_oop/nav2/routing/route_path.dart';
 
@@ -10,7 +9,7 @@ class NotFoundRoutePath extends RoutePath {
     super(navTabIndex: navTabIndex, resource: '404-page-not-found');
 
   @override
-  Future<void> configureState(TabNavState navState, List<ChangeNotifier> stateItems) {
+  Future<void> configureStateFromUri(TabNavState navState) {
     navState.notFoundUri = notFoundUri;
     return Future.value();
   }

@@ -11,7 +11,7 @@ class RoutePath {
     required this.resource
   });
 
-  Future<void> configureState(TabNavState navState, List<ChangeNotifier> stateItems) {
+  Future<void> configureStateFromUri(TabNavState navState) {
     navState.selectedTabIndex = navTabIndex;
     return Future.value();
   }

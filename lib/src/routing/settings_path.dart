@@ -6,7 +6,7 @@ class SettingsPath extends RoutePath {
 
   static const String resourceName = 'settings';
 
-  SettingsPath() :
+  const SettingsPath() :
     super(
       navTabIndex: SettingsScreen.navTabIndex,
       resource: resourceName

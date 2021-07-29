@@ -18,8 +18,7 @@ class NavAwareAppState<T extends StatefulWidget> extends State<T> {
     required String appTitle,
     required this.navState,
     required List<RoutePathFactory> routeParsers,
-    required List<TabInfo> tabs,
-    List<ChangeNotifier>? stateItems
+    required List<TabInfo> tabs
   }) :
     _appTitle = appTitle,
     _routeInformationParser = NavAwareRouteInfoParser(
@@ -27,11 +26,10 @@ class NavAwareAppState<T extends StatefulWidget> extends State<T> {
         routeParsers: routeParsers
     ),
     _routerDelegate = NavAwareRouterDelegate(
-        navState: navState,
-        stateItems: stateItems
+        navState: navState
     )
   {
-    navState.tabs.addAll(tabs);
+    navState.addTabs(tabs);
   }
 
   @override

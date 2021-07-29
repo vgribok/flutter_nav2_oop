@@ -8,7 +8,7 @@ import 'package:flutter_nav2_oop/src/routing/book_details_path.dart';
 class BookDetailsScreen extends TabbedNavScreen {
   static const navTabIndex = 0;
 
-  final ValueNotifier<Book?> selectedBook;
+  final Book selectedBook;
   final int selectedBookId;
 
   BookDetailsScreen({
@@ -16,14 +16,10 @@ class BookDetailsScreen extends TabbedNavScreen {
     required this.selectedBookId,
     required TabNavState navState
   }) : super(
-    pageTitle: selectedBook.value!.title,
+    pageTitle: selectedBook.title,
     tabIndex: navTabIndex,
     navState: navState
-  ){
-    if(selectedBook.value == null) throw Exception('A book must be selected to display its details');
-  }
-
-  Book get book => selectedBook.value!;
+  );
 
   @override
   Widget buildBody(BuildContext context) =>
@@ -33,8 +29,8 @@ class BookDetailsScreen extends TabbedNavScreen {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ...[
-              Text(book.title, style: Theme.of(context).textTheme.headline6),
-              Text(book.author, style: Theme.of(context).textTheme.subtitle1),
+              Text(selectedBook.title, style: Theme.of(context).textTheme.headline6),
+              Text(selectedBook.author, style: Theme.of(context).textTheme.subtitle1),
             ],
           ],
         ),
@@ -43,7 +39,7 @@ class BookDetailsScreen extends TabbedNavScreen {
   @override
   void removeFromNavStackTop() {
     super.removeFromNavStackTop();
-    selectedBook.value = null;
+    navState.selectedBook.value = null;
   }
 
   @override
