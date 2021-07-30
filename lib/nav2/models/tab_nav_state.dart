@@ -56,15 +56,17 @@ class TabNavState extends ChangeNotifier {
       _selectedTabIndex = selectedTabIndex;
 
     if(beforeSelectedTabIndex != _selectedTabIndex) {
+      // Ensure that state changes affecting screens in non-selected tabs
+      // do not cause entire app UI rebuild
       _tabs[beforeSelectedTabIndex].removeListener(notifyListeners);
+      // Bubble up notifications coming from state associated only with the current tab
       selectedTab.addListener(notifyListeners);
 
       notifyListeners();
       return;
     }
 
-    if(beforeSelectedTabIndex != _selectedTabIndex ||
-        beforeNotFoundUri != _notFoundUri ||
+    if(beforeNotFoundUri != _notFoundUri ||
         beforePrevSelectedTabIndex != _prevSelectedTabIndex
     ) {
       notifyListeners();
@@ -91,9 +93,12 @@ class TabNavState extends ChangeNotifier {
   }
 
 
-  Iterable<ChangeNotifier> allStateItems() sync* {
+  Iterable<ChangeNotifier> allStateItems({bool excludeCurrent: false}) sync* {
     for(var tab in _tabs)
-      yield* tab.stateItems;
+      if(excludeCurrent && tab == selectedTab)
+        continue;
+      else
+        yield* tab.stateItems;
   }
 
   T stateByType<T extends ChangeNotifier>() {
@@ -103,7 +108,7 @@ class TabNavState extends ChangeNotifier {
       return currentTabStateItem;
     }
 
-    for (var stateItem in allStateItems())
+    for (var stateItem in allStateItems(excludeCurrent: true))
       if (stateItem is T)
         return stateItem;
 
