@@ -9,7 +9,7 @@ import 'package:flutter_nav2_oop/src/screens/book_details_screen.dart';
 class BooksListScreen extends TabbedNavScreen {
   static const int navTabIndex = 0;
 
-  const BooksListScreen({required TabNavState navState})
+  const BooksListScreen(TabNavState navState)
       : super(pageTitle: 'Books', tabIndex: navTabIndex, navState: navState);
 
   @override

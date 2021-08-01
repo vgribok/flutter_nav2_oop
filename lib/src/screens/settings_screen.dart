@@ -7,7 +7,7 @@ import 'package:flutter_nav2_oop/src/routing/settings_path.dart';
 class SettingsScreen extends TabbedNavScreen {
   static const int navTabIndex = 2;
 
-  const SettingsScreen({required TabNavState navState}) :
+  const SettingsScreen(TabNavState navState) :
     super(tabIndex: navTabIndex, navState: navState);
 
   @override

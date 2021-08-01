@@ -27,15 +27,15 @@ class _BooksAppState extends NavAwareAppState<BooksApp> {
       appTitle: 'Books App',
       navState: TabNavState.instance,
       tabs: [
-        TabInfo(id: 'Books', icon: Icons.home, title: 'Books',
+        TabInfo(icon: Icons.home, title: 'Books',
           stateItems: [Books.selectedBook],
-          rootScreenFactory: (nvState) => BooksListScreen(navState: nvState)
+          rootScreenFactory: (nvState) => BooksListScreen(nvState)
         ),
-        TabInfo(id: 'User', icon: Icons.person, title: 'User',
-          rootScreenFactory: (nvState) => UserProfileScreen(navState: nvState)
+        TabInfo(icon: Icons.person, title: 'User',
+          rootScreenFactory: (nvState) => UserProfileScreen(nvState)
         ),
-        TabInfo(id: 'Settings', icon: Icons.settings, title: 'Settings',
-          rootScreenFactory: (nvState) => SettingsScreen(navState: nvState)
+        TabInfo(icon: Icons.settings, title: 'Settings',
+          rootScreenFactory: (nvState) => SettingsScreen(nvState)
         )
       ],
       routeParsers: [

@@ -29,7 +29,7 @@ abstract class TabbedNavScreen extends StatelessWidget {
 
   TabInfo get tab => navState[tabIndex];
 
-  String get pageTitle => _pageTitle ?? tab.title ?? tab.id;
+  String get pageTitle => _pageTitle ?? tab.title ?? 'Page title unspecified';
 
   ValueKey get key => ValueKey(routePath.location);
 
