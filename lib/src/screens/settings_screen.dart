@@ -8,7 +8,11 @@ class SettingsScreen extends TabbedNavScreen {
   static const int navTabIndex = 2;
 
   const SettingsScreen(TabNavState navState) :
-    super(tabIndex: navTabIndex, navState: navState);
+    super(
+      tabIndex: navTabIndex,
+      navState: navState,
+      screenTitle: 'Settings'
+    );
 
   @override
   Widget buildBody(BuildContext context) =>

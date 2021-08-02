@@ -4,21 +4,33 @@ import 'package:flutter_nav2_oop/nav2/routing/not_found_route_path.dart';
 import 'package:flutter_nav2_oop/nav2/routing/route_path.dart';
 import 'package:flutter_nav2_oop/nav2/screens/tabbed_nav_screen.dart';
 
+/// Factory method signature for instantiating a screen for 404 situations
 typedef NotFoundScreenFactory = UrlNotFoundScreen Function(TabNavState navState);
 
+/// A screen shown when user-typed URL in the browser address bar
+/// is invalid
 class UrlNotFoundScreen extends TabbedNavScreen {
 
-  static NotFoundScreenFactory notFoundScreenFactory = (navState) { return UrlNotFoundScreen(navState: navState);};
+  /// User-replaceable factory instantiating the
+  /// [UrlNotFoundScreen]
+  static NotFoundScreenFactory notFoundScreenFactory =
+      (navState) => UrlNotFoundScreen(navState: navState);
 
+  /// User-replaceable message to be shown on the screen
   static String defaultMessage = 'Following URI is incorrect: ';
+  /// User-replaceable screen title
   static String defaultTitle = 'Resource not found';
 
+  /// Invalid URL typed in the web browser
+  /// address bar by the user
   final Uri notFoundUri;
 
+  /// Do not instantiate directly! Use [notFoundScreenFactory]
+  /// instead.
   UrlNotFoundScreen({required TabNavState navState}) :
     notFoundUri = navState.notFoundUri!,
     super(
-      pageTitle: defaultTitle,
+      screenTitle: defaultTitle,
       tabIndex: navState.selectedTabIndex,
       navState: navState
     );
@@ -39,8 +51,9 @@ class UrlNotFoundScreen extends TabbedNavScreen {
     );
 
   @override
-  void removeFromNavStackTop() => navState.notFoundUri = null;
+  void updateStateOnScreenRemovalFromNavStackTop() =>
+      navState.notFoundUri = null;
 
   @override
-  RoutePath get routePath => NotFoundRoutePath(notFoundUri: notFoundUri, navTabIndex: tabIndex);
+  RoutePath get routePath => NotFoundRoutePath(notFoundUri: notFoundUri);
 }

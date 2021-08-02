@@ -9,16 +9,19 @@ class BookListPath extends RoutePath {
 
   const BookListPath() :
         super(
-          navTabIndex: BooksListScreen.navTabIndex,
+          tabIndex: BooksListScreen.navTabIndex,
           resource: resourceName);
 
   static RoutePath? fromUri(Uri uri) =>
       uri.path == '/' || uri.isSingleSegmentPath(resourceName) ?
         BookListPath() : null;
 
+  SelectedBookState selectedBookState(TabNavState navState) =>
+      stateByType<SelectedBookState>(navState)!;
+
   @override
   Future<void> configureStateFromUri(TabNavState navState) {
-    navState.selectedBook.value = null;
+    selectedBookState(navState).value = null;
     return super.configureStateFromUri(navState);
   }
 }

@@ -8,7 +8,7 @@ class SettingsPath extends RoutePath {
 
   const SettingsPath() :
     super(
-      navTabIndex: SettingsScreen.navTabIndex,
+      tabIndex: SettingsScreen.navTabIndex,
       resource: resourceName
     );
 

@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_nav2_oop/nav2/models/tab_nav_state.dart';
 import 'package:flutter_nav2_oop/nav2/screens/tabbed_nav_screen.dart';
 
+// TODO: Make application app colors customizable.
+// TODO: move app sample into /example folder.
+// TODO: publish the library on pub.dev
+
 /// Signature of a method instantiating a root screen for a tab
 typedef TabRootScreenFactory = TabbedNavScreen Function(TabNavState navState);
 

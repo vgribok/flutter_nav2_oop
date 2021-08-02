@@ -23,26 +23,32 @@ class BooksApp extends StatefulWidget {
 class _BooksAppState extends NavAwareAppState<BooksApp> {
 
   _BooksAppState() :
-    super(
-      appTitle: 'Books App',
-      navState: TabNavState.instance,
-      tabs: [
-        TabInfo(icon: Icons.home, title: 'Books',
-          stateItems: [Books.selectedBook],
-          rootScreenFactory: (nvState) => BooksListScreen(nvState)
-        ),
-        TabInfo(icon: Icons.person, title: 'User',
-          rootScreenFactory: (nvState) => UserProfileScreen(nvState)
-        ),
-        TabInfo(icon: Icons.settings, title: 'Settings',
-          rootScreenFactory: (nvState) => SettingsScreen(nvState)
+      super(
+          appTitle: 'Books App',
+          navState: TabNavState(),
+          tabs: [
+            TabInfo(
+              icon: Icons.home,
+              title: 'Books',
+              stateItems: [SelectedBookState()],
+              rootScreenFactory: (nvState) => BooksListScreen(nvState)),
+            TabInfo(
+              icon: Icons.person,
+              title: 'User',
+              rootScreenFactory: (nvState) => UserProfileScreen(nvState)),
+            TabInfo(
+              icon: Icons.settings,
+              title: 'Settings',
+              rootScreenFactory: (nvState) => SettingsScreen(nvState))
+          ],
+          routeParsers: [
+            BookListPath.fromUri,
+            BookDetailsPath.fromUri,
+            UserProfilePath.fromUri,
+            SettingsPath.fromUri
+          ],
         )
-      ],
-      routeParsers: [
-        BookListPath.fromUri,
-        BookDetailsPath.fromUri,
-        UserProfilePath.fromUri,
-        SettingsPath.fromUri
-      ],
-    );
+  {
+    navState.assertSingleStateItemOfEachType();
+  }
 }

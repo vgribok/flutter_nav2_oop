@@ -10,7 +10,7 @@ class UserProfileScreen extends TabbedNavScreen {
   static const int navTabIndex = 1;
 
   const UserProfileScreen(TabNavState navState) : super(
-    pageTitle: 'User Profile',
+    screenTitle: 'User Profile',
     tabIndex: navTabIndex,
     navState: navState
   );

@@ -16,7 +16,7 @@ class BookDetailsScreen extends TabbedNavScreen {
     required this.selectedBookId,
     required TabNavState navState
   }) : super(
-    pageTitle: selectedBook.title,
+    screenTitle: selectedBook.title,
     tabIndex: navTabIndex,
     navState: navState
   );
@@ -36,10 +36,12 @@ class BookDetailsScreen extends TabbedNavScreen {
         ),
       );
 
+  SelectedBookState get selectedBookState => stateByType<SelectedBookState>()!;
+
   @override
-  void removeFromNavStackTop() {
-    super.removeFromNavStackTop();
-    navState.selectedBook.value = null;
+  void updateStateOnScreenRemovalFromNavStackTop() {
+    super.updateStateOnScreenRemovalFromNavStackTop();
+    selectedBookState.value = null;
   }
 
   @override
