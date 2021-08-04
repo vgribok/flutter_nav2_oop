@@ -7,8 +7,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_nav2_oop/main.dart';
-import 'package:flutter_nav2_oop/nav2/utility/uri_extensions.dart';
+import '../example/lib/main.dart';
+import 'package:flutter_nav2_oop/all.dart';
 
 void main() {
 
