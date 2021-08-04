@@ -61,7 +61,6 @@ class TabNavState extends ChangeNotifier {
   set selectedTabIndex(int selectedTabIndex) =>
       _setSelectedTabIndex(selectedTabIndex, byUser: false);
 
-  /// Internal (todo: refactor method visibility).
   /// Sets currently selected tab. Set [byUser] to `true` when this action
   /// is initiated be user tapping a tab, and to `else` otherwise.
   void _setSelectedTabIndex(int selectedTabIndex, {required bool byUser}) {

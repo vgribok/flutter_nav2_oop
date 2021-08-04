@@ -18,10 +18,14 @@ typedef AppBarBuilder = AppBar Function(TabbedNavScreen, BuildContext, String);
 abstract class TabbedNavScreen extends StatelessWidget {
 
   /// Screen title
-  final String _screenTitle;
+  @protected
+  final String screenTitle;
+
   /// Index of navigation tab associated with this screen
   final int tabIndex;
   /// Application state holder
+
+  @protected
   final TabNavState navState;
 
   /// A user-replaceable factory building
@@ -41,7 +45,7 @@ abstract class TabbedNavScreen extends StatelessWidget {
 
   const TabbedNavScreen(
       {
-        required String screenTitle,
+        required this.screenTitle,
         /// Index of the navigation tab associated
         /// with the screen
         required this.tabIndex,
@@ -52,22 +56,19 @@ abstract class TabbedNavScreen extends StatelessWidget {
         /// is used as the key
         LocalKey? key
       }):
-        _screenTitle = screenTitle,
         _keySpecified = key != null,
         super(key: key);
-
-  /// Overridable getter returning screen title
-  String get screenTitle => _screenTitle;
 
   @override
   LocalKey get key => _keySpecified ? super.key! as LocalKey : ValueKey(routePath.location);
 
   /// Returns a Page instance used by the [Navigator] Widget
-  Page get page => MaterialPage(key: key, child: this);
+  Page get _page => MaterialPage(key: key, child: this);
 
   /// Overridden by subclasses, returns
   /// [RoutePath] instance corresponding to
   /// this screen
+  @protected
   RoutePath get routePath;
 
   /// Uses [Scaffold] to build navigation-aware screen UI
@@ -95,6 +96,7 @@ abstract class TabbedNavScreen extends StatelessWidget {
   /// Be sure to make this method very fast as
   /// it's called frequently to test-build
   /// screen stack.
+  @protected
   TabbedNavScreen? get topScreen => null;
 
   /// Non-root screens should override this method
@@ -106,15 +108,18 @@ abstract class TabbedNavScreen extends StatelessWidget {
       navState.changeTabOnBackArrowTapIfNecessary(this);
 
   /// Default implementation of the [tabItemBuilder] factory
+  @protected
   static BottomNavigationBarItem buildTabItem(TabbedNavScreen screen, BuildContext context, TabInfo tabInfo) =>
       BottomNavigationBarItem(icon: Icon(tabInfo.icon), label: tabInfo.title);
 
   /// Default implementation of the [appBarBuilder] factory
+  @protected
   static AppBar buildAppBar(TabbedNavScreen screen, BuildContext context, String pageTitle) =>
       AppBar(title: Text(pageTitle));
 
   /// Convenience method surfacing [TabNavState] ability
   /// to find state object by its type
+  @protected
   T? stateByType<T extends ChangeNotifier>({
     /// Set to true to search all tab state
     /// object collections, as opposed to

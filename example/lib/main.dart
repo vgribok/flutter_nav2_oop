@@ -6,6 +6,7 @@ import 'package:example/src/routing/user_profile_path.dart';
 import 'package:example/src/screens/book_list_screen.dart';
 import 'package:example/src/screens/settings_screen.dart';
 import 'package:example/src/screens/user_profile_screen.dart';
+import 'package:example/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nav2_oop/all.dart';
 
@@ -23,6 +24,7 @@ class _BooksAppState extends NavAwareAppState<BooksApp> {
   _BooksAppState() :
       super(
           appTitle: 'Books App',
+          theme: myTheme,
           navState: TabNavState(),
           tabs: [
             TabInfo(

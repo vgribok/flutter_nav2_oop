@@ -1,5 +1,9 @@
 library flutter_nav2_oop;
 
+// TODO: update README.md for changed file locations
+// TODO: publish the library on pub.dev
+// TODO: add localization support
+
 import 'package:flutter/material.dart';
 
 part './src/models/tab_info.dart';

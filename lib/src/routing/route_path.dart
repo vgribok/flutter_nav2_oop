@@ -25,6 +25,7 @@ class RoutePath {
   /// to ensure correct selected tab switching.
   /// Overriding this method is not required if all that needed
   /// is changing current navigation tab.
+  @protected
   Future<void> configureStateFromUri(TabNavState navState) {
     navState.selectedTabIndex = tabIndex;
     return Future.value();

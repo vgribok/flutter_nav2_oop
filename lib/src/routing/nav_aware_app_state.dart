@@ -16,6 +16,8 @@ class NavAwareAppState<T extends StatefulWidget> extends State<T> {
   final NavAwareRouterDelegate _routerDelegate;
   final NavAwareRouteInfoParser _routeInformationParser;
 
+  final ThemeData? _theme;
+
   NavAwareAppState({
     /// Application name
     required String appTitle,
@@ -25,13 +27,15 @@ class NavAwareAppState<T extends StatefulWidget> extends State<T> {
     /// user-typed URLs into [RoutePath] subclass instances
     required List<RoutePathFactory> routeParsers,
     /// Application navigation tab definitions
-    required List<TabInfo> tabs
+    required List<TabInfo> tabs,
+
+    /// Application color theme
+    ThemeData? theme
   }) :
     _appTitle = appTitle,
     _routeInformationParser = NavAwareRouteInfoParser(routeParsers: routeParsers),
-    _routerDelegate = NavAwareRouterDelegate(
-        navState: navState
-    )
+    _routerDelegate = NavAwareRouterDelegate(navState: navState),
+    _theme = theme
   {
     navState.addTabs(tabs);
   }
@@ -42,6 +46,7 @@ class NavAwareAppState<T extends StatefulWidget> extends State<T> {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: appTitle,
+      theme: _theme,
       routerDelegate: _routerDelegate,
       routeInformationParser: _routeInformationParser,
     );

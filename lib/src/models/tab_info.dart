@@ -1,8 +1,5 @@
 part of flutter_nav2_oop;
 
-// TODO: Make application app colors customizable.
-// TODO: publish the library on pub.dev
-
 /// Signature of a method instantiating a root screen for a tab
 typedef TabRootScreenFactory = TabbedNavScreen Function(TabNavState navState);
 

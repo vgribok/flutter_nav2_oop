@@ -27,7 +27,7 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
     // into the stack of screens.
     final List<Page<dynamic>> pageStack =
       navState._buildNavigatorScreenStack()
-          .map((screen) => screen.page)
+          .map((screen) => screen._page)
           .toList();
 
     // Feed page stack and standard back arrow

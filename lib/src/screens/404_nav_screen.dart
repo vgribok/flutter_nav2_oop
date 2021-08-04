@@ -19,12 +19,12 @@ class UrlNotFoundScreen extends TabbedNavScreen {
 
   /// Invalid URL typed in the web browser
   /// address bar by the user
-  final Uri notFoundUri;
+  final Uri _notFoundUri;
 
   /// Do not instantiate directly! Use [notFoundScreenFactory]
   /// instead.
   UrlNotFoundScreen({required TabNavState navState}) :
-    notFoundUri = navState.notFoundUri!,
+    _notFoundUri = navState.notFoundUri!,
     super(
       screenTitle: defaultTitle,
       tabIndex: navState.selectedTabIndex,
@@ -40,16 +40,16 @@ class UrlNotFoundScreen extends TabbedNavScreen {
         children: [
           Text(defaultMessage),
           Text(
-              '\"${navState.notFoundUri}\"',
+              '\"$_notFoundUri\"',
               style: TextStyle(fontWeight: FontWeight.bold)
           )
         ])
     );
 
-  @override
+  @override @protected
   void updateStateOnScreenRemovalFromNavStackTop() =>
       navState.notFoundUri = null;
 
-  @override
-  RoutePath get routePath => NotFoundRoutePath(notFoundUri: notFoundUri);
+  @override @protected
+  RoutePath get routePath => NotFoundRoutePath(notFoundUri: _notFoundUri);
 }
