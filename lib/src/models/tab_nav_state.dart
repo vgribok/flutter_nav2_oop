@@ -185,10 +185,12 @@ class TabNavState extends ChangeNotifier {
       return currentTabStateItem;
     }
 
-    for (var stateItem in _allStateItems(excludeCurrentTab: true))
-      if (stateItem is T) return stateItem;
+    T stateItem = _allStateItems(excludeCurrentTab: true)
+      .firstWhere((item) => item is T,
+        orElse: () => throw new Exception('State of type \"$T\" was not found')
+      ) as T;
 
-    throw new Exception('State of type \"$T\" was not found');
+    return stateItem;
   } // selectedTab.stateByType<T>();
 
   /// A convenience method for iterating tabs

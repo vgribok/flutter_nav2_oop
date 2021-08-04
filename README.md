@@ -1,9 +1,71 @@
 # Flutter 2 Navigator abstracted with OOP
 
-> **TL;DR** If you have tried Flutter Navigator 2.0 (FN2) and  were stymied by its complexity and opacity, fear not: this little (necessarily opinionated) library + tabbed app sample combo will ensure that you will not have to spend cycles writing navigation/routing-related boilerplate code and instead focus on your application "meat" code, supplying *[screens](example/lib/src/screens)*, *[routes](example/lib/src/routing)* that are mapped to those screens, and the *[app initialization code](example/lib/main.dart)* wiring together navigation tabs and their "root" screens, to have web & native UI and navigation working out-of-the box:<br/>
+> **TL;DR** If you have tried Flutter Navigator 2.0 (FN2) and  were stymied by its complexity and opacity, fear not: this little (necessarily opinionated) library + tabbed app sample combo will ensure that you will not have to spend cycles writing navigation/routing-related boilerplate code, instead of focusing on your application "meat" code, supplying *[screens](example/lib/src/screens)*, *[routes](example/lib/src/routing)* that are mapped to those screens, and the *[app initialization code](example/lib/main.dart)* wiring together navigation tabs and their "root" screens, to have web & native UI and navigation working out-of-the box:<br/>
+
+Your application `main.dart` will look like this:
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_nav2_oop/all.dart';
+import 'package:example/theme.dart';
+
+import 'package:example/src/models/book.dart';
+import 'package:example/src/routing/book_details_path.dart';
+import 'package:example/src/routing/book_list_path.dart';
+import 'package:example/src/routing/settings_path.dart';
+import 'package:example/src/routing/user_profile_path.dart';
+import 'package:example/src/screens/book_list_screen.dart';
+import 'package:example/src/screens/settings_screen.dart';
+import 'package:example/src/screens/user_profile_screen.dart';
+
+void main() {
+  runApp(BooksApp());
+}
+
+class BooksApp extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _BooksAppState();
+}
+
+class _BooksAppState extends NavAwareAppState<BooksApp> {
+
+  _BooksAppState() :
+      super(
+          appTitle: 'Books App',
+          theme: myTheme,
+          navState: TabNavState(),
+          tabs: [
+            TabInfo(
+              icon: Icons.home,
+              title: 'Books',
+              stateItems: [SelectedBookState()],
+              rootScreenFactory: (nvState) => BooksListScreen(nvState)),
+            TabInfo(
+              icon: Icons.person,
+              title: 'User',
+              rootScreenFactory: (nvState) => UserProfileScreen(nvState)),
+            TabInfo(
+              icon: Icons.settings,
+              title: 'Settings',
+              rootScreenFactory: (nvState) => SettingsScreen(nvState))
+          ],
+          routeParsers: [
+            BookListPath.fromUri,
+            BookDetailsPath.fromUri,
+            UserProfilePath.fromUri,
+            SettingsPath.fromUri
+          ],
+        )
+  {
+    navState.assertSingleStateItemOfEachType();
+  }
+}
+```
+Once your [screen](./example/lib/src/screens/book_list_screen.dart) and [route](./example/lib/src/routing/book_details_path.dart) classes are implemented,
+you get your app looking like this.
 
 ![web UI screenshot](./doc/images/nav_2_app_android.png) 
 ![web UI screenshot](./doc/images/nav_2_app_web.png)
+
 
 ## Challenge to Overcome
 

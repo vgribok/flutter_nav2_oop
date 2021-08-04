@@ -59,15 +59,13 @@ class TabInfo {
     // screen on top
     for (TabbedNavScreen? nextScreen = rootScreen.topScreen;
         nextScreen != null;
-        nextScreen = nextScreen.topScreen) yield nextScreen;
+        nextScreen = nextScreen.topScreen)
+      yield nextScreen;
   }
 
   /// Finds a state object by its type in tab's state object collection
-  T? stateByType<T extends ChangeNotifier>() {
-    for (var stateItem in stateItems)
-      if (stateItem is T) return stateItem;
-    return null;
-  }
+  T? stateByType<T extends ChangeNotifier>() =>
+      stateItems.firstSafe((e) => e is T) as T?;
 
   /// Attaches external listener of state change notifications.
   ///

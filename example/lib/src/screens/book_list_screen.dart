@@ -17,11 +17,14 @@ class BooksListScreen extends TabbedNavScreen {
           ListTile(
             title: Text(book.title),
             subtitle: Text(book.author),
-            onTap: () => selectedBookState.value = book,
+            onTap: () => selectedBookState.selectedBook = book,
           )
       ]);
 
+  @protected
   SelectedBookState get selectedBookState => stateByType<SelectedBookState>()!;
+
+  @protected
   Book? get selectedBook => selectedBookState.selectedBook;
 
   @override

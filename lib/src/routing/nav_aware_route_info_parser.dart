@@ -12,26 +12,25 @@ class NavAwareRouteInfoParser extends RouteInformationParser<RoutePath> {
   /// Collection of parsers each serving as a factory
   /// for instantiating [RoutePath] subclass corresponding
   /// to entered URL
-  final List<RoutePathFactory> routeParsers;
+  final List<RoutePathFactory> _routeParsers;
 
-  const NavAwareRouteInfoParser({required this.routeParsers});
+  const NavAwareRouteInfoParser({required List<RoutePathFactory> routeParsers})
+    : _routeParsers = routeParsers;
 
   @override
   Future<RoutePath> parseRouteInformation(RouteInformation routeInformation) {
     final uri = Uri.parse(routeInformation.location!);
 
-    /// Let each route factory to test-parse the URL.
-    for (RoutePathFactory routePathFactory in routeParsers) {
-      RoutePath? path = routePathFactory(uri);
-      if (path != null) {
-        return Future.value(path);
-      }
-    }
+    /// Let each route factory test-parse the URL.
+    RoutePath? path = _routeParsers
+      .map((parser) => parser(uri))
+      .firstSafe((path) => path != null);
 
-    // None of URL parsers recognized the URL.
+    // None of URL parsers have recognized the URL.
     // Return the 404 route object.
     return Future.value(
-      NotFoundRoutePath(notFoundUri: uri));
+        path ?? NotFoundRoutePath(notFoundUri: uri)
+    );
   }
 
   @override

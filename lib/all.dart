@@ -1,6 +1,6 @@
 library flutter_nav2_oop;
 
-// TODO: update README.md for changed file locations
+// TODO: rename the package as nav2_with_tabs
 // TODO: publish the library on pub.dev
 // TODO: add localization support
 
@@ -21,3 +21,4 @@ part './src/screens/404_nav_screen.dart';
 part './src/screens/tabbed_nav_screen.dart';
 
 part './src/utility/uri_extensions.dart';
+part './src/utility/iterable_extensions.dart';

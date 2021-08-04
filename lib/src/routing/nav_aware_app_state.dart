@@ -28,7 +28,6 @@ class NavAwareAppState<T extends StatefulWidget> extends State<T> {
     required List<RoutePathFactory> routeParsers,
     /// Application navigation tab definitions
     required List<TabInfo> tabs,
-
     /// Application color theme
     ThemeData? theme
   }) :
