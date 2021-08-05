@@ -31,8 +31,6 @@ dependencies:
   flutter_nav2_oop:
     path: ../
 
-#  convex_bottom_bar: ^3.0.0
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
