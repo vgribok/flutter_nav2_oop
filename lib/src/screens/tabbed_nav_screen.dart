@@ -75,14 +75,24 @@ abstract class TabbedNavScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       Scaffold(
-          appBar: appBarBuilder(this, context, screenTitle),
+          appBar: buildAppBar(context),
           body: buildBody(context),
           bottomNavigationBar: tabBarBuilder(context, navState._tabs, navState.selectedTabIndex,
               (newTabIndex) => navState._setSelectedTabIndex(newTabIndex, byUser: true)
           )
       );
 
+  /// Method to override in subclasses to build screen-specific
+  /// app bar.
+  ///
+  /// Default implementation calls application-wide [appBarBuilder]
+  /// factory method building same app bar for every screen.
+  @protected
+  PreferredSizeWidget? buildAppBar(BuildContext context) =>
+      appBarBuilder(this, context, screenTitle);
+
   /// Override in subclasses to supply screen body
+  @protected
   Widget buildBody(BuildContext context);
 
   /// Override to supply "child" screen based
