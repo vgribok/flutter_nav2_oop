@@ -1,9 +1,9 @@
 part of flutter_nav2_oop;
 
-/// A signature of a programmer-replaceable method building each tab's
-/// [BottomNavigationBarItem] instance.
+/// A signature of a programmer-replaceable method building
+/// bottom navigation tab Widget.
 ///
-typedef TabItemBuilder = BottomNavigationBarItem Function(TabbedNavScreen, BuildContext, TabInfo);
+typedef TabBarBuilder = Widget Function(BuildContext context, Iterable<TabInfo> tabs, int initialSelection, void Function(int index) tapHandler);
 
 /// A signature of a programmer-replaceable method building
 /// application screens' [AppBar]
@@ -29,16 +29,16 @@ abstract class TabbedNavScreen extends StatelessWidget {
   final TabNavState navState;
 
   /// A user-replaceable factory building
-  /// [BottomNavigationBarItem] instance for each tab.
+  /// bottom navigation bar.
   ///
-  /// Default implementation is the static [buildTabItem] method.
-  static TabItemBuilder tabItemBuilder = buildTabItem;
+  /// Default implementation is the static [buildDefaultBottomTabBar] method.
+  static TabBarBuilder tabBarBuilder = buildDefaultBottomTabBar;
 
   /// A user-replaceable factory building
   /// [AppBar] for each application screen.
   ///
-  /// Default implementation is the static [buildAppBar] method.
-  static AppBarBuilder appBarBuilder = buildAppBar;
+  /// Default implementation is the static [buildDefaultAppBar] method.
+  static AppBarBuilder appBarBuilder = buildDefaultAppBar;
 
   /// True if key is supplied to the constructor explicitly
   final bool _keySpecified;
@@ -77,12 +77,8 @@ abstract class TabbedNavScreen extends StatelessWidget {
       Scaffold(
           appBar: appBarBuilder(this, context, screenTitle),
           body: buildBody(context),
-          bottomNavigationBar: BottomNavigationBar(
-            items:
-              navState.mapTabs((tabInfo) =>
-                  tabItemBuilder(this, context, tabInfo)).toList(),
-            currentIndex: navState.selectedTabIndex,
-            onTap: (newTabIndex) => navState._setSelectedTabIndex(newTabIndex, byUser: true)
+          bottomNavigationBar: tabBarBuilder(context, navState._tabs, navState.selectedTabIndex,
+              (newTabIndex) => navState._setSelectedTabIndex(newTabIndex, byUser: true)
           )
       );
 
@@ -107,15 +103,19 @@ abstract class TabbedNavScreen extends StatelessWidget {
   void updateStateOnScreenRemovalFromNavStackTop() =>
       navState.changeTabOnBackArrowTapIfNecessary(this);
 
-  /// Default implementation of the [tabItemBuilder] factory
-  @protected
-  static BottomNavigationBarItem buildTabItem(TabbedNavScreen screen, BuildContext context, TabInfo tabInfo) =>
-      BottomNavigationBarItem(icon: Icon(tabInfo.icon), label: tabInfo.title);
-
   /// Default implementation of the [appBarBuilder] factory
-  @protected
-  static AppBar buildAppBar(TabbedNavScreen screen, BuildContext context, String pageTitle) =>
+  static AppBar buildDefaultAppBar(TabbedNavScreen screen, BuildContext context, String pageTitle) =>
       AppBar(title: Text(pageTitle));
+
+  /// Default implementation of the [tabBarBuilder] factory
+  static Widget buildDefaultBottomTabBar(
+      BuildContext context, Iterable<TabInfo> tabs, int initialSelection, ValueChanged<int>? tapHandler) =>
+      BottomNavigationBar(
+          items:
+          tabs.map((tabInfo) => BottomNavigationBarItem(icon: Icon(tabInfo.icon), label: tabInfo.title)).toList(),
+          currentIndex: initialSelection,
+          onTap: tapHandler
+      );
 
   /// Convenience method surfacing [TabNavState] ability
   /// to find state object by its type

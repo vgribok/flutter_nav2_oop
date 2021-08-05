@@ -1,3 +1,4 @@
+// import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:example/src/models/book.dart';
 import 'package:example/src/routing/book_details_path.dart';
 import 'package:example/src/routing/book_list_path.dart';
@@ -50,5 +51,18 @@ class _BooksAppState extends NavAwareAppState<BooksApp> {
         )
   {
     navState.assertSingleStateItemOfEachType();
+    //TabbedNavScreen.tabBarBuilder = buildFancyTabBar;
   }
+
+  // Widget buildFancyTabBar(BuildContext context, Iterable<TabInfo> tabs, int initialSelection, void Function(int index) tapHandler) =>
+  //     ConvexAppBar.badge(
+  //       <int, dynamic>{0: Books.allBooks.length.toString()},
+  //       style: TabStyle.reactCircle,
+  //       items: tabs.map((tab) => TabItem(icon: tab.icon, title: tab.title)).toList(),
+  //       onTap: tapHandler,
+  //       initialActiveIndex: initialSelection,
+  //       backgroundColor: myTheme.primaryColorDark,
+  //       badgeTextColor: myTheme.primaryColorLight,
+  //       badgeColor: Colors.blueAccent,
+  //     );
 }
