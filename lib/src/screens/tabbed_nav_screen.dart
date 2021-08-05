@@ -7,7 +7,7 @@ typedef TabBarBuilder = Widget Function(BuildContext context, Iterable<TabInfo> 
 
 /// A signature of a programmer-replaceable method building
 /// application screens' [AppBar]
-typedef AppBarBuilder = AppBar Function(TabbedNavScreen, BuildContext, String);
+typedef AppBarBuilder = AppBar Function(TabbedNavScreen, BuildContext);
 
 /// A base class for all application screens.
 ///
@@ -45,6 +45,7 @@ abstract class TabbedNavScreen extends StatelessWidget {
 
   const TabbedNavScreen(
       {
+        /// Screen title
         required this.screenTitle,
         /// Index of the navigation tab associated
         /// with the screen
@@ -54,7 +55,7 @@ abstract class TabbedNavScreen extends StatelessWidget {
         /// Optional user-supplied key.
         /// If not supplied, route URI
         /// is used as the key
-        LocalKey? key
+        LocalKey? key,
       }):
         _keySpecified = key != null,
         super(key: key);
@@ -77,9 +78,7 @@ abstract class TabbedNavScreen extends StatelessWidget {
       Scaffold(
           appBar: buildAppBar(context),
           body: buildBody(context),
-          bottomNavigationBar: tabBarBuilder(context, navState._tabs, navState.selectedTabIndex,
-              (newTabIndex) => navState._setSelectedTabIndex(newTabIndex, byUser: true)
-          )
+          bottomNavigationBar: buildNavTabBar(context)
       );
 
   /// Method to override in subclasses to build screen-specific
@@ -89,7 +88,19 @@ abstract class TabbedNavScreen extends StatelessWidget {
   /// factory method building same app bar for every screen.
   @protected
   PreferredSizeWidget? buildAppBar(BuildContext context) =>
-      appBarBuilder(this, context, screenTitle);
+      appBarBuilder(this, context);
+
+  /// Method to override in subclasses to build scree-specific
+  /// bottom navigation bar. May return `null` to not render nav bar.
+  ///
+  /// Default implementation calls application-wide [tabBarBuilder]
+  /// factory method building same bottom navigation bar for every
+  /// screen.
+  @protected
+  Widget? buildNavTabBar(BuildContext context) =>
+      tabBarBuilder(context, navState._tabs, navState.selectedTabIndex,
+        (newTabIndex) => navState._setSelectedTabIndex(newTabIndex, byUser: true)
+      );
 
   /// Override in subclasses to supply screen body
   @protected
@@ -114,18 +125,22 @@ abstract class TabbedNavScreen extends StatelessWidget {
       navState.changeTabOnBackArrowTapIfNecessary(this);
 
   /// Default implementation of the [appBarBuilder] factory
-  static AppBar buildDefaultAppBar(TabbedNavScreen screen, BuildContext context, String pageTitle) =>
-      AppBar(title: Text(pageTitle));
+  static AppBar buildDefaultAppBar(TabbedNavScreen screen, BuildContext context) =>
+      AppBar(
+        title: Text(screen.screenTitle),
+        actions: screen.buildAbbBarActions(context)
+      );
 
   /// Default implementation of the [tabBarBuilder] factory
   static Widget buildDefaultBottomTabBar(
       BuildContext context, Iterable<TabInfo> tabs, int initialSelection, ValueChanged<int>? tapHandler) =>
-      BottomNavigationBar(
-          items:
-          tabs.map((tabInfo) => BottomNavigationBarItem(icon: Icon(tabInfo.icon), label: tabInfo.title)).toList(),
-          currentIndex: initialSelection,
-          onTap: tapHandler
-      );
+        BottomNavigationBar(
+            items: tabs.map(
+                (tabInfo) => BottomNavigationBarItem(icon: Icon(tabInfo.icon), label: tabInfo.title)
+            ).toList(),
+            currentIndex: initialSelection,
+            onTap: tapHandler
+        );
 
   /// Convenience method surfacing [TabNavState] ability
   /// to find state object by its type
@@ -137,4 +152,12 @@ abstract class TabbedNavScreen extends StatelessWidget {
     bool stateObjectIsInAnotherTab = false
   }) =>
       navState.stateByType<T>(tabIndex: tabIndex, searchOtherTabs: stateObjectIsInAnotherTab);
+
+  /// Provides ability to set screen-specific actions
+  /// on the right side of the [AppBar].
+  ///
+  /// Default implementation returns null resulting
+  /// in no action Widgets added
+  @protected
+  List<Widget>? buildAbbBarActions(BuildContext context) => null;
 }

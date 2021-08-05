@@ -19,6 +19,7 @@ part './src/routing/route_path.dart';
 
 part './src/screens/404_nav_screen.dart';
 part './src/screens/tabbed_nav_screen.dart';
+part './src/screens/full_screen_modal_dialog.dart';
 
 part './src/utility/uri_extensions.dart';
 part './src/utility/iterable_extensions.dart';

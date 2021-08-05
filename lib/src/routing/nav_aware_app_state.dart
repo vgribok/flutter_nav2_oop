@@ -48,6 +48,7 @@ class NavAwareAppState<T extends StatefulWidget> extends State<T> {
       theme: _theme,
       routerDelegate: _routerDelegate,
       routeInformationParser: _routeInformationParser,
+      debugShowCheckedModeBanner: false // Hide 'Debug' ribbon on the AppBar
     );
   }
 

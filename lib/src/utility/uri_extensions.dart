@@ -11,4 +11,25 @@ extension UriExtensions on Uri {
     final segments = nonEmptyPathSegments;
     return segments.length == 1 && segments[0] == pathSegment;
   }
+
+  /// Checks whether URI's path segments match exactly
+  /// passed [path] segments.
+  ///
+  /// For example, if [Uri] was 'http://host/orders/fulfilled',
+  /// this method will return true if [path] argument is
+  /// '/orders/fulfilled', with leading and trailing slashes
+  /// ignored.
+  bool pathsMatch(String path) {
+    final segments = nonEmptyPathSegments;
+    final List<String> segmentsToMatch = path.split('/')
+        .where((pathSegment) => pathSegment.isNotEmpty).toList();
+
+    if(segments.length != segmentsToMatch.length)
+      return false;
+
+    for(int i = 0 ; i < segments.length ; i++)
+      if(segments[i] != segmentsToMatch[i]) return false;
+
+    return true;
+  }
 }
