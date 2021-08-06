@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:example/src/models/book.dart';
 import 'package:example/src/models/show_settings_modal_state.dart';
 import 'package:example/src/routing/book_details_path.dart';
@@ -9,7 +10,6 @@ import 'package:example/src/screens/book_list_screen.dart';
 import 'package:example/src/screens/settings_screen.dart';
 import 'package:example/src/screens/user_profile_screen.dart';
 import 'package:example/theme.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_nav2_oop/all.dart';
 
 void main() {
@@ -18,40 +18,40 @@ void main() {
 
 class BooksApp extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _BooksAppState();
+  State<StatefulWidget> createState() => BooksAppState();
 }
 
-class _BooksAppState extends NavAwareAppState<BooksApp> {
+class BooksAppState extends NavAwareAppState<BooksApp> {
 
-  _BooksAppState() :
+  BooksAppState() :
       super(
-          appTitle: 'Books App',
-          theme: myTheme,
-          navState: TabNavState(),
-          tabs: [
-            TabInfo(
+        appTitle: 'Books App',
+        theme: myTheme,
+        navState: NavAwareState(NavType.Drawer),
+        tabs: [
+          TabInfo(
               icon: Icons.home,
               title: 'Books',
               stateItems: [SelectedBookState()],
               rootScreenFactory: (nvState) => BooksListScreen(nvState)),
-            TabInfo(
+          TabInfo(
               icon: Icons.person,
               title: 'User',
               rootScreenFactory: (nvState) => UserProfileScreen(nvState)),
-            TabInfo(
+          TabInfo(
               icon: Icons.settings,
               title: 'Settings',
               stateItems: [ShowSettingsModalState()],
               rootScreenFactory: (nvState) => SettingsScreen(nvState))
-          ],
-          routeParsers: [
-            BookListPath.fromUri,
-            BookDetailsPath.fromUri,
-            UserProfilePath.fromUri,
-            SettingsPath.fromUri,
-            SettingsModalChildPath.fromUri
-          ],
-        )
+        ],
+        routeParsers: [
+          BookListPath.fromUri,
+          BookDetailsPath.fromUri,
+          UserProfilePath.fromUri,
+          SettingsPath.fromUri,
+          SettingsModalChildPath.fromUri
+        ],
+      )
   {
     navState.assertSingleStateItemOfEachType();
   }

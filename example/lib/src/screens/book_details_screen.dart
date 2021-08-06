@@ -3,7 +3,7 @@ import 'package:example/src/routing/book_details_path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nav2_oop/all.dart';
 
-class BookDetailsScreen extends TabbedNavScreen {
+class BookDetailsScreen extends NavScreen {
   static const navTabIndex = 0;
 
   final Book selectedBook;
@@ -12,7 +12,7 @@ class BookDetailsScreen extends TabbedNavScreen {
   BookDetailsScreen({
     required this.selectedBook,
     required this.selectedBookId,
-    required TabNavState navState
+    required NavAwareState navState
   }) : super(
     screenTitle: selectedBook.title,
     tabIndex: navTabIndex,

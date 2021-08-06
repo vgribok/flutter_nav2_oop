@@ -26,7 +26,7 @@ class RoutePath {
   /// Overriding this method is not required if all that needed
   /// is changing current navigation tab.
   @protected
-  Future<void> configureStateFromUri(TabNavState navState) {
+  Future<void> configureStateFromUri(NavAwareState navState) {
     navState.selectedTabIndex = tabIndex;
     return Future.value();
   }
@@ -43,10 +43,10 @@ class RoutePath {
   /// Maps current route object to Flutter-required [RouteInformation] object
   RouteInformation? get _routeInformation => RouteInformation(location: location);
 
-  /// Convenience method surfacing [TabNavState] ability
+  /// Convenience method surfacing [NavAwareState] ability
   /// to find state object by its type
   T? stateByType<T extends ChangeNotifier>(
-      TabNavState navState,
+      NavAwareState navState,
       {
         /// Set to true to search all tab state
         /// object collections, as opposed to

@@ -5,17 +5,18 @@
 Your application `main.dart` will look like this:
 ```dart
 import 'package:flutter/material.dart';
-import 'package:flutter_nav2_oop/all.dart';
-import 'package:example/theme.dart';
-
 import 'package:example/src/models/book.dart';
+import 'package:example/src/models/show_settings_modal_state.dart';
 import 'package:example/src/routing/book_details_path.dart';
 import 'package:example/src/routing/book_list_path.dart';
+import 'package:example/src/routing/settings_modal_child_path.dart';
 import 'package:example/src/routing/settings_path.dart';
 import 'package:example/src/routing/user_profile_path.dart';
 import 'package:example/src/screens/book_list_screen.dart';
 import 'package:example/src/screens/settings_screen.dart';
 import 'package:example/src/screens/user_profile_screen.dart';
+import 'package:example/theme.dart';
+import 'package:flutter_nav2_oop/all.dart';
 
 void main() {
   runApp(BooksApp());
@@ -23,44 +24,47 @@ void main() {
 
 class BooksApp extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _BooksAppState();
+  State<StatefulWidget> createState() => BooksAppState();
 }
 
-class _BooksAppState extends NavAwareAppState<BooksApp> {
+class BooksAppState extends NavAwareAppState<BooksApp> {
 
-  _BooksAppState() :
+  BooksAppState() :
       super(
-          appTitle: 'Books App',
-          theme: myTheme,
-          navState: TabNavState(),
-          tabs: [
-            TabInfo(
+        appTitle: 'Books App',
+        theme: myTheme,
+        navState: NavAwareState(NavType.Drawer),
+        tabs: [
+          TabInfo(
               icon: Icons.home,
               title: 'Books',
               stateItems: [SelectedBookState()],
               rootScreenFactory: (nvState) => BooksListScreen(nvState)),
-            TabInfo(
+          TabInfo(
               icon: Icons.person,
               title: 'User',
               rootScreenFactory: (nvState) => UserProfileScreen(nvState)),
-            TabInfo(
+          TabInfo(
               icon: Icons.settings,
               title: 'Settings',
+              stateItems: [ShowSettingsModalState()],
               rootScreenFactory: (nvState) => SettingsScreen(nvState))
-          ],
-          routeParsers: [
-            BookListPath.fromUri,
-            BookDetailsPath.fromUri,
-            UserProfilePath.fromUri,
-            SettingsPath.fromUri
-          ],
-        )
+        ],
+        routeParsers: [
+          BookListPath.fromUri,
+          BookDetailsPath.fromUri,
+          UserProfilePath.fromUri,
+          SettingsPath.fromUri,
+          SettingsModalChildPath.fromUri
+        ],
+      )
   {
     navState.assertSingleStateItemOfEachType();
   }
 }
 ```
-Once your [screen](./example/lib/src/screens/book_list_screen.dart) and [route](./example/lib/src/routing/book_details_path.dart) classes are implemented,
+
+Once your [screen](example/lib/src/screens/book_list_screen.dart) and [route](example/lib/src/routing/book_details_path.dart) classes are implemented,
 you get your app looking like this.
 
 ![web UI screenshot](./doc/images/nav_2_app_android.png) 
@@ -92,7 +96,7 @@ The [reusable library part](./lib/) takes care of the following application UI &
 
 1. No need to use `BottomNavigationBar` to define your nav tabs and then manually implement tab navigation. Instead you simply [supply tab data](example/lib/main.dart) and tab "root" screen factories.
 2. No need to use `Scaffold` to define your screens. Instead you subclass [TabbedNavScreen](lib/src/screens/tabbed_nav_screen.dart) and override its "`Widget buildBody(BuildContext)`" method.
-3. No code duplication for [calculating top screen](https://gist.github.com/johnpryan/430c1d3ad771c43bf249c07fa3aeef14#file-main-dart-L108) and [determining the URL](https://gist.github.com/johnpryan/430c1d3ad771c43bf249c07fa3aeef14#file-main-dart-L88) to show in the browser address bar. Instead, each TabbedNavScreen subclass [overrides `routePath`](example/lib/src/screens/settings_screen.dart), letting the framework pick the route to show from the top screen of the stack.
+3. No code duplication for [calculating top screen](https://gist.github.com/johnpryan/430c1d3ad771c43bf249c07fa3aeef14#file-main-dart-L108) and [determining the URL](https://gist.github.com/johnpryan/430c1d3ad771c43bf249c07fa3aeef14#file-main-dart-L88) to show in the browser address bar. Instead, each TabbedNavScreen subclass [overrides `routePath`](example/lib/src/screens/settings_screen.dart) property getter, letting the framework pick the route URL to display from the top screen of the stack.
 4. No need to write [spaghetti code](https://gist.github.com/johnpryan/430c1d3ad771c43bf249c07fa3aeef14#file-main-dart-L36) parsing user-entered browser URLs to set the app state. Instead, each route class has a standard `fromUri(Uri)` [factory method](example/lib/src/routing/user_profile_path.dart) that looks at the user-entered URI and decides whether it matches.
 5. Use [`topScreen` property](example/lib/src/screens/book_list_screen.dart) override to check relevant state and tell the framework whether another "overlay" screen needs to be shown on top of the current one. **This is the famous `UI = f(state)` part in action**.
 6. Use [`removeFromNavStackTop()` method](example/lib/src/screens/book_details_screen.dart) override to update the state so that current screen would be removed from the top of the nav stack.

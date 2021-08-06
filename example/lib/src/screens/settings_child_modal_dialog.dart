@@ -6,7 +6,7 @@ import 'package:flutter_nav2_oop/all.dart';
 
 class SettingsChildModalDialog extends FullScreenModalDialog {
 
-  SettingsChildModalDialog({required TabbedNavScreen parent})
+  SettingsChildModalDialog({required NavScreen parent})
     : super(
         parent: parent,
         screenTitle: 'Modal Demo',

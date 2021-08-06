@@ -14,11 +14,11 @@ class BookListPath extends RoutePath {
       uri.path == '/' || uri.isSingleSegmentPath(resourceName) ?
         BookListPath() : null;
 
-  SelectedBookState selectedBookState(TabNavState navState) =>
+  SelectedBookState selectedBookState(NavAwareState navState) =>
       stateByType<SelectedBookState>(navState)!;
 
   @override
-  Future<void> configureStateFromUri(TabNavState navState) {
+  Future<void> configureStateFromUri(NavAwareState navState) {
     selectedBookState(navState).value = null;
     return super.configureStateFromUri(navState);
   }

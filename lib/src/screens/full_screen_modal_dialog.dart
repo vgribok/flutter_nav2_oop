@@ -1,11 +1,11 @@
 part of flutter_nav2_oop;
 
 /// A base class for full-screen modal dialogs
-abstract class FullScreenModalDialog extends TabbedNavScreen {
+abstract class FullScreenModalDialog extends NavScreen {
 
   FullScreenModalDialog({
     /// Dialog's parent screen
-    required TabbedNavScreen parent,
+    required NavScreen parent,
     /// Screen title
     required String screenTitle,
     /// Optional user-supplied key.
@@ -21,6 +21,9 @@ abstract class FullScreenModalDialog extends TabbedNavScreen {
 
   @override
   Widget? buildNavTabBar(BuildContext context) => null; // Hides bottom navbar
+
+  @override
+  Widget? buildDrawer(BuildContext context) => null; // Hides Drawer
 
   /// Closes the dialog
   void close(BuildContext context) => Navigator.pop(context);

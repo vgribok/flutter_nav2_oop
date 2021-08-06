@@ -5,10 +5,10 @@ import 'package:flutter_nav2_oop/all.dart';
 
 import 'book_details_screen.dart';
 
-class BooksListScreen extends TabbedNavScreen {
+class BooksListScreen extends NavScreen {
   static const int navTabIndex = 0;
 
-  const BooksListScreen(TabNavState navState)
+  const BooksListScreen(NavAwareState navState)
       : super(screenTitle: 'Books', tabIndex: navTabIndex, navState: navState);
 
   @override
@@ -28,7 +28,7 @@ class BooksListScreen extends TabbedNavScreen {
   Book? get selectedBook => selectedBookState.selectedBook;
 
   @override
-  TabbedNavScreen? get topScreen => selectedBook == null
+  NavScreen? get topScreen => selectedBook == null
       ? null
       : BookDetailsScreen(
           selectedBook: selectedBook!,

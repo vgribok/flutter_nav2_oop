@@ -1,14 +1,14 @@
 part of flutter_nav2_oop;
 
 /// Encapsulates boilerplate of the [State] initialization
-/// that wires together [TabNavState]-aware subclass of
+/// that wires together [NavAwareState]-aware subclass of
 /// [RouterDelegate], the [RouteInformationParser], and
 /// wrapping application UI in the [MaterialApp.router] Widget.
 class NavAwareAppState<T extends StatefulWidget> extends State<T> {
 
-  /// [TabNavState] instance that lives as long as
+  /// [NavAwareState] instance that lives as long as
   ///  app state does
-  final TabNavState navState;
+  final NavAwareState navState;
 
   /// Application name
   final String _appTitle;

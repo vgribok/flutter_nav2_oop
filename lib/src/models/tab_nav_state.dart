@@ -1,12 +1,20 @@
 part of flutter_nav2_oop;
 
+enum NavType {
+  BottomTabBar,
+  Drawer
+}
+
 /// Implements tab navigation and tab screen stack builder,
 /// adhering to declarative/functional UI concept.
 ///
 /// Also serves as a holder for other
 /// [ChangeNotifier]-derived application state
 /// objects.
-class TabNavState extends ChangeNotifier {
+class NavAwareState extends ChangeNotifier {
+
+  NavType _navigationType;
+
   /// State: collection of navigation tab
   /// definitions and tab state
   final List<TabInfo> _tabs = [];
@@ -20,6 +28,8 @@ class TabNavState extends ChangeNotifier {
   /// State: Index of a previously selected navigation tab.
   /// Only set when user explicitly tapped a nav tab.
   int? _prevSelectedTabIndex;
+
+  NavAwareState(NavType navType) : _navigationType = navType;
 
   /// Add tab definitions during application initialization
   void addTabs(List<TabInfo> tabs) {
@@ -35,12 +45,22 @@ class TabNavState extends ChangeNotifier {
   /// by [selectedTabIndex] property.
   TabInfo get selectedTab => _tabs[selectedTabIndex];
 
+  /// Defines application mode, like bottom tabs,
+  /// drawer, etc.
+  NavType get navigationType => _navigationType;
+  set navigationType(NavType navType) {
+    if(_navigationType == navType) return;
+
+    _navigationType = navType;
+    notifyListeners();
+  }
+
   /// The *`UI = f(state)`* function.
   ///
   /// Builds entire application screen state, taking into
   /// account selected nav tab index, "child" screens of
   /// tab "root" screens, and a 404 screen.
-  Iterable<TabbedNavScreen> _buildNavigatorScreenStack() sync* {
+  Iterable<NavScreen> _buildNavigatorScreenStack() sync* {
     if (_prevSelectedTabIndex != null &&
         _prevSelectedTabIndex != _selectedTabIndex)
       // Enable back arrow navigation for a previously selected tab
@@ -119,7 +139,7 @@ class TabNavState extends ChangeNotifier {
 
   /// Internal. Tests whether selected tab needs to be changed
   /// on route pop, when user hits navigation back button.
-  void changeTabOnBackArrowTapIfNecessary(TabbedNavScreen topScreen) {
+  void changeTabOnBackArrowTapIfNecessary(NavScreen topScreen) {
 
     /// Check whether there is info about previously selected tab.
     /// If not, no change to make.
@@ -127,19 +147,11 @@ class TabNavState extends ChangeNotifier {
 
     assert(topScreen.tabIndex == _selectedTabIndex);
 
-    if (_isThisScreenTheOnlyOneInItsTab(topScreen)) {
+    if (topScreen.tab.hasOnlyOneScreenInStack(this)) {
       // Tab screen stack has only one (current) screen,
       // meaning back arrow tap should change the tab.
       selectedTabIndex = _prevSelectedTabIndex!;
     }
-  }
-
-  /// Returns `true` if a given screen the only screen
-  /// in its tab screen stack.
-  bool _isThisScreenTheOnlyOneInItsTab(TabbedNavScreen screen) {
-    // Screen stack withing the tab of the screen's tab
-    final tabScreenStack = _tabs[screen.tabIndex]._screenStack(this);
-    return tabScreenStack.length == 1;
   }
 
   /// Returns all user-provided application state objects associated

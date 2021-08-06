@@ -1,7 +1,7 @@
 part of flutter_nav2_oop;
 
 /// Signature of a method instantiating a root screen for a tab
-typedef TabRootScreenFactory = TabbedNavScreen Function(TabNavState navState);
+typedef TabRootScreenFactory = NavScreen Function(NavAwareState navState);
 
 /// Defines both mutable and immutable parts of navigation tab's state.
 ///
@@ -23,7 +23,7 @@ class TabInfo {
 
   /// A collection of state objects used by screens belonging
   /// to the tab
-  final List<ChangeNotifier> _stateItems;
+  final List<ChangeNotifier> stateItems;
 
   const TabInfo({
     /// Tab icon
@@ -36,11 +36,7 @@ class TabInfo {
     /// to the tab
     List<ChangeNotifier>? stateItems
   })
-      : _stateItems = stateItems ?? const [];
-
-  /// A collection of state objects used by screens belonging
-  /// to the tab
-  List<ChangeNotifier> get stateItems => _stateItems;
+    : this.stateItems = stateItems ?? const [];
 
   /// Calculates the basis of the screen navigation stack
   /// for the tab, when it's selected.
@@ -48,16 +44,16 @@ class TabInfo {
   /// The last screen in the returned collection will be displayed,
   /// unless the framework needs to show the 404 screen on top of it
   /// in response to user's invalid input into browser's address bar.
-  Iterable<TabbedNavScreen> _screenStack(TabNavState navState) sync* {
+  Iterable<NavScreen> _screenStack(NavAwareState navState) sync* {
 
     // Let application code instantiate the root screen for the tab
-    final TabbedNavScreen rootScreen = rootScreenFactory(navState);
+    final NavScreen rootScreen = rootScreenFactory(navState);
     yield rootScreen;
 
     // Build screen stack by calling each screen's [topScreen]
     // property to see whether the screen needs to show another
     // screen on top
-    for (TabbedNavScreen? nextScreen = rootScreen.topScreen;
+    for (NavScreen? nextScreen = rootScreen.topScreen;
         nextScreen != null;
         nextScreen = nextScreen.topScreen)
       yield nextScreen;
@@ -73,7 +69,7 @@ class TabInfo {
   /// optimize number of UI rebuilds by ignoring state
   /// changes affecting inactive tab screens.
   void _addListener(VoidCallback listener) =>
-      _stateItems.forEach((stateItem) {
+      stateItems.forEach((stateItem) {
         assert(!stateItem.hasListeners);
         stateItem.addListener(listener);
       });
@@ -84,9 +80,19 @@ class TabInfo {
   /// optimize number of UI rebuilds by ignoring state
   /// changes affecting inactive tab screens.
   void _removeListener(VoidCallback listener) =>
-      _stateItems.forEach((stateItem) {
+      stateItems.forEach((stateItem) {
         assert(stateItem.hasListeners);
         stateItem.removeListener(listener);
         assert(!stateItem.hasListeners);
       });
+
+  /// Returns `true` if this tab has more than one screen
+  /// in its screen stack.
+  bool hasMultipleScreensInStack(NavAwareState navState) =>
+      _screenStack(navState).take(2).length == 2;
+
+  /// Returns `true` if this tab has only one screen
+  /// in its screen stack.
+  bool hasOnlyOneScreenInStack(NavAwareState navState) =>
+      _screenStack(navState).take(2).length == 1;
 }

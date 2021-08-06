@@ -1,11 +1,11 @@
 part of flutter_nav2_oop;
 
 /// Factory method signature for instantiating a screen for 404 situations
-typedef NotFoundScreenFactory = UrlNotFoundScreen Function(TabNavState navState);
+typedef NotFoundScreenFactory = UrlNotFoundScreen Function(NavAwareState navState);
 
 /// A screen shown when user-typed URL in the browser address bar
 /// is invalid
-class UrlNotFoundScreen extends TabbedNavScreen {
+class UrlNotFoundScreen extends NavScreen {
 
   /// User-replaceable factory instantiating the
   /// [UrlNotFoundScreen]
@@ -16,6 +16,7 @@ class UrlNotFoundScreen extends TabbedNavScreen {
   static String defaultMessage = 'Following URI is incorrect: ';
   /// User-replaceable screen title
   static String defaultTitle = 'Resource not found';
+  static String defaultCloseButtonText = 'Return';
 
   /// Invalid URL typed in the web browser
   /// address bar by the user
@@ -23,7 +24,7 @@ class UrlNotFoundScreen extends TabbedNavScreen {
 
   /// Do not instantiate directly! Use [notFoundScreenFactory]
   /// instead.
-  UrlNotFoundScreen({required TabNavState navState}) :
+  UrlNotFoundScreen({required NavAwareState navState}) :
     _notFoundUri = navState.notFoundUri!,
     super(
       screenTitle: defaultTitle,
@@ -42,9 +43,24 @@ class UrlNotFoundScreen extends TabbedNavScreen {
           Text(
               '\"$_notFoundUri\"',
               style: TextStyle(fontWeight: FontWeight.bold)
+          ),
+          Divider(thickness: 1, indent: 50, endIndent: 50),
+          ElevatedButton(
+              child: Text(defaultCloseButtonText),
+              onPressed: updateStateOnScreenRemovalFromNavStackTop
           )
         ])
     );
+
+  @override
+  List<Widget>? buildAbbBarActions(BuildContext context) =>
+      [
+        IconButton(
+            icon: const Icon(Icons.cancel),
+            tooltip: defaultCloseButtonText,
+            onPressed: updateStateOnScreenRemovalFromNavStackTop
+        )
+      ];
 
   @override @protected
   void updateStateOnScreenRemovalFromNavStackTop() =>

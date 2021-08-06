@@ -12,7 +12,7 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
   /// Application state reference holder
-  final TabNavState navState;
+  final NavAwareState navState;
 
   NavAwareRouterDelegate({
     required this.navState,
@@ -46,16 +46,16 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
       return false;
     }
 
-    TabbedNavScreen navScreen = _screenFromRoute(route);
+    NavScreen navScreen = _screenFromRoute(route);
     navScreen.updateStateOnScreenRemovalFromNavStackTop();
 
     return true;
   }
 
-  static TabbedNavScreen _screenFromRoute(Route route) {
+  static NavScreen _screenFromRoute(Route route) {
     dynamic page = route.settings; // Cast settings to Page
     // Cast page.child to TabbedNavScreen
-    TabbedNavScreen navScreen = page.child as TabbedNavScreen;
+    NavScreen navScreen = page.child as NavScreen;
     return navScreen;
   }
 
