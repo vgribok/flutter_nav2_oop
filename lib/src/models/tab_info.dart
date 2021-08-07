@@ -63,28 +63,28 @@ class TabInfo {
   T? stateByType<T extends ChangeNotifier>() =>
       stateItems.firstSafe((e) => e is T) as T?;
 
-  /// Attaches external listener of state change notifications.
-  ///
-  /// This method, along with the [_removeListener] method,
-  /// optimize number of UI rebuilds by ignoring state
-  /// changes affecting inactive tab screens.
-  void _addListener(VoidCallback listener) =>
-      stateItems.forEach((stateItem) {
-        assert(!stateItem.hasListeners);
-        stateItem.addListener(listener);
-      });
-
-  /// Removes external listener of state change notifications
-  ///
-  /// This method, along with the [_addListener] method,
-  /// optimize number of UI rebuilds by ignoring state
-  /// changes affecting inactive tab screens.
-  void _removeListener(VoidCallback listener) =>
-      stateItems.forEach((stateItem) {
-        assert(stateItem.hasListeners);
-        stateItem.removeListener(listener);
-        assert(!stateItem.hasListeners);
-      });
+  // /// Attaches external listener of state change notifications.
+  // ///
+  // /// This method, along with the [_removeListener] method,
+  // /// optimize number of UI rebuilds by ignoring state
+  // /// changes affecting inactive tab screens.
+  // void _addListener(VoidCallback listener) =>
+  //     stateItems.forEach((stateItem) {
+  //       assert(!stateItem.hasListeners);
+  //       stateItem.addListener(listener);
+  //     });
+  //
+  // /// Removes external listener of state change notifications
+  // ///
+  // /// This method, along with the [_addListener] method,
+  // /// optimize number of UI rebuilds by ignoring state
+  // /// changes affecting inactive tab screens.
+  // void _removeListener(VoidCallback listener) =>
+  //     stateItems.forEach((stateItem) {
+  //       assert(stateItem.hasListeners);
+  //       stateItem.removeListener(listener);
+  //       assert(!stateItem.hasListeners);
+  //     });
 
   /// Returns `true` if this tab has more than one screen
   /// in its screen stack.

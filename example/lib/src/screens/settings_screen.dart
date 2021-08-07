@@ -49,8 +49,8 @@ class SettingsScreen extends NavScreen {
   @override
   RoutePath get routePath => SettingsPath();
 
-  ShowSettingsModalState get showSettingsModalState =>
-    stateByType<ShowSettingsModalState>()!;
+  // ShowSettingsModalState get showSettingsModalState =>
+  //   stateByType<ShowSettingsModalState>()!;
 
   @override
   NavScreen? get topScreen =>

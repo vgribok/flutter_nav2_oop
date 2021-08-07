@@ -35,7 +35,7 @@ class NavAwareState extends ChangeNotifier {
   void addTabs(List<TabInfo> tabs) {
     _tabs.addAll(tabs);
     //assertSingleStateItemOfEachType();
-    selectedTab._addListener(notifyListeners);
+    //selectedTab._addListener(notifyListeners);
   }
 
   /// Returns a navigation tab definition by its index
@@ -109,11 +109,11 @@ class NavAwareState extends ChangeNotifier {
       _selectedTabIndex = selectedTabIndex;
 
     if (beforeSelectedTabIndex != _selectedTabIndex) {
-      // Ensure that state changes affecting screens in non-selected tabs
-      // do not cause entire app UI rebuild
-      _tabs[beforeSelectedTabIndex]._removeListener(notifyListeners);
-      // Bubble up notifications coming from state associated only with the current tab
-      selectedTab._addListener(notifyListeners);
+      // // Ensure that state changes affecting screens in non-selected tabs
+      // // do not cause entire app UI rebuild
+      // _tabs[beforeSelectedTabIndex]._removeListener(notifyListeners);
+      // // Bubble up notifications coming from state associated only with the current tab
+      // selectedTab._addListener(notifyListeners);
 
       // Notify the UI to rebuild due to selected tab change
       notifyListeners();

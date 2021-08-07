@@ -57,8 +57,17 @@ abstract class NavScreen extends StatelessWidget {
   @override
   LocalKey get key => _keySpecified ? super.key! as LocalKey : ValueKey(routePath.location);
 
-  /// Returns a Page instance used by the [Navigator] Widget
-  Page get _page => MaterialPage(key: key, child: this);
+  // /// Returns a Page instance used by the [Navigator] Widget
+  Page get _page => MaterialPage(key: key,
+    child: MultiProvider(
+      child: this,
+      providers: [
+        for(ChangeNotifier stateItem in tab.stateItems)
+          ChangeNotifierProvider.value(value: stateItem)
+      ]
+    )
+    //this
+  );
 
   /// Overridden by subclasses, returns
   /// [RoutePath] instance corresponding to
@@ -122,16 +131,16 @@ abstract class NavScreen extends StatelessWidget {
   void updateStateOnScreenRemovalFromNavStackTop() =>
       navState.changeTabOnBackArrowTapIfNecessary(this);
 
-  /// Convenience method surfacing [TabNavState] ability
-  /// to find state object by its type
-  @protected
-  T? stateByType<T extends ChangeNotifier>({
-    /// Set to true to search all tab state
-    /// object collections, as opposed to
-    /// just screen's tab state object collection
-    bool stateObjectIsInAnotherTab = false
-  }) =>
-      navState.stateByType<T>(tabIndex: tabIndex, searchOtherTabs: stateObjectIsInAnotherTab);
+  // /// Convenience method surfacing [TabNavState] ability
+  // /// to find state object by its type
+  // @protected
+  // T? stateByType<T extends ChangeNotifier>({
+  //   /// Set to true to search all tab state
+  //   /// object collections, as opposed to
+  //   /// just screen's tab state object collection
+  //   bool stateObjectIsInAnotherTab = false
+  // }) =>
+  //     navState.stateByType<T>(tabIndex: tabIndex, searchOtherTabs: stateObjectIsInAnotherTab);
 
   //#region App-wide screen customization factories
 
