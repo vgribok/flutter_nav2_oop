@@ -53,7 +53,7 @@ class UrlNotFoundScreen extends NavScreen {
     );
 
   @override
-  List<Widget>? buildAbbBarActions(BuildContext context) =>
+  List<Widget>? buildAppBarActions(BuildContext context) =>
       [
         IconButton(
             icon: const Icon(Icons.cancel),

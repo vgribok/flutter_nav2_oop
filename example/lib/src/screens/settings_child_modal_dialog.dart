@@ -44,7 +44,7 @@ class SettingsChildModalDialog extends FullScreenModalDialog {
     showSettingsModalState.showSettingsModal = false;
 
   @override
-  List<Widget>? buildAbbBarActions(BuildContext context) =>
+  List<Widget>? buildAppBarActions(BuildContext context) =>
     [
       IconButton(
         icon: const Icon(Icons.save),

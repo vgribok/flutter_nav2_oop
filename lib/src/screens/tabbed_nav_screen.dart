@@ -4,12 +4,17 @@ part of flutter_nav2_oop;
 /// navigation Widget - either a bottom tab bar, or
 /// a [Drawer]
 typedef NavigationWidgetBarBuilder = Widget Function(
-    NavScreen, BuildContext context, List<TabInfo>, int currentSelection, void Function(int index) tapHandler
+    NavScreen screen, BuildContext context, List<TabInfo>, int currentSelection, void Function(int index) tapHandler
 );
 
 /// A signature of a programmer-replaceable method building
 /// navigation drawer header widget
 typedef DrawerHeaderBuilder = Widget? Function (NavScreen, BuildContext context);
+
+/// A signature of a programmer-replaceable method building
+/// vertical rail navigation widget
+typedef VerticalNavRailBuilder = Widget Function(Widget body, NavScreen screen,
+    List<TabInfo> tabs, int currentSelection, ValueChanged<int> tapHandler);
 
 /// A signature of a programmer-replaceable method building
 /// application screens' [AppBar]
@@ -74,7 +79,7 @@ abstract class NavScreen extends StatelessWidget {
   Widget build(BuildContext context) =>
       Scaffold(
           appBar: buildAppBar(context),
-          body: buildBody(context),
+          body: _buildBodyInternal(context),
           bottomNavigationBar: _buildNavTabBarInternal(context),
           drawer: _buildDrawerInternal(context),
       );
@@ -84,7 +89,7 @@ abstract class NavScreen extends StatelessWidget {
   @protected
   void onNavItemTap(BuildContext context, int newTabIndex) {
 
-    if(navState.navigationType == NavType.Drawer) {
+    if(navState.effectiveNavType == NavType.Drawer) {
       // Hide the Drawer
       Navigator.pop(context);
     }
@@ -98,6 +103,13 @@ abstract class NavScreen extends StatelessWidget {
     }else {
       navState._setSelectedTabIndex(newTabIndex, byUser: true);
     }
+  }
+
+  Widget _buildBodyInternal(BuildContext context) {
+    final Widget body = buildBody(context);
+
+    return navState.effectiveNavType == NavType.VerticalRail ?
+            buildVerticalRailAndBody(context, body) : body;
   }
 
   /// Override in subclasses to supply screen body
@@ -154,6 +166,12 @@ abstract class NavScreen extends StatelessWidget {
   static DrawerHeaderBuilder drawerHeaderBuilder = buildDefaultDrawerHeader;
 
   /// A user-replaceable factory building
+  /// Vertical Rail navigation widget.
+  ///
+  /// Default implementation is the static [buildDefaultVerticalNavRail] method.
+  static VerticalNavRailBuilder verticalNavRailBuilder = buildDefaultVerticalNavRail;
+
+  /// A user-replaceable factory building
   /// [AppBar] for each application screen.
   ///
   /// Default implementation is the static [buildDefaultAppBar] method.
@@ -163,7 +181,7 @@ abstract class NavScreen extends StatelessWidget {
   static AppBar buildDefaultAppBar(NavScreen screen, BuildContext context) =>
       AppBar(
           title: Text(screen.screenTitle),
-          actions: screen.buildAbbBarActions(context)
+          actions: screen.buildAppBarActions(context)
       );
 
   /// Default implementation of the [tabBarBuilder] factory
@@ -171,7 +189,7 @@ abstract class NavScreen extends StatelessWidget {
       BuildContext context, Iterable<TabInfo> tabs, int currentSelection, ValueChanged<int> tapHandler) =>
       BottomNavigationBar(
           items: tabs.map(
-                  (tabInfo) => BottomNavigationBarItem(icon: Icon(tabInfo.icon), label: tabInfo.title)
+             (tabInfo) => BottomNavigationBarItem(icon: Icon(tabInfo.icon), label: tabInfo.title)
           ).toList(),
           currentIndex: currentSelection,
           onTap: tapHandler
@@ -235,10 +253,26 @@ abstract class NavScreen extends StatelessWidget {
     );
   }
 
+  /// Default implementation of the [verticalNavRailBuilder] factory
+  static Widget buildDefaultVerticalNavRail(Widget body, NavScreen screen,
+    List<TabInfo> tabs, int currentSelection, ValueChanged<int> tapHandler) =>
+      Row(children: [
+        NavigationRail(
+            selectedIndex: currentSelection,
+            onDestinationSelected: (index) => tapHandler(index),
+            labelType: NavigationRailLabelType.all,
+            destinations: tabs.map((tab) =>NavigationRailDestination(
+                icon: Icon(tab.icon),
+                label: Text(tab.title ?? '')
+            )).toList()
+        ),
+        const VerticalDivider(thickness: 1, width: 1),
+        Expanded(child: body)
+      ]);
+
   //#endregion
 
   //#region Screen-specific customization methods
-
   /// Method to override in subclasses to build screen-specific
   /// app bar.
   ///
@@ -249,11 +283,11 @@ abstract class NavScreen extends StatelessWidget {
       appBarBuilder(this, context);
 
   Widget? _buildNavTabBarInternal(BuildContext context) {
-    if (navState.navigationType != NavType.BottomTabBar) return null;
+    if (navState.effectiveNavType != NavType.BottomTabBar) return null;
     return buildNavTabBar(context);
   }
 
-  /// Method to override in subclasses to build scree-specific
+  /// Method to override in subclasses to build screen-specific
   /// bottom navigation bar. May return `null` to not render nav bar.
   ///
   /// Default implementation calls application-wide [tabBarBuilder]
@@ -261,16 +295,16 @@ abstract class NavScreen extends StatelessWidget {
   /// screen.
   @protected
   Widget? buildNavTabBar(BuildContext context) =>
-      tabBarBuilder(this, context, navState._tabs, navState.selectedTabIndex,
+      tabBarBuilder(this, context, navState.tabs, navState.selectedTabIndex,
               (newTabIndex) => onNavItemTap(context, newTabIndex)
       );
 
   Widget? _buildDrawerInternal(BuildContext context) {
-    if (navState.navigationType != NavType.Drawer) return null;
+    if (navState.effectiveNavType != NavType.Drawer) return null;
     return buildDrawer(context);
   }
 
-  /// Method to override in subclasses to build scree-specific
+  /// Method to override in subclasses to build screen-specific
   /// navigation drawer. May return `null` to not render drawer.
   ///
   /// Default implementation calls application-wide [drawerBuilder]
@@ -280,12 +314,12 @@ abstract class NavScreen extends StatelessWidget {
   Widget? buildDrawer(BuildContext context) =>
       drawerBuilder(this,
           context,
-          navState._tabs,
+          navState.tabs,
           navState.selectedTabIndex,
           (newTabIndex) => onNavItemTap(context, newTabIndex)
       );
 
-  /// Method to override in subclasses to build scree-specific
+  /// Method to override in subclasses to build screen-specific
   /// navigation drawer header. May return `null` to not render drawer header.
   ///
   /// Default implementation calls application-wide [drawerHeaderBuilder]
@@ -300,7 +334,20 @@ abstract class NavScreen extends StatelessWidget {
   /// Default implementation returns null resulting
   /// in no action Widgets added
   @protected
-  List<Widget>? buildAbbBarActions(BuildContext context) => null;
+  List<Widget>? buildAppBarActions(BuildContext context) => null;
 
-//#endregion
+  /// Method to override in subclasses to build screen-specific
+  /// vertical rial navigation widget. May return `[body]` to
+  /// not render widget.
+  ///
+  /// Default implementation calls application-wide [verticalNavRailBuilder]
+  /// factory method building same vertical nav rail for every
+  /// screen.
+  @protected
+  Widget buildVerticalRailAndBody(BuildContext context, Widget body) =>
+      verticalNavRailBuilder(body, this, navState.tabs, navState.selectedTabIndex,
+              (newTabIndex) => onNavItemTap(context, newTabIndex)
+      );
+
+  //#endregion
 }

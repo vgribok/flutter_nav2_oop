@@ -16,18 +16,13 @@ void main() {
   runApp(BooksApp());
 }
 
-class BooksApp extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => BooksAppState();
-}
+class BooksApp extends NavAwareAppState {
 
-class BooksAppState extends NavAwareAppState<BooksApp> {
-
-  BooksAppState() :
+  BooksApp() :
       super(
         appTitle: 'Books App',
         theme: myTheme,
-        navState: NavAwareState(NavType.Drawer),
+        navState: NavAwareState(),
         tabs: [
           TabInfo(
               icon: Icons.home,

@@ -2,7 +2,8 @@ part of flutter_nav2_oop;
 
 enum NavType {
   BottomTabBar,
-  Drawer
+  Drawer,
+  VerticalRail
 }
 
 /// Implements tab navigation and tab screen stack builder,
@@ -13,11 +14,11 @@ enum NavType {
 /// objects.
 class NavAwareState extends ChangeNotifier {
 
-  NavType _navigationType;
+  NavType? _navigationType;
 
   /// State: collection of navigation tab
   /// definitions and tab state
-  final List<TabInfo> _tabs = [];
+  final List<TabInfo> tabs = [];
 
   /// State: index of the currently selected navigation tab
   int _selectedTabIndex = 0;
@@ -29,31 +30,45 @@ class NavAwareState extends ChangeNotifier {
   /// Only set when user explicitly tapped a nav tab.
   int? _prevSelectedTabIndex;
 
-  NavAwareState(NavType navType) : _navigationType = navType;
+  NavAwareState({NavType? navType}) : _navigationType = navType;
 
   /// Add tab definitions during application initialization
   void addTabs(List<TabInfo> tabs) {
-    _tabs.addAll(tabs);
+    this.tabs.addAll(tabs);
     //assertSingleStateItemOfEachType();
     selectedTab._addListener(notifyListeners);
   }
 
   /// Returns a navigation tab definition by its index
-  TabInfo operator [](int index) => _tabs[index];
+  TabInfo operator [](int index) => tabs[index];
 
   /// Returns currently selected navigation tab, as defined
   /// by [selectedTabIndex] property.
-  TabInfo get selectedTab => _tabs[selectedTabIndex];
+  TabInfo get selectedTab => tabs[selectedTabIndex];
 
-  /// Defines application mode, like bottom tabs,
+  /// Defines application navigation mode, like bottom tabs,
   /// drawer, etc.
-  NavType get navigationType => _navigationType;
-  set navigationType(NavType navType) {
+  ///
+  /// If not specified, in portrait orientation bottom tabs are used,
+  /// and in landscape orientation, vertical nav rail is used.
+  NavType? get navigationType => _navigationType;
+  set navigationType(NavType? navType) {
     if(_navigationType == navType) return;
 
     _navigationType = navType;
     notifyListeners();
   }
+
+  /// Returns concrete navigation mode.
+  ///
+  /// When non-null navigation mode is set via [navigationType],
+  /// then that is the returned value. If [navigationType] is null,
+  /// device orientation determines navigation mode: in portrait
+  /// orientation bottom tab bar is used, and in landscape mode the
+  /// vertical rail is used.
+  NavType get effectiveNavType =>
+      _navigationType ??
+          (isPortrait ? NavType.BottomTabBar : NavType.VerticalRail);
 
   /// The *`UI = f(state)`* function.
   ///
@@ -64,7 +79,7 @@ class NavAwareState extends ChangeNotifier {
     if (_prevSelectedTabIndex != null &&
         _prevSelectedTabIndex != _selectedTabIndex)
       // Enable back arrow navigation for a previously selected tab
-      yield* _tabs[_prevSelectedTabIndex!]._screenStack(this);
+      yield* tabs[_prevSelectedTabIndex!]._screenStack(this);
 
     // Return a screen stack for the currently selected tab
     yield* selectedTab._screenStack(this);
@@ -100,10 +115,10 @@ class NavAwareState extends ChangeNotifier {
       _prevSelectedTabIndex = null;
     }
 
-    if (selectedTabIndex < 0 || selectedTabIndex >= _tabs.length) {
+    if (selectedTabIndex < 0 || selectedTabIndex >= tabs.length) {
       // If `selectedTabIndex` is out of range, set it to 0
       print(
-          'Selected tab index $selectedTabIndex is outside the [0..${_tabs.length - 1}] range. Setting index to 0.');
+          'Selected tab index $selectedTabIndex is outside the [0..${tabs.length - 1}] range. Setting index to 0.');
       _selectedTabIndex = 0;
     } else
       _selectedTabIndex = selectedTabIndex;
@@ -111,7 +126,7 @@ class NavAwareState extends ChangeNotifier {
     if (beforeSelectedTabIndex != _selectedTabIndex) {
       // Ensure that state changes affecting screens in non-selected tabs
       // do not cause entire app UI rebuild
-      _tabs[beforeSelectedTabIndex]._removeListener(notifyListeners);
+      tabs[beforeSelectedTabIndex]._removeListener(notifyListeners);
       // Bubble up notifications coming from state associated only with the current tab
       selectedTab._addListener(notifyListeners);
 
@@ -137,6 +152,17 @@ class NavAwareState extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool _isPortrait = true;
+
+  /// Returns current device orientation
+  bool get isPortrait => _isPortrait;
+  set isPortrait(bool newVal) {
+    if(_isPortrait == newVal) return;
+
+    _isPortrait = newVal;
+    notifyListeners();
+  }
+
   /// Internal. Tests whether selected tab needs to be changed
   /// on route pop, when user hits navigation back button.
   void changeTabOnBackArrowTapIfNecessary(NavScreen topScreen) {
@@ -159,7 +185,7 @@ class NavAwareState extends ChangeNotifier {
   ///
   /// Current tab state could be excluded if necessary.
   Iterable<ChangeNotifier> _allStateItems({bool excludeCurrentTab: false}) sync* {
-    for (var tab in _tabs)
+    for (var tab in tabs)
       if (excludeCurrentTab && tab == selectedTab)
         continue;
       else
@@ -187,7 +213,7 @@ class NavAwareState extends ChangeNotifier {
     if(tabIndex != null) {
       // Start the search with specified tab's state
       // object collection.
-      T? stateObject = _tabs[tabIndex].stateByType<T>();
+      T? stateObject = tabs[tabIndex].stateByType<T>();
       if(!searchOtherTabs) return stateObject!;
     }
 
@@ -206,7 +232,7 @@ class NavAwareState extends ChangeNotifier {
   } // selectedTab.stateByType<T>();
 
   /// A convenience method for iterating tabs
-  Iterable<T> mapTabs<T>(T f(E)) => _tabs.map(f);
+  Iterable<T> mapTabs<T>(T f(E)) => tabs.map(f);
 
   /// Call from your app state constructor if
   /// you want to ensure that

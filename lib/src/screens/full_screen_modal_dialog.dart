@@ -25,6 +25,9 @@ abstract class FullScreenModalDialog extends NavScreen {
   @override
   Widget? buildDrawer(BuildContext context) => null; // Hides Drawer
 
+  @override
+  Widget buildVerticalRailAndBody(BuildContext context, Widget body) => body;
+
   /// Closes the dialog
   void close(BuildContext context) => Navigator.pop(context);
 
@@ -35,6 +38,6 @@ abstract class FullScreenModalDialog extends NavScreen {
       AppBar(
         title: Text(this.screenTitle),
         leading: IconButton(icon: Icon(Icons.cancel), onPressed: () => close(context)),
-        actions: buildAbbBarActions(context)
+        actions: buildAppBarActions(context)
       );
 }
