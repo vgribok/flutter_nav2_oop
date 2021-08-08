@@ -23,6 +23,15 @@ class BooksApp extends NavAwareAppState {
         appTitle: 'Books App',
         theme: myTheme,
         navState: NavAwareState(),
+
+        routeParsers: [
+          BookListPath.fromUri,
+          BookDetailsPath.fromUri,
+          UserProfilePath.fromUri,
+          SettingsPath.fromUri,
+          SettingsModalChildPath.fromUri
+        ],
+
         tabs: [
           TabInfo(
               icon: Icons.home,
@@ -36,16 +45,9 @@ class BooksApp extends NavAwareAppState {
           TabInfo(
               icon: Icons.settings,
               title: 'Settings',
-              stateItems: [ShowSettingsModalState()],
+              stateItems: [SettingsShowModalState()],
               rootScreenFactory: (nvState) => SettingsScreen(nvState))
-        ],
-        routeParsers: [
-          BookListPath.fromUri,
-          BookDetailsPath.fromUri,
-          UserProfilePath.fromUri,
-          SettingsPath.fromUri,
-          SettingsModalChildPath.fromUri
-        ],
+        ]
       )
   {
     navState.assertSingleStateItemOfEachType();

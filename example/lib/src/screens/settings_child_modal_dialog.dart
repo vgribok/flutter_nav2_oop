@@ -34,8 +34,8 @@ class SettingsChildModalDialog extends FullScreenModalDialog {
 
   /// Convenience accessor to the state object
   @protected
-  ShowSettingsModalState get showSettingsModalState =>
-      stateByType<ShowSettingsModalState>()!;
+  SettingsShowModalState get showSettingsModalState =>
+      stateByType<SettingsShowModalState>()!;
 
   @override
   void updateStateOnScreenRemovalFromNavStackTop() =>

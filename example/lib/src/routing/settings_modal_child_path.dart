@@ -19,7 +19,7 @@ class SettingsModalChildPath extends RoutePath {
   @override
   Future<void> configureStateFromUri(NavAwareState navState) {
     super.configureStateFromUri(navState);
-    stateByType<ShowSettingsModalState>(navState)!.showSettingsModal = true;
+    stateByType<SettingsShowModalState>(navState)!.showSettingsModal = true;
     return Future.value();
   }
 }
