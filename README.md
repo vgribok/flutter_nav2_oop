@@ -22,41 +22,38 @@ void main() {
   runApp(BooksApp());
 }
 
-class BooksApp extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => BooksAppState();
-}
+class BooksApp extends NavAwareAppState {
 
-class BooksAppState extends NavAwareAppState<BooksApp> {
+  BooksApp() :
+        super(
+          appTitle: 'Books App',
+          theme: myTheme,
+          navState: NavAwareState(),
 
-  BooksAppState() :
-      super(
-        appTitle: 'Books App',
-        theme: myTheme,
-        navState: NavAwareState(NavType.Drawer),
-        tabs: [
-          TabInfo(
-              icon: Icons.home,
-              title: 'Books',
-              stateItems: [SelectedBookState()],
-              rootScreenFactory: (nvState) => BooksListScreen(nvState)),
-          TabInfo(
-              icon: Icons.person,
-              title: 'User',
-              rootScreenFactory: (nvState) => UserProfileScreen(nvState)),
-          TabInfo(
-              icon: Icons.settings,
-              title: 'Settings',
-              stateItems: [ShowSettingsModalState()],
-              rootScreenFactory: (nvState) => SettingsScreen(nvState))
-        ],
-        routeParsers: [
-          BookListPath.fromUri,
-          BookDetailsPath.fromUri,
-          UserProfilePath.fromUri,
-          SettingsPath.fromUri,
-          SettingsModalChildPath.fromUri
-        ],
+          routeParsers: [
+            BookListPath.fromUri,
+            BookDetailsPath.fromUri,
+            UserProfilePath.fromUri,
+            SettingsPath.fromUri,
+            SettingsModalChildPath.fromUri
+          ],
+
+          tabs: [
+            TabInfo(
+                icon: Icons.home,
+                title: 'Books',
+                stateItems: [SelectedBookState()],
+                rootScreenFactory: (nvState) => BooksListScreen(nvState)),
+            TabInfo(
+                icon: Icons.person,
+                title: 'User',
+                rootScreenFactory: (nvState) => UserProfileScreen(nvState)),
+            TabInfo(
+                icon: Icons.settings,
+                title: 'Settings',
+                stateItems: [SettingsShowModalState()],
+                rootScreenFactory: (nvState) => SettingsScreen(nvState))
+          ]
       )
   {
     navState.assertSingleStateItemOfEachType();
