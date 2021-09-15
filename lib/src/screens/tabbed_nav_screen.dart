@@ -24,7 +24,7 @@ typedef AppBarBuilder = AppBar Function(NavScreen, BuildContext);
 ///
 /// Screens inheriting this class will have an [AppBar],
 /// and a [BottomNavigationBar] with tabs defined when
-/// [NavAwareAppState] class is constructed by application's
+/// [NavAwareApp] class is constructed by application's
 /// `main.dart`.
 abstract class NavScreen extends StatelessWidget {
 

@@ -16,7 +16,7 @@ void main() {
   runApp(BooksApp());
 }
 
-class BooksApp extends NavAwareAppState {
+class BooksApp extends NavAwareApp {
 
   BooksApp() :
       super(

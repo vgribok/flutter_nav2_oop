@@ -4,7 +4,7 @@ part of flutter_nav2_oop;
 /// that wires together [NavAwareState]-aware subclass of
 /// [RouterDelegate], the [RouteInformationParser], and
 /// wrapping application UI in the [MaterialApp.router] Widget.
-class NavAwareAppState extends StatelessWidget {
+class NavAwareApp extends StatelessWidget {
 
   /// [NavAwareState] instance that lives as long as
   ///  app state does
@@ -18,7 +18,7 @@ class NavAwareAppState extends StatelessWidget {
 
   final ThemeData? _theme;
 
-  NavAwareAppState({
+  NavAwareApp({
     /// Application name
     required String appTitle,
     /// Application state holder instance
@@ -51,6 +51,7 @@ class NavAwareAppState extends StatelessWidget {
           theme: _theme,
           routerDelegate: _routerDelegate,
           routeInformationParser: _routeInformationParser,
+          restorationScopeId: 'root',
           debugShowCheckedModeBanner: false // Hide 'Debug' ribbon on the AppBar
       );
     });

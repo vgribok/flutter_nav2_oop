@@ -17,7 +17,7 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
   NavAwareRouterDelegate({
     required this.navState,
   }) {
-    navState.addListener(notifyListeners);
+    navState.addListener(this.notifyListeners);
   }
 
   @override
