@@ -70,6 +70,7 @@ class TabInfo {
   /// changes affecting inactive tab screens.
   void _addListener(VoidCallback listener) =>
       stateItems.forEach((stateItem) {
+        // ignore: invalid_use_of_protected_member
         assert(!stateItem.hasListeners);
         stateItem.addListener(listener);
       });
@@ -81,8 +82,12 @@ class TabInfo {
   /// changes affecting inactive tab screens.
   void _removeListener(VoidCallback listener) =>
       stateItems.forEach((stateItem) {
+        // ignore: invalid_use_of_protected_member
         assert(stateItem.hasListeners);
+
         stateItem.removeListener(listener);
+
+        // ignore: invalid_use_of_protected_member
         assert(!stateItem.hasListeners);
       });
 

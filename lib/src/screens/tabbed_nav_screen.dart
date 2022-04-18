@@ -239,11 +239,11 @@ abstract class NavScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start, // Align to the top of the Drawer Header
         children: [
           Row(children: [ // Align icon and text at text baseline
-            Icon(screen.tab.icon, color: theme.accentIconTheme.color),
+            Icon(screen.tab.icon, color: theme.colorScheme.secondary),
             Text(' '),
             Text(screen.screenTitle,
               style: TextStyle(
-                  color: theme.accentIconTheme.color,
+                  color: theme.colorScheme.secondary,
                   fontSize: theme.textTheme.headline6?.fontSize
               ),
             )

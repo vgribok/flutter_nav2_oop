@@ -12,6 +12,7 @@ class NotFoundRoutePath extends RoutePath {
     super(tabIndex: 0, resource: '404-page-not-found');
 
   @override
+  // ignore: must_call_super
   Future<void> configureStateFromUri(NavAwareState navState) {
     navState.notFoundUri = notFoundUri;
     return Future.value();
