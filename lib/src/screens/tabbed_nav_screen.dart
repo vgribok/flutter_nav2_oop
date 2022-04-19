@@ -36,8 +36,8 @@ abstract class NavScreen extends StatelessWidget {
   final int tabIndex;
   /// Application state holder
 
-  @protected
-  final NavAwareState navState;
+  // @protected
+  // final NavAwareState navState;
 
   /// True if key is supplied to the constructor explicitly
   final bool _keySpecified;
@@ -49,8 +49,8 @@ abstract class NavScreen extends StatelessWidget {
         /// Index of the navigation tab associated
         /// with the screen
         required this.tabIndex,
-        /// Reference to an existing [TabNavState] instance
-        required this.navState,
+        // /// Reference to an existing [TabNavState] instance
+        // required this.navState,
         /// Optional user-supplied key.
         /// If not supplied, route URI
         /// is used as the key
@@ -71,12 +71,17 @@ abstract class NavScreen extends StatelessWidget {
   @protected
   RoutePath get routePath;
 
+  NavAwareState navState(BuildContext context, {final bool listen = false})
+      => Provider.of<NavAwareState>(context, listen: listen);
+
   /// Returns tab reference associated with this screen
-  TabInfo get tab => navState[tabIndex];
+  TabInfo tab(BuildContext context) => navState(context)[tabIndex];
 
   /// Uses [Scaffold] to build navigation-aware screen UI
   @override
   Widget build(BuildContext context) =>
+    Consumer<NavAwareState>(
+        builder: (context, navState, child) =>
       Scaffold(
           appBar: buildAppBar(context),
           body: _buildBodyInternal(context),
