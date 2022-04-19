@@ -13,10 +13,15 @@ class RoutePath {
   /// Index of the tab associated with this route.
   final int tabIndex;
 
-  const RoutePath({
-    required this.tabIndex,
-    required this.resource
-  });
+  final BuildContext context;
+
+  const RoutePath(
+      this.context,
+      {
+        required this.tabIndex,
+        required this.resource
+      }
+  );
 
   /// Framework calls this method to let subclasses construct valid
   /// state from a URL typed by a user into browser's address bar.
@@ -27,8 +32,8 @@ class RoutePath {
   /// is changing current navigation tab.
   @protected
   @mustCallSuper
-  Future<void> configureStateFromUri(NavAwareState navState) {
-    navState.selectedTabIndex = tabIndex;
+  Future<void> configureStateFromUri() {
+    getState<NavAwareState>().selectedTabIndex = tabIndex;
     return Future.value();
   }
 
@@ -44,15 +49,8 @@ class RoutePath {
   /// Maps current route object to Flutter-required [RouteInformation] object
   RouteInformation? get _routeInformation => RouteInformation(location: location);
 
-  /// Convenience method surfacing [NavAwareState] ability
-  /// to find state object by its type
-  T? stateByType<T extends ChangeNotifier>(
-      NavAwareState navState,
-      {
-        /// Set to true to search all tab state
-        /// object collections, as opposed to
-        /// just screen's tab state object collection
-        bool stateObjectIsInAnotherTab = false
-      }) =>
-    navState.stateByType<T>(tabIndex: tabIndex, searchOtherTabs: stateObjectIsInAnotherTab);
+  /// Convenience method surfacing state to the route
+  T getState<T extends ChangeNotifier>()
+    => Provider.of<T>(context, listen: false);
+    // navState.stateByType<T>(tabIndex: tabIndex, searchOtherTabs: stateObjectIsInAnotherTab);
 }

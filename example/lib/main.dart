@@ -32,11 +32,12 @@ class BooksApp extends NavAwareApp {
           SettingsModalChildPath.fromUri
         ],
 
+        stateItems: [SelectedBookState(), SettingsShowModalState()],
+
         tabs: [
           TabInfo(
               icon: Icons.home,
               title: 'Books',
-              stateItems: [SelectedBookState()],
               rootScreenFactory: (nvState) => BooksListScreen(nvState)),
           TabInfo(
               icon: Icons.person,
@@ -45,7 +46,6 @@ class BooksApp extends NavAwareApp {
           TabInfo(
               icon: Icons.settings,
               title: 'Settings',
-              stateItems: [SettingsShowModalState()],
               rootScreenFactory: (nvState) => SettingsScreen(nvState))
         ]
       )

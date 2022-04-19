@@ -14,7 +14,8 @@ class NavAwareApp extends StatelessWidget {
   final String _appTitle;
 
   final NavAwareRouterDelegate _routerDelegate;
-  final NavAwareRouteInfoParser _routeInformationParser;
+  final List<ChangeNotifier>? _stateItems; // TODO: set them via MultiProvider
+  final List<RoutePathFactory> _routeParsers;
 
   final ThemeData? _theme;
 
@@ -26,14 +27,18 @@ class NavAwareApp extends StatelessWidget {
     /// Collection of factory methods test-converting
     /// user-typed URLs into [RoutePath] subclass instances
     required List<RoutePathFactory> routeParsers,
+    /// A collection of state objects used by screens belonging
+    /// to the tab
+    List<ChangeNotifier>? stateItems,
     /// Application navigation tab definitions
     required List<TabInfo> tabs,
     /// Application color theme
     ThemeData? theme
   }) :
     _appTitle = appTitle,
-    _routeInformationParser = NavAwareRouteInfoParser(routeParsers: routeParsers),
     _routerDelegate = NavAwareRouterDelegate(navState: navState),
+    _routeParsers = routeParsers,
+    _stateItems = stateItems ?? const [],
     _theme = theme
   {
     navState.addTabs(tabs);
@@ -50,7 +55,7 @@ class NavAwareApp extends StatelessWidget {
           title: appTitle,
           theme: _theme,
           routerDelegate: _routerDelegate,
-          routeInformationParser: _routeInformationParser,
+          routeInformationParser: NavAwareRouteInfoParser(context, _routeParsers),
           restorationScopeId: 'root',
           debugShowCheckedModeBanner: false // Hide 'Debug' ribbon on the AppBar
       );

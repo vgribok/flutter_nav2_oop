@@ -14,14 +14,17 @@ abstract class DetailsRoutePath<T> extends RoutePath {
   /// Object Id
   final T id;
 
-  const DetailsRoutePath({
-    required int navTabIndex,
-    required this.id,
-    required String resource
-  }) : super(
+  const DetailsRoutePath(
+    BuildContext context,
+    {
+      required int navTabIndex,
+      required this.id,
+      required String resource
+    }) : super(
+      context,
       tabIndex: navTabIndex,
       resource: resource
-  );
+    );
 
   /// Returns URL path in the form of
   /// '/resourcename/object-id'
@@ -35,7 +38,7 @@ abstract class DetailsRoutePath<T> extends RoutePath {
   /// URL parser factories instantiating routes
   /// from user-typed URLs.
   @protected
-  static RoutePath? fromUri(String resource, Uri uri, IdParser idParser) {
+  static RoutePath? fromUri(String resource,  Uri uri, IdParser idParser) {
     final List<String> pathSegments = uri.nonEmptyPathSegments;
 
     // Test two-part path for matching route's pattern

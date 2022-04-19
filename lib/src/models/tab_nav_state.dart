@@ -36,7 +36,7 @@ class NavAwareState extends ChangeNotifier {
   void addTabs(List<TabInfo> tabs) {
     this.tabs.addAll(tabs);
     //assertSingleStateItemOfEachType();
-    selectedTab._addListener(this.notifyListeners);
+    // selectedTab._addListener(this.notifyListeners);
   }
 
   /// Returns a navigation tab definition by its index
@@ -77,10 +77,10 @@ class NavAwareState extends ChangeNotifier {
   /// tab "root" screens, and a 404 screen.
   Iterable<NavScreen> _buildNavigatorScreenStack() sync* {
     if (_prevSelectedTabIndex != null &&
-        _prevSelectedTabIndex != _selectedTabIndex)
+        _prevSelectedTabIndex != _selectedTabIndex) {
       // Enable back arrow navigation for a previously selected tab
       yield* tabs[_prevSelectedTabIndex!]._screenStack(this);
-
+    }
     // Return a screen stack for the currently selected tab
     yield* selectedTab._screenStack(this);
 
@@ -124,11 +124,11 @@ class NavAwareState extends ChangeNotifier {
       _selectedTabIndex = selectedTabIndex;
 
     if (beforeSelectedTabIndex != _selectedTabIndex) {
-      // Ensure that state changes affecting screens in non-selected tabs
-      // do not cause entire app UI rebuild
-      tabs[beforeSelectedTabIndex]._removeListener(this.notifyListeners);
+      // // Ensure that state changes affecting screens in non-selected tabs
+      // // do not cause entire app UI rebuild
+      // tabs[beforeSelectedTabIndex]._removeListener(this.notifyListeners);
       // Bubble up notifications coming from state associated only with the current tab
-      selectedTab._addListener(this.notifyListeners);
+      // selectedTab._addListener(this.notifyListeners);
 
       // Notify the UI to rebuild due to selected tab change
       notifyListeners();
@@ -180,84 +180,84 @@ class NavAwareState extends ChangeNotifier {
     }
   }
 
-  /// Returns all user-provided application state objects associated
-  /// with all tabs.
-  ///
-  /// Current tab state could be excluded if necessary.
-  Iterable<ChangeNotifier> _allStateItems({bool excludeCurrentTab: false}) sync* {
-    for (var tab in tabs)
-      if (excludeCurrentTab && tab == selectedTab)
-        continue;
-      else
-        yield* tab.stateItems;
-  }
+  // /// Returns all user-provided application state objects associated
+  // /// with all tabs.
+  // ///
+  // /// Current tab state could be excluded if necessary.
+  // Iterable<ChangeNotifier> _allStateItems({bool excludeCurrentTab: false}) sync* {
+  //   for (var tab in tabs)
+  //     if (excludeCurrentTab && tab == selectedTab)
+  //       continue;
+  //     else
+  //       yield* tab.stateItems;
+  // }
 
-  /// Finds a specific application state object by its type.
-  ///
-  /// If no parameters are specified, all tab state collections
-  /// are searched. If [tabIndex] is specified, the search starts
-  /// within that tab's state object collection, and if unsuccessful,
-  /// continues to other tabs if [searchOtherTabs] is set to `true`.
-  T stateByType<T extends ChangeNotifier>({
-    /// If not specified or set to null,
-    /// all tabs will be searched
-    int? tabIndex,
-    /// Ignored if [tabIndex] was null.
-    /// If `false`, searches state objects
-    /// only within the tab state object collection.
-    /// Otherwise, searches all tabb state
-    /// object collections
-    bool searchOtherTabs = true
-  }) {
-
-    if(tabIndex != null) {
-      // Start the search with specified tab's state
-      // object collection.
-      T? stateObject = tabs[tabIndex].stateByType<T>();
-      if(!searchOtherTabs) return stateObject!;
-    }
-
-    // Now, let's search the current tab, as the most likely place.
-    T? currentTabStateItem = selectedTab.stateByType();
-    if (currentTabStateItem != null) {
-      return currentTabStateItem;
-    }
-
-    T stateItem = _allStateItems(excludeCurrentTab: true)
-      .firstWhere((item) => item is T,
-        orElse: () => throw new Exception('State of type \"$T\" was not found')
-      ) as T;
-
-    return stateItem;
-  } // selectedTab.stateByType<T>();
+  // /// Finds a specific application state object by its type.
+  // ///
+  // /// If no parameters are specified, all tab state collections
+  // /// are searched. If [tabIndex] is specified, the search starts
+  // /// within that tab's state object collection, and if unsuccessful,
+  // /// continues to other tabs if [searchOtherTabs] is set to `true`.
+  // T stateByType<T extends ChangeNotifier>({
+  //   /// If not specified or set to null,
+  //   /// all tabs will be searched
+  //   int? tabIndex,
+  //   /// Ignored if [tabIndex] was null.
+  //   /// If `false`, searches state objects
+  //   /// only within the tab state object collection.
+  //   /// Otherwise, searches all tabb state
+  //   /// object collections
+  //   bool searchOtherTabs = true
+  // }) {
+  //
+  //   if(tabIndex != null) {
+  //     // Start the search with specified tab's state
+  //     // object collection.
+  //     T? stateObject = tabs[tabIndex].stateByType<T>();
+  //     if(!searchOtherTabs) return stateObject!;
+  //   }
+  //
+  //   // Now, let's search the current tab, as the most likely place.
+  //   T? currentTabStateItem = selectedTab.stateByType();
+  //   if (currentTabStateItem != null) {
+  //     return currentTabStateItem;
+  //   }
+  //
+  //   T stateItem = _allStateItems(excludeCurrentTab: true)
+  //     .firstWhere((item) => item is T,
+  //       orElse: () => throw new Exception('State of type \"$T\" was not found')
+  //     ) as T;
+  //
+  //   return stateItem;
+  // } // selectedTab.stateByType<T>();
 
   /// A convenience method for iterating tabs
   Iterable<T> mapTabs<T>(T f(E)) => tabs.map(f);
 
-  /// Call from your app state constructor if
-  /// you want to ensure that
-  /// each type of state object is allowed
-  /// only once in the entire collection of state
-  /// items, regardless which tab this state type
-  /// is associated with.
-  void assertSingleStateItemOfEachType() {
-    final List<String> stateTypes = [];
-    final List<String> duplicateTypes = [];
-
-    for (var stateItem in _allStateItems(excludeCurrentTab: false)) {
-      final stateItemType = stateItem.runtimeType.toString();
-
-      if(stateTypes.any((typeName) => typeName == stateItemType)) {
-        if(!duplicateTypes.any((typeName) => typeName == stateItemType)) {
-          duplicateTypes.add(stateItemType);
-        }
-      }else {
-        stateTypes.add(stateItemType);
-      }
-    }
-
-    if(duplicateTypes.isNotEmpty) {
-      throw Exception('Duplicate state types are prohibited: \"${duplicateTypes.join(', ')}\"');
-    }
-  }
+  // /// Call from your app state constructor if
+  // /// you want to ensure that
+  // /// each type of state object is allowed
+  // /// only once in the entire collection of state
+  // /// items, regardless which tab this state type
+  // /// is associated with.
+  // void assertSingleStateItemOfEachType() {
+  //   final List<String> stateTypes = [];
+  //   final List<String> duplicateTypes = [];
+  //
+  //   for (var stateItem in _allStateItems(excludeCurrentTab: false)) {
+  //     final stateItemType = stateItem.runtimeType.toString();
+  //
+  //     if(stateTypes.any((typeName) => typeName == stateItemType)) {
+  //       if(!duplicateTypes.any((typeName) => typeName == stateItemType)) {
+  //         duplicateTypes.add(stateItemType);
+  //       }
+  //     }else {
+  //       stateTypes.add(stateItemType);
+  //     }
+  //   }
+  //
+  //   if(duplicateTypes.isNotEmpty) {
+  //     throw Exception('Duplicate state types are prohibited: \"${duplicateTypes.join(', ')}\"');
+  //   }
+  // }
 }

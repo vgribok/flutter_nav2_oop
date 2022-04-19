@@ -19,8 +19,8 @@ class BookDetailsPath extends DetailsRoutePath {
       return Books.isValidBookId(bookId) ? BookDetailsPath(bookId: bookId!) : null;
     });
 
-  SelectedBookState selectedBookState(NavAwareState navState) =>
-      stateByType<SelectedBookState>(navState)!;
+  // SelectedBookState selectedBookState(NavAwareState navState) =>
+  //     stateByType<SelectedBookState>(navState)!;
 
   @override
   Future<void> configureStateFromUri(NavAwareState navState) {

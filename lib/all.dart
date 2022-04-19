@@ -5,6 +5,7 @@ library flutter_nav2_oop;
 // TODO: add localization support
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 part './src/models/tab_info.dart';
 part './src/models/tab_nav_state.dart';

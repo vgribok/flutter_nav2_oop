@@ -12,7 +12,7 @@ class BookListPath extends RoutePath {
 
   static RoutePath? fromUri(Uri uri) =>
       uri.path == '/' || uri.isSingleSegmentPath(resourceName) ?
-        BookListPath() : null;
+        const BookListPath() : null;
 
   SelectedBookState selectedBookState(NavAwareState navState) =>
       stateByType<SelectedBookState>(navState)!;

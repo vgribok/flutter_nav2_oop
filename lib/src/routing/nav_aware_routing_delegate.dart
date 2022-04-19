@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_this
+
 part of flutter_nav2_oop;
 
 /// Abstracts away boilerplate implementation of the
@@ -77,7 +79,7 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
   /// navigation stack.
   @override
   Future<void> setNewRoutePath(RoutePath path) =>
-      path.configureStateFromUri(navState);
+      path.configureStateFromUri();
 
   @override
   GlobalKey<NavigatorState>? get navigatorKey => _navigatorKey;
