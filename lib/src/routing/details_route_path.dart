@@ -15,13 +15,13 @@ abstract class DetailsRoutePath<T> extends RoutePath {
   final T id;
 
   const DetailsRoutePath(
-    BuildContext context,
     {
+      BuildContext? context,
       required int navTabIndex,
       required this.id,
       required String resource
     }) : super(
-      context,
+      context: context,
       tabIndex: navTabIndex,
       resource: resource
     );

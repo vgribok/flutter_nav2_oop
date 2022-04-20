@@ -26,10 +26,9 @@ class UrlNotFoundScreen extends NavScreen {
   /// instead.
   UrlNotFoundScreen({required NavAwareState navState}) :
     _notFoundUri = navState.notFoundUri!,
-    super(
+    super(key: const ValueKey("f2n_404Screen"),
       screenTitle: defaultTitle,
       tabIndex: navState.selectedTabIndex,
-      navState: navState
     );
 
   @override
@@ -41,13 +40,16 @@ class UrlNotFoundScreen extends NavScreen {
         children: [
           Text(defaultMessage),
           Text(
-              '\"$_notFoundUri\"',
-              style: TextStyle(fontWeight: FontWeight.bold)
+              '"$_notFoundUri"',
+              style: const TextStyle(fontWeight: FontWeight.bold)
           ),
-          Divider(thickness: 1, indent: 50, endIndent: 50),
+          const Divider(thickness: 1, indent: 50, endIndent: 50),
           ElevatedButton(
               child: Text(defaultCloseButtonText),
-              onPressed: updateStateOnScreenRemovalFromNavStackTop
+              onPressed: () => updateStateOnScreenRemovalFromNavStackTop(
+                                  Provider.of<NavAwareState>(context, listen: false),
+                                  context
+                              )
           )
         ])
     );
@@ -58,12 +60,15 @@ class UrlNotFoundScreen extends NavScreen {
         IconButton(
             icon: const Icon(Icons.cancel),
             tooltip: defaultCloseButtonText,
-            onPressed: updateStateOnScreenRemovalFromNavStackTop
+            onPressed: () =>
+                updateStateOnScreenRemovalFromNavStackTop(
+                    Provider.of<NavAwareState>(context, listen: false), context
+                )
         )
       ];
 
   @override @protected
-  void updateStateOnScreenRemovalFromNavStackTop() =>
+  void updateStateOnScreenRemovalFromNavStackTop(NavAwareState navState, BuildContext context) =>
       navState.notFoundUri = null;
 
   @override @protected

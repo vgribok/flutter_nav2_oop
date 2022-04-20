@@ -6,13 +6,13 @@ class UserProfilePath extends RoutePath {
 
   static const String resourceName = 'profile';
 
-  const UserProfilePath(BuildContext context)
+  const UserProfilePath({BuildContext? context})
     : super(
-      context,
+      context: context,
       tabIndex: UserProfileScreen.navTabIndex,
       resource: resourceName
     );
 
   static RoutePath? fromUri(Uri uri, BuildContext context) =>
-      uri.isSingleSegmentPath(resourceName) ? UserProfilePath(context) : null;
+      uri.isSingleSegmentPath(resourceName) ? UserProfilePath(context: context) : null;
 }

@@ -6,18 +6,17 @@ class UserProfileScreen extends NavScreen {
 
   static const int navTabIndex = 1;
 
-  const UserProfileScreen(NavAwareState navState) : super(
+  const UserProfileScreen() : super(
     screenTitle: 'User Profile',
     tabIndex: navTabIndex,
-    navState: navState
   );
 
   @override
   Widget buildBody(BuildContext context)  =>
-      Center(
+      const Center(
         child: Text('User Profile will go here'),
       );
 
   @override
-  RoutePath get routePath => UserProfilePath();
+  RoutePath get routePath => const UserProfilePath();
 }

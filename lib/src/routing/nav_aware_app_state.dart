@@ -14,12 +14,11 @@ class NavAwareApp extends StatelessWidget {
   final String _appTitle;
 
   final NavAwareRouterDelegate _routerDelegate;
-  final List<ChangeNotifier>? _stateItems; // TODO: set them via MultiProvider
   final List<RoutePathFactory> _routeParsers;
 
   final ThemeData? _theme;
 
-  NavAwareApp({
+  NavAwareApp({Key? key,
     /// Application name
     required String appTitle,
     /// Application state holder instance
@@ -38,8 +37,8 @@ class NavAwareApp extends StatelessWidget {
     _appTitle = appTitle,
     _routerDelegate = NavAwareRouterDelegate(navState: navState),
     _routeParsers = routeParsers,
-    _stateItems = stateItems ?? const [],
-    _theme = theme
+    _theme = theme,
+    super(key: key)
   {
     navState.addTabs(tabs);
   }
@@ -50,7 +49,7 @@ class NavAwareApp extends StatelessWidget {
   Widget build(BuildContext context) =>
     OrientationBuilder(builder: (context, orientation) {
       navState.isPortrait = orientation == Orientation.portrait;
-
+      // TODO: Implement multi-provider state propagation
       return MaterialApp.router(
           title: appTitle,
           theme: _theme,

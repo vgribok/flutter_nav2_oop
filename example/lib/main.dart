@@ -38,18 +38,15 @@ class BooksApp extends NavAwareApp {
           TabInfo(
               icon: Icons.home,
               title: 'Books',
-              rootScreenFactory: (nvState) => BooksListScreen(nvState)),
+              rootScreenFactory: () => const BooksListScreen()),
           TabInfo(
               icon: Icons.person,
               title: 'User',
-              rootScreenFactory: (nvState) => UserProfileScreen(nvState)),
+              rootScreenFactory: () => const UserProfileScreen()),
           TabInfo(
               icon: Icons.settings,
               title: 'Settings',
-              rootScreenFactory: (nvState) => SettingsScreen(nvState))
+              rootScreenFactory: () => const SettingsScreen())
         ]
-      )
-  {
-    navState.assertSingleStateItemOfEachType();
-  }
+      );
 }

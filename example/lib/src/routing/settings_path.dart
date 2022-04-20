@@ -6,13 +6,13 @@ class SettingsPath extends RoutePath {
 
   static const String resourceName = 'settings';
 
-  const SettingsPath(BuildContext context) :
+  const SettingsPath({BuildContext? context}) :
     super(
-      context,
+      context: context,
       tabIndex: SettingsScreen.navTabIndex,
       resource: resourceName
     );
 
   static RoutePath? fromUri(Uri uri, BuildContext context) =>
-      uri.isSingleSegmentPath(resourceName) ? SettingsPath(context) : null;
+      uri.isSingleSegmentPath(resourceName) ? SettingsPath(context: context) : null;
 }

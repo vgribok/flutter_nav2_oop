@@ -13,11 +13,11 @@ class RoutePath {
   /// Index of the tab associated with this route.
   final int tabIndex;
 
-  final BuildContext context;
+  final BuildContext? context;
 
   const RoutePath(
-      this.context,
       {
+        this.context,
         required this.tabIndex,
         required this.resource
       }
@@ -33,7 +33,7 @@ class RoutePath {
   @protected
   @mustCallSuper
   Future<void> configureStateFromUri() {
-    getState<NavAwareState>().selectedTabIndex = tabIndex;
+    Provider.of(context!)<NavAwareState>().selectedTabIndex = tabIndex;
     return Future.value();
   }
 
@@ -49,8 +49,8 @@ class RoutePath {
   /// Maps current route object to Flutter-required [RouteInformation] object
   RouteInformation? get _routeInformation => RouteInformation(location: location);
 
-  /// Convenience method surfacing state to the route
-  T getState<T extends ChangeNotifier>()
-    => Provider.of<T>(context, listen: false);
+  // /// Convenience method surfacing state to the route
+  // T getState<T extends ChangeNotifier>()
+  //   => Provider.of<T>(context!, listen: false);
     // navState.stateByType<T>(tabIndex: tabIndex, searchOtherTabs: stateObjectIsInAnotherTab);
 }

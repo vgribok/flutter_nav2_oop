@@ -71,11 +71,14 @@ abstract class NavScreen extends StatelessWidget {
   @protected
   RoutePath get routePath;
 
-  NavAwareState navState(BuildContext context, {final bool listen = false})
+  NavAwareState getNavState(BuildContext context, {final bool listen = false})
       => Provider.of<NavAwareState>(context, listen: listen);
 
   /// Returns tab reference associated with this screen
-  TabInfo tab(BuildContext context) => navState(context)[tabIndex];
+  TabInfo tab(NavAwareState navState) => navState[tabIndex];
+
+  /// Returns tab reference associated with this screen
+  TabInfo getTab(BuildContext context) => tab(Provider.of<NavAwareState>(context, listen: false));
 
   /// Uses [Scaffold] to build navigation-aware screen UI
   @override
@@ -84,15 +87,16 @@ abstract class NavScreen extends StatelessWidget {
         builder: (context, navState, child) =>
       Scaffold(
           appBar: buildAppBar(context),
-          body: _buildBodyInternal(context),
-          bottomNavigationBar: _buildNavTabBarInternal(context),
-          drawer: _buildDrawerInternal(context),
-      );
+          body: _buildBodyInternal(context, navState),
+          bottomNavigationBar: _buildNavTabBarInternal(context, navState),
+          drawer: _buildDrawerInternal(context, navState),
+      )
+    );
 
   /// Invoked by the framework when navigation item,
   /// like tab or drawer list item, is tapped
   @protected
-  void onNavItemTap(BuildContext context, int newTabIndex) {
+  void onNavItemTap(BuildContext context, int newTabIndex, NavAwareState navState) {
 
     if(navState.effectiveNavType == NavType.Drawer) {
       // Hide the Drawer
@@ -100,7 +104,7 @@ abstract class NavScreen extends StatelessWidget {
     }
 
     bool tappedSameTabWithMultipleScreensInStack =
-        newTabIndex == tabIndex && tab.hasMultipleScreensInStack(navState);
+        newTabIndex == tabIndex && tab(navState).hasMultipleScreensInStack(navState, context);
 
     if(tappedSameTabWithMultipleScreensInStack) {
       // Remove top screen from the stack
@@ -110,11 +114,11 @@ abstract class NavScreen extends StatelessWidget {
     }
   }
 
-  Widget _buildBodyInternal(BuildContext context) {
+  Widget _buildBodyInternal(BuildContext context, NavAwareState navState) {
     final Widget body = buildBody(context);
 
     return navState.effectiveNavType == NavType.VerticalRail ?
-            buildVerticalRailAndBody(context, body) : body;
+            buildVerticalRailAndBody(context, body, navState) : body;
   }
 
   /// Override in subclasses to supply screen body
@@ -129,26 +133,26 @@ abstract class NavScreen extends StatelessWidget {
   /// it's called frequently to test-build
   /// screen stack.
   @protected
-  NavScreen? get topScreen => null;
+  NavScreen? topScreen(BuildContext context) => null;
 
   /// Non-root screens should override this method
   /// and call this one via super, to update the
   /// state so that the top child screen could be
   /// removed from the top of the nav stack
   @protected
-  void updateStateOnScreenRemovalFromNavStackTop() =>
-      navState.changeTabOnBackArrowTapIfNecessary(this);
+  void updateStateOnScreenRemovalFromNavStackTop(NavAwareState navState, BuildContext context) =>
+      navState.changeTabOnBackArrowTapIfNecessary(this, navState, context);
 
-  /// Convenience method surfacing [TabNavState] ability
-  /// to find state object by its type
-  @protected
-  T? stateByType<T extends ChangeNotifier>({
-    /// Set to true to search all tab state
-    /// object collections, as opposed to
-    /// just screen's tab state object collection
-    bool stateObjectIsInAnotherTab = false
-  }) =>
-      navState.stateByType<T>(tabIndex: tabIndex, searchOtherTabs: stateObjectIsInAnotherTab);
+  // /// Convenience method surfacing [TabNavState] ability
+  // /// to find state object by its type
+  // @protected
+  // T? stateByType<T extends ChangeNotifier>({
+  //   /// Set to true to search all tab state
+  //   /// object collections, as opposed to
+  //   /// just screen's tab state object collection
+  //   bool stateObjectIsInAnotherTab = false
+  // }) =>
+  //     navState.stateByType<T>(tabIndex: tabIndex, searchOtherTabs: stateObjectIsInAnotherTab);
 
   //#region App-wide screen customization factories
 
@@ -244,8 +248,8 @@ abstract class NavScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start, // Align to the top of the Drawer Header
         children: [
           Row(children: [ // Align icon and text at text baseline
-            Icon(screen.tab.icon, color: theme.colorScheme.secondary),
-            Text(' '),
+            Icon(screen.getTab(context).icon, color: theme.colorScheme.secondary),
+            const Text(' '),
             Text(screen.screenTitle,
               style: TextStyle(
                   color: theme.colorScheme.secondary,
@@ -287,9 +291,9 @@ abstract class NavScreen extends StatelessWidget {
   PreferredSizeWidget? buildAppBar(BuildContext context) =>
       appBarBuilder(this, context);
 
-  Widget? _buildNavTabBarInternal(BuildContext context) {
+  Widget? _buildNavTabBarInternal(BuildContext context, NavAwareState navState) {
     if (navState.effectiveNavType != NavType.BottomTabBar) return null;
-    return buildNavTabBar(context);
+    return buildNavTabBar(context, navState);
   }
 
   /// Method to override in subclasses to build screen-specific
@@ -299,14 +303,14 @@ abstract class NavScreen extends StatelessWidget {
   /// factory method building same bottom navigation bar for every
   /// screen.
   @protected
-  Widget? buildNavTabBar(BuildContext context) =>
+  Widget? buildNavTabBar(BuildContext context, NavAwareState navState) =>
       tabBarBuilder(this, context, navState.tabs, navState.selectedTabIndex,
-              (newTabIndex) => onNavItemTap(context, newTabIndex)
+              (newTabIndex) => onNavItemTap(context, newTabIndex, navState)
       );
 
-  Widget? _buildDrawerInternal(BuildContext context) {
+  Widget? _buildDrawerInternal(BuildContext context, NavAwareState navState) {
     if (navState.effectiveNavType != NavType.Drawer) return null;
-    return buildDrawer(context);
+    return buildDrawer(context, navState);
   }
 
   /// Method to override in subclasses to build screen-specific
@@ -316,12 +320,12 @@ abstract class NavScreen extends StatelessWidget {
   /// factory method building same drawer for every
   /// screen.
   @protected
-  Widget? buildDrawer(BuildContext context) =>
+  Widget? buildDrawer(BuildContext context, NavAwareState navState) =>
       drawerBuilder(this,
           context,
           navState.tabs,
           navState.selectedTabIndex,
-          (newTabIndex) => onNavItemTap(context, newTabIndex)
+          (newTabIndex) => onNavItemTap(context, newTabIndex, navState)
       );
 
   /// Method to override in subclasses to build screen-specific
@@ -349,9 +353,9 @@ abstract class NavScreen extends StatelessWidget {
   /// factory method building same vertical nav rail for every
   /// screen.
   @protected
-  Widget buildVerticalRailAndBody(BuildContext context, Widget body) =>
+  Widget buildVerticalRailAndBody(BuildContext context, Widget body, NavAwareState navState) =>
       verticalNavRailBuilder(body, this, navState.tabs, navState.selectedTabIndex,
-              (newTabIndex) => onNavItemTap(context, newTabIndex)
+              (newTabIndex) => onNavItemTap(context, newTabIndex, navState)
       );
 
   //#endregion

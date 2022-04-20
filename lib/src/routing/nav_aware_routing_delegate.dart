@@ -22,14 +22,19 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
     navState.addListener(this.notifyListeners);
   }
 
+  /// Updated on each navigator rendering
+  NavScreen? _topNavScreen;
+
   @override
   Widget build(BuildContext context) {
+
+    final List<NavScreen> screenStack = navState._buildNavigatorScreenStack(context).toList();
+    _topNavScreen = screenStack.last;
 
     // Call the function converting state
     // into the stack of screens.
     final List<Page<dynamic>> pageStack =
-      navState._buildNavigatorScreenStack()
-          .map((screen) => screen._page)
+          screenStack.map((screen) => screen._page)
           .toList();
 
     // Feed page stack and standard back arrow
@@ -38,18 +43,19 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
       key: navigatorKey,
       transitionDelegate: NoAnimationTransitionDelegate(),
       pages: pageStack,
-      onPopPage: _onBackButtonPress,
+      onPopPage: (route, result) => _onBackButtonPress(route, result, navState, context),
     );
   }
 
   /// Standard handler of the back arrow navigation button
-  bool _onBackButtonPress(Route route, dynamic result) {
+  bool _onBackButtonPress(Route route, dynamic result, NavAwareState navState, BuildContext context)
+  {
     if (!route.didPop(result)) {
       return false;
     }
 
     NavScreen navScreen = _screenFromRoute(route);
-    navScreen.updateStateOnScreenRemovalFromNavStackTop();
+    navScreen.updateStateOnScreenRemovalFromNavStackTop(navState, context);
 
     return true;
   }
@@ -70,8 +76,7 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
   /// (although current/top screen is well known to the system but not
   /// supplied here), and then ask the screen for its route.
   @override
-  RoutePath get currentConfiguration =>
-      navState._buildNavigatorScreenStack().last.routePath;
+  RoutePath get currentConfiguration => _topNavScreen!.routePath;
 
   /// Updates application navigation state based on
   /// user-typed URL, so that a screen corresponding

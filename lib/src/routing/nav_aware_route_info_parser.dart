@@ -31,7 +31,7 @@ class NavAwareRouteInfoParser extends RouteInformationParser<RoutePath> {
     // None of URL parsers have recognized the URL.
     // Return the 404 route object.
     return Future.value(
-        path ?? NotFoundRoutePath(context, notFoundUri: uri)
+        path ?? NotFoundRoutePath(context: context, notFoundUri: uri)
     );
   }
 

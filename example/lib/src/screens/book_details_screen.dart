@@ -2,6 +2,7 @@ import 'package:example/src/models/book.dart';
 import 'package:example/src/routing/book_details_path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nav2_oop/all.dart';
+import 'package:provider/provider.dart';
 
 class BookDetailsScreen extends NavScreen {
   static const navTabIndex = 0;
@@ -12,11 +13,9 @@ class BookDetailsScreen extends NavScreen {
   BookDetailsScreen({
     required this.selectedBook,
     required this.selectedBookId,
-    required NavAwareState navState
   }) : super(
     screenTitle: selectedBook.title,
     tabIndex: navTabIndex,
-    navState: navState
   );
 
   @override
@@ -34,12 +33,12 @@ class BookDetailsScreen extends NavScreen {
         ),
       );
 
-  SelectedBookState get selectedBookState => stateByType<SelectedBookState>()!;
+  // SelectedBookState get selectedBookState => stateByType<SelectedBookState>()!;
 
   @override
-  void updateStateOnScreenRemovalFromNavStackTop() {
-    super.updateStateOnScreenRemovalFromNavStackTop();
-    selectedBookState.value = null;
+  void updateStateOnScreenRemovalFromNavStackTop(NavAwareState navState, BuildContext context) {
+    super.updateStateOnScreenRemovalFromNavStackTop(navState, context);
+    Provider.of<SelectedBookState>(context, listen: false).selectedBook = null;
   }
 
   @override
