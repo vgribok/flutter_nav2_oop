@@ -38,7 +38,7 @@ class BooksListScreen extends NavScreen {
     return selectedBook == null
         ? null
         : BookDetailsScreen(
-            selectedBook: selectedBook!,
+            selectedBook: selectedBook,
             selectedBookId: selectedBookState.selectedBookId
             );
   }

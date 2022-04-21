@@ -76,7 +76,7 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
   /// (although current/top screen is well known to the system but not
   /// supplied here), and then ask the screen for its route.
   @override
-  RoutePath get currentConfiguration => _topNavScreen!.routePath;
+  RoutePath? get currentConfiguration => _topNavScreen?.routePath;
 
   /// Updates application navigation state based on
   /// user-typed URL, so that a screen corresponding

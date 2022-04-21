@@ -15,7 +15,7 @@ class NavAwareApp extends StatelessWidget {
 
   final NavAwareRouterDelegate _routerDelegate;
   final List<RoutePathFactory> _routeParsers;
-
+  final List<ChangeNotifier> _stateItems;
   final ThemeData? _theme;
 
   NavAwareApp({Key? key,
@@ -37,6 +37,7 @@ class NavAwareApp extends StatelessWidget {
     _appTitle = appTitle,
     _routerDelegate = NavAwareRouterDelegate(navState: navState),
     _routeParsers = routeParsers,
+    _stateItems = stateItems ?? [],
     _theme = theme,
     super(key: key)
   {
@@ -47,18 +48,34 @@ class NavAwareApp extends StatelessWidget {
   /// the [MaterialApp.router] method
   @override
   Widget build(BuildContext context) =>
-    OrientationBuilder(builder: (context, orientation) {
-      navState.isPortrait = orientation == Orientation.portrait;
-      // TODO: Implement multi-provider state propagation
-      return MaterialApp.router(
+      MultiProvider(
+        providers: stateProviders().toList(),
+        builder: (context, child) =>
+          OrientationBuilder(
+            builder: (context, orientation) {
+            navState.isPortrait = orientation == Orientation.portrait;
+            return mainAppWidget(context);
+          }
+        ),
+      );
+
+  Widget mainAppWidget(BuildContext context) =>
+      MaterialApp.router(
           title: appTitle,
           theme: _theme,
           routerDelegate: _routerDelegate,
           routeInformationParser: NavAwareRouteInfoParser(context, _routeParsers),
-          restorationScopeId: 'root',
+          // restorationScopeId: 'root',
           debugShowCheckedModeBanner: false // Hide 'Debug' ribbon on the AppBar
       );
-    });
+  
+  Iterable<ChangeNotifierProvider> stateProviders() sync* {
+    yield ChangeNotifierProvider(create: (context) => navState);
+
+    for(ChangeNotifier model in _stateItems) {
+      yield ChangeNotifierProvider(create: (context) => model);
+    }
+  }
 
   /// Returns the name of the application
   String get appTitle => _appTitle;
