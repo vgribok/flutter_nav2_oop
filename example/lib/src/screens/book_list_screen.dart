@@ -33,14 +33,14 @@ class BooksListScreen extends NavScreen {
 
   @override
   NavScreen? topScreen(BuildContext context) {
-    final SelectedBookState selectedBookState = Provider.of<SelectedBookState>(context, listen: true);
-    final Book? selectedBook = selectedBookState.selectedBook;
+    final SelectedBookState? selectedBookState = Provider.of<SelectedBookState?>(context, listen: true);
+    final Book? selectedBook = selectedBookState?.selectedBook;
     return selectedBook == null
         ? null
         : BookDetailsScreen(
             selectedBook: selectedBook,
-            selectedBookId: selectedBookState.selectedBookId
-            );
+            selectedBookId: selectedBookState!.selectedBookId
+        );
   }
 
   @override

@@ -70,11 +70,8 @@ class NavAwareApp extends StatelessWidget {
       );
   
   Iterable<ChangeNotifierProvider> stateProviders() sync* {
-    yield ChangeNotifierProvider(create: (context) => navState);
-
-    for(ChangeNotifier model in _stateItems) {
-      yield ChangeNotifierProvider(create: (context) => model);
-    }
+    yield ChangeNotifierProvider.value(value: navState);
+    yield* _stateItems.map((model) => ChangeNotifierProvider.value(value: model));
   }
 
   /// Returns the name of the application
