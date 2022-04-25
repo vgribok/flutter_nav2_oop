@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 part './src/models/tab_info.dart';
 part './src/models/tab_nav_state.dart';
+part './src/models/nav_state_restorer.dart';
 
 part './src/routing/details_route_path.dart';
 part './src/routing/nav_aware_app_state.dart';

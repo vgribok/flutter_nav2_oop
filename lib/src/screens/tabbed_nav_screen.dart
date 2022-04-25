@@ -131,6 +131,7 @@ abstract class NavScreen extends StatelessWidget {
   /// state so that the top child screen could be
   /// removed from the top of the nav stack
   @protected
+  @mustCallSuper
   void updateStateOnScreenRemovalFromNavStackTop() =>
       navState.changeTabOnBackArrowTapIfNecessary(this);
 

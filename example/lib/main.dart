@@ -13,16 +13,16 @@ import 'package:example/theme.dart';
 import 'package:flutter_nav2_oop/all.dart';
 
 void main() {
-  runApp(BooksApp());
+  runApp(NavAwareApp(stateFactory: () => BooksAppState()));
 }
 
-class BooksApp extends NavAwareApp {
+class BooksAppState extends NavAwareAppState {
 
-  BooksApp() :
+  BooksAppState() :
       super(
-        appTitle: 'Books App',
+        applicationId: "nav-aware-books-sample",
+        appTitle: 'Books With Navigation',
         theme: myTheme,
-        navState: NavAwareState(),
 
         routeParsers: [
           BookListPath.fromUri,
@@ -48,8 +48,5 @@ class BooksApp extends NavAwareApp {
               stateItems: [SettingsShowModalState()],
               rootScreenFactory: (nvState) => SettingsScreen(nvState))
         ]
-      )
-  {
-    navState.assertSingleStateItemOfEachType();
-  }
+      );
 }

@@ -34,6 +34,7 @@ class NavAwareState extends ChangeNotifier {
 
   /// Add tab definitions during application initialization
   void addTabs(List<TabInfo> tabs) {
+    this.tabs.clear();
     this.tabs.addAll(tabs);
     //assertSingleStateItemOfEachType();
     selectedTab._addListener(this.notifyListeners);
@@ -117,7 +118,7 @@ class NavAwareState extends ChangeNotifier {
 
     if (selectedTabIndex < 0 || selectedTabIndex >= tabs.length) {
       // If `selectedTabIndex` is out of range, set it to 0
-      print(
+      debugPrint(
           'Selected tab index $selectedTabIndex is outside the [0..${tabs.length - 1}] range. Setting index to 0.');
       _selectedTabIndex = 0;
     } else

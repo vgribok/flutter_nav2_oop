@@ -36,5 +36,5 @@ class BooksListScreen extends NavScreen {
           navState: navState);
 
   @override
-  RoutePath get routePath => BookListPath();
+  RoutePath get routePath => const BookListPath();
 }
