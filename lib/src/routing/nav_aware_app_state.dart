@@ -61,7 +61,7 @@ class NavAwareAppState extends State<NavAwareApp>
           theme: _theme,
           routerDelegate: NavAwareRouterDelegate(navState: navState),
           routeInformationParser: _routeInformationParser,
-          // restorationScopeId: 'root',
+          restorationScopeId: "app-router-restoration-scope",
           debugShowCheckedModeBanner: false // Hide 'Debug' ribbon on the AppBar
       );
     });

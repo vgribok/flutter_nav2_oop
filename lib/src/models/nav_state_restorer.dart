@@ -12,6 +12,7 @@ class NavStateRestorer extends RestorableChangeNotifier<NavAwareState> {
     final navState = NavAwareState(navType: navType);
     navState.addTabs(tabs);
     navState.assertSingleStateItemOfEachType();
+    navState.addListener(notifyListeners);
     return navState;
   }
 
