@@ -13,9 +13,11 @@ class BookDetailsScreen extends NavScreen {
   BookDetailsScreen({
     required this.selectedBook,
     required this.selectedBookId,
+    required List<ChangeNotifierProvider> providers
   }) : super(
     screenTitle: selectedBook.title,
     tabIndex: navTabIndex,
+    providers: providers
   );
 
   @override

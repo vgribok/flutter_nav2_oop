@@ -10,6 +10,7 @@ abstract class FullScreenModalDialog extends NavScreen {
     required NavScreen parent,
     /// Screen title
     required String screenTitle,
+    required List<ChangeNotifierProvider> providers,
     /// Optional user-supplied key.
     /// If not supplied, route URI
     /// is used as the key
@@ -17,6 +18,7 @@ abstract class FullScreenModalDialog extends NavScreen {
   }) : super(
     screenTitle: screenTitle,
     tabIndex: parent.tabIndex,
+    providers: providers,
     key: key
   );
 

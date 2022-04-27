@@ -39,6 +39,8 @@ abstract class NavScreen extends StatelessWidget {
   // @protected
   // final NavAwareState navState;
 
+  final List<ChangeNotifierProvider> providers;
+
   /// True if key is supplied to the constructor explicitly
   final bool _keySpecified;
 
@@ -49,6 +51,7 @@ abstract class NavScreen extends StatelessWidget {
         /// Index of the navigation tab associated
         /// with the screen
         required this.tabIndex,
+        required this.providers,
         // /// Reference to an existing [TabNavState] instance
         // required this.navState,
         /// Optional user-supplied key.
@@ -83,14 +86,18 @@ abstract class NavScreen extends StatelessWidget {
   /// Uses [Scaffold] to build navigation-aware screen UI
   @override
   Widget build(BuildContext context) =>
-    Consumer<NavAwareState>(
-        builder: (context, navState, child) =>
-      Scaffold(
-          appBar: buildAppBar(context),
-          body: _buildBodyInternal(context, navState),
-          bottomNavigationBar: _buildNavTabBarInternal(context, navState),
-          drawer: _buildDrawerInternal(context, navState),
-      )
+  MultiProvider(
+      providers: this.providers,
+      builder: (context, child) =>
+        Consumer<NavAwareState>(
+            builder: (context, navState, child) =>
+          Scaffold(
+              appBar: buildAppBar(context),
+              body: _buildBodyInternal(context, navState),
+              bottomNavigationBar: _buildNavTabBarInternal(context, navState),
+              drawer: _buildDrawerInternal(context, navState),
+          )
+        )
     );
 
   /// Invoked by the framework when navigation item,
@@ -104,7 +111,7 @@ abstract class NavScreen extends StatelessWidget {
     }
 
     bool tappedSameTabWithMultipleScreensInStack =
-        newTabIndex == tabIndex && tab(navState).hasMultipleScreensInStack(navState, context);
+        newTabIndex == tabIndex && tab(navState).hasMultipleScreensInStack(navState, context, providers);
 
     if(tappedSameTabWithMultipleScreensInStack) {
       // Remove top screen from the stack
@@ -141,7 +148,7 @@ abstract class NavScreen extends StatelessWidget {
   /// removed from the top of the nav stack
   @protected
   void updateStateOnScreenRemovalFromNavStackTop(NavAwareState navState, BuildContext context) =>
-      navState.changeTabOnBackArrowTapIfNecessary(this, navState, context);
+      navState.changeTabOnBackArrowTapIfNecessary(this, navState, context, providers);
 
   // /// Convenience method surfacing [TabNavState] ability
   // /// to find state object by its type

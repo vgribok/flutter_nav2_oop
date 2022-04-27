@@ -13,7 +13,7 @@ class NavAwareApp extends StatelessWidget {
   /// Application name
   final String _appTitle;
 
-  final NavAwareRouterDelegate _routerDelegate;
+  // final NavAwareRouterDelegate _routerDelegate;
   final List<RoutePathFactory> _routeParsers;
   final List<ChangeNotifier> _stateItems;
   final ThemeData? _theme;
@@ -35,7 +35,7 @@ class NavAwareApp extends StatelessWidget {
     ThemeData? theme
   }) :
     _appTitle = appTitle,
-    _routerDelegate = NavAwareRouterDelegate(navState: navState),
+    // _routerDelegate = NavAwareRouterDelegate(navState: navState),
     _routeParsers = routeParsers,
     _stateItems = stateItems ?? [],
     _theme = theme,
@@ -48,24 +48,24 @@ class NavAwareApp extends StatelessWidget {
   /// the [MaterialApp.router] method
   @override
   Widget build(BuildContext context) =>
-      MultiProvider(
-        providers: stateProviders().toList(),
-        builder: (context, child) =>
+      // MultiProvider(
+      //   providers: stateProviders().toList(),
+      //   builder: (context, child) =>
           OrientationBuilder(
             builder: (context, orientation) {
             navState.isPortrait = orientation == Orientation.portrait;
             return mainAppWidget(context);
           }
-        ),
+        // ),
       );
 
   Widget mainAppWidget(BuildContext context) =>
       MaterialApp.router(
           title: appTitle,
           theme: _theme,
-          routerDelegate: _routerDelegate,
+          routerDelegate: NavAwareRouterDelegate(navState: navState, providers: stateProviders().toList()),
           routeInformationParser: NavAwareRouteInfoParser(context, _routeParsers),
-          // restorationScopeId: 'root',
+          restorationScopeId: 'root',
           debugShowCheckedModeBanner: false // Hide 'Debug' ribbon on the AppBar
       );
   

@@ -15,9 +15,11 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
 
   /// Application state reference holder
   final NavAwareState navState;
+  final List<ChangeNotifierProvider> providers;
 
   NavAwareRouterDelegate({
     required this.navState,
+    required this.providers
   }) {
     navState.addListener(this.notifyListeners);
   }
@@ -28,7 +30,7 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
   @override
   Widget build(BuildContext context) {
 
-    final List<NavScreen> screenStack = navState._buildNavigatorScreenStack(context).toList();
+    final List<NavScreen> screenStack = navState._buildNavigatorScreenStack(context, providers).toList();
     _topNavScreen = screenStack.last;
 
     // Call the function converting state

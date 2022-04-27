@@ -38,15 +38,15 @@ class BooksApp extends NavAwareApp {
           TabInfo(
               icon: Icons.home,
               title: 'Books',
-              rootScreenFactory: () => const BooksListScreen()),
+              rootScreenFactory: (providers) => BooksListScreen(providers)),
           TabInfo(
               icon: Icons.person,
               title: 'User',
-              rootScreenFactory: () => const UserProfileScreen()),
+              rootScreenFactory: (providers) => UserProfileScreen(providers)),
           TabInfo(
               icon: Icons.settings,
               title: 'Settings',
-              rootScreenFactory: () => const SettingsScreen())
+              rootScreenFactory: (providers) =>  SettingsScreen(providers))
         ]
       );
 }

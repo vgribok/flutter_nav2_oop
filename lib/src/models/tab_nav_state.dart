@@ -77,19 +77,19 @@ class NavAwareState extends ChangeNotifier {
   /// Builds entire application screen state, taking into
   /// account selected nav tab index, "child" screens of
   /// tab "root" screens, and a 404 screen.
-  Iterable<NavScreen> _buildNavigatorScreenStack(BuildContext context) sync* {
+  Iterable<NavScreen> _buildNavigatorScreenStack(BuildContext context, List<ChangeNotifierProvider> providers) sync* {
     if (_prevSelectedTabIndex != null &&
         _prevSelectedTabIndex != _selectedTabIndex) {
       // Enable back arrow navigation for a previously selected tab
-      yield* tabs[_prevSelectedTabIndex!]._screenStack(this, context);
+      yield* tabs[_prevSelectedTabIndex!]._screenStack(this, context, providers);
     }
     // Return a screen stack for the currently selected tab
-    yield* selectedTab._screenStack(this, context);
+    yield* selectedTab._screenStack(this, context, providers);
 
     if (notFoundUri != null) {
       // Put 404 screen on top of all others if user typed in
       // an invalid URL into the browser address bar.
-      yield UrlNotFoundScreen.notFoundScreenFactory(this);
+      yield UrlNotFoundScreen.notFoundScreenFactory(this, providers);
     }
   }
 
@@ -168,7 +168,7 @@ class NavAwareState extends ChangeNotifier {
 
   /// Internal. Tests whether selected tab needs to be changed
   /// on route pop, when user hits navigation back button.
-  void changeTabOnBackArrowTapIfNecessary(NavScreen topScreen, NavAwareState navState, BuildContext context) {
+  void changeTabOnBackArrowTapIfNecessary(NavScreen topScreen, NavAwareState navState, BuildContext context, List<ChangeNotifierProvider> providers) {
 
     /// Check whether there is info about previously selected tab.
     /// If not, no change to make.
@@ -176,7 +176,7 @@ class NavAwareState extends ChangeNotifier {
 
     assert(topScreen.tabIndex == _selectedTabIndex);
 
-    if (topScreen.tab(navState).hasOnlyOneScreenInStack(this, context)) {
+    if (topScreen.tab(navState).hasOnlyOneScreenInStack(this, context, providers)) {
       // Tab screen stack has only one (current) screen,
       // meaning back arrow tap should change the tab.
       selectedTabIndex = _prevSelectedTabIndex!;

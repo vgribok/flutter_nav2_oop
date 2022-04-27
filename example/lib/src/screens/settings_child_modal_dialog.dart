@@ -7,10 +7,11 @@ import 'package:provider/provider.dart';
 
 class SettingsChildModalDialog extends FullScreenModalDialog {
 
-  SettingsChildModalDialog({required NavScreen parent})
+  SettingsChildModalDialog({required NavScreen parent, required List<ChangeNotifierProvider> providers})
     : super(
         parent: parent,
         screenTitle: 'Modal Demo',
+        providers: providers
     );
 
   @override

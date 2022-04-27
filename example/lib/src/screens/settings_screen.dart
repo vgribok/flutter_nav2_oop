@@ -8,10 +8,11 @@ import 'package:provider/provider.dart';
 class SettingsScreen extends NavScreen {
   static const int navTabIndex = 2;
 
-  const SettingsScreen() :
+  const SettingsScreen(List<ChangeNotifierProvider> providers) :
     super(
       tabIndex: navTabIndex,
-      screenTitle: 'Settings'
+      screenTitle: 'Settings',
+      providers: providers
     );
 
   @override
@@ -69,5 +70,5 @@ class SettingsScreen extends NavScreen {
   @override
   NavScreen? topScreen(BuildContext context) =>
     Provider.of<SettingsShowModalState>(context, listen: true).showSettingsModal ?
-      SettingsChildModalDialog(parent: this) : null;
+      SettingsChildModalDialog(parent: this, providers: providers) : null;
 }
