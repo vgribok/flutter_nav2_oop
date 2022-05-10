@@ -20,7 +20,7 @@ class CounterScreen extends NavScreen {
   @override
   Widget? buildFloatingActionButton(BuildContext context) =>
       FloatingActionButton(
-        onPressed: () => counterKey.currentState?._incrementCounter(),
+        onPressed: () => counterKey.currentState!._incrementCounter(),
         tooltip: 'Increment',
         backgroundColor: Theme.of(context).primaryColor,
         child: const Icon(Icons.add),
@@ -46,6 +46,12 @@ class _CounterWidgetState extends State<CounterWidget> with RestorationMixin {
       // called again, and so nothing would appear to happen.
       _counter.value++;
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _counter.dispose();
   }
 
   @override

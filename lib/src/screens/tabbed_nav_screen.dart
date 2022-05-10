@@ -39,9 +39,6 @@ abstract class NavScreen extends StatelessWidget {
   @protected
   final NavAwareState navState;
 
-  /// True if key is supplied to the constructor explicitly
-  final bool _keySpecified;
-
   const NavScreen(
       {
         /// Screen title
@@ -54,16 +51,12 @@ abstract class NavScreen extends StatelessWidget {
         /// Optional user-supplied key.
         /// If not supplied, route URI
         /// is used as the key
-        LocalKey? key,
+        Key? key,
       }):
-        _keySpecified = key != null,
         super(key: key);
 
-  @override
-  LocalKey get key => _keySpecified ? super.key! as LocalKey : ValueKey(routePath.location);
-
   /// Returns a Page instance used by the [Navigator] Widget
-  Page get _page => MaterialPage(key: key, child: this);
+  Page get _page => MaterialPage(key: ValueKey(routePath.location), child: this, restorationId: routePath.location);
 
   /// Overridden by subclasses, returns
   /// [RoutePath] instance corresponding to
