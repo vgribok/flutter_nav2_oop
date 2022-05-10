@@ -4,7 +4,7 @@ import 'package:flutter_nav2_oop/all.dart';
 
 class UserProfileScreen extends NavScreen {
 
-  static const int navTabIndex = 1;
+  static const int navTabIndex = 3;
 
   const UserProfileScreen(NavAwareState navState) : super(
     screenTitle: 'User Profile',

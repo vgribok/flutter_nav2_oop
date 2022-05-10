@@ -1,3 +1,5 @@
+import 'package:example/src/routing/counter_path.dart';
+import 'package:example/src/screens/counter.dart';
 import 'package:flutter/material.dart';
 import 'package:example/src/models/book.dart';
 import 'package:example/src/models/show_settings_modal_state.dart';
@@ -34,7 +36,8 @@ class BooksAppState extends NavAwareAppState {
           BookDetailsPath.fromUri,
           UserProfilePath.fromUri,
           SettingsPath.fromUri,
-          SettingsModalChildPath.fromUri
+          SettingsModalChildPath.fromUri,
+          CounterPath.fromUri
         ],
 
         tabs: [
@@ -44,14 +47,21 @@ class BooksAppState extends NavAwareAppState {
               stateItems: [SelectedBookState()],
               rootScreenFactory: (nvState) => BooksListScreen(nvState)),
           TabInfo(
-              icon: Icons.person,
-              title: 'User',
-              rootScreenFactory: (nvState) => UserProfileScreen(nvState)),
+            icon: Icons.plus_one,
+            title: 'Counter',
+            rootScreenFactory: (nvState) => CounterScreen(nvState)
+          ),
           TabInfo(
               icon: Icons.settings,
               title: 'Settings',
               stateItems: [SettingsShowModalState()],
-              rootScreenFactory: (nvState) => SettingsScreen(nvState))
+              rootScreenFactory: (nvState) => SettingsScreen(nvState)
+          ),
+          TabInfo(
+              icon: Icons.person,
+              title: 'User',
+              rootScreenFactory: (nvState) => UserProfileScreen(nvState)
+          ),
         ]
       );
 }

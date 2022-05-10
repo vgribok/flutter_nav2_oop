@@ -5,6 +5,6 @@ import 'package:flutter/material.dart';
 final ThemeData myTheme = ThemeData.from(
     colorScheme: ColorScheme.fromSeed(
         seedColor: Colors.pink,
-        secondary: Colors.white
+        secondary: Colors.white,
     )
 );

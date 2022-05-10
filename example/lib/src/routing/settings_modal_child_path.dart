@@ -14,7 +14,7 @@ class SettingsModalChildPath extends RoutePath {
       );
 
   static RoutePath? fromUri(Uri uri) =>
-      uri.pathsMatch(resourceName) ? SettingsModalChildPath() : null;
+      uri.pathsMatch(resourceName) ? const SettingsModalChildPath() : null;
 
   @override
   Future<void> configureStateFromUri(NavAwareState navState) {

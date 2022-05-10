@@ -9,7 +9,7 @@ typedef NavigationWidgetBarBuilder = Widget Function(
 
 /// A signature of a programmer-replaceable method building
 /// navigation drawer header widget
-typedef DrawerHeaderBuilder = Widget? Function (NavScreen, BuildContext context);
+typedef OptionalWidgetBuilder = Widget? Function (NavScreen, BuildContext context);
 
 /// A signature of a programmer-replaceable method building
 /// vertical rail navigation widget
@@ -76,13 +76,21 @@ abstract class NavScreen extends StatelessWidget {
 
   /// Uses [Scaffold] to build navigation-aware screen UI
   @override
-  Widget build(BuildContext context) =>
-      Scaffold(
-          appBar: buildAppBar(context),
-          body: _buildBodyInternal(context),
-          bottomNavigationBar: _buildNavTabBarInternal(context),
-          drawer: _buildDrawerInternal(context),
-      );
+  Widget build(BuildContext context) {
+    var navBar = _buildNavTabBarInternal(context);
+    var appBar = buildAppBar(context);
+    var body = _buildBodyInternal(context);
+    var drawer = _buildDrawerInternal(context);
+    var actionButton = buildFloatingActionButton(context);
+
+    return Scaffold(
+      appBar: appBar,
+      body: body,
+      bottomNavigationBar: navBar,
+      drawer: drawer,
+      floatingActionButton: actionButton,
+    );
+  }
 
   /// Invoked by the framework when navigation item,
   /// like tab or drawer list item, is tapped
@@ -164,7 +172,7 @@ abstract class NavScreen extends StatelessWidget {
   /// navigation Drawer Header widget.
   ///
   /// Default implementation is the static [buildDefaultDrawerHeader] method.
-  static DrawerHeaderBuilder drawerHeaderBuilder = buildDefaultDrawerHeader;
+  static OptionalWidgetBuilder drawerHeaderBuilder = buildDefaultDrawerHeader;
 
   /// A user-replaceable factory building
   /// Vertical Rail navigation widget.
@@ -193,7 +201,8 @@ abstract class NavScreen extends StatelessWidget {
              (tabInfo) => BottomNavigationBarItem(icon: Icon(tabInfo.icon), label: tabInfo.title)
           ).toList(),
           currentIndex: currentSelection,
-          onTap: tapHandler
+          onTap: tapHandler,
+          type: BottomNavigationBarType.fixed,
       );
 
   /// Default implementation of the [drawerBuilder] factory
@@ -241,7 +250,7 @@ abstract class NavScreen extends StatelessWidget {
         children: [
           Row(children: [ // Align icon and text at text baseline
             Icon(screen.tab.icon, color: theme.colorScheme.secondary),
-            Text(' '),
+            const Text(' '),
             Text(screen.screenTitle,
               style: TextStyle(
                   color: theme.colorScheme.secondary,
@@ -350,5 +359,7 @@ abstract class NavScreen extends StatelessWidget {
               (newTabIndex) => onNavItemTap(context, newTabIndex)
       );
 
+  @protected
+  Widget? buildFloatingActionButton(BuildContext context) => null;
   //#endregion
 }

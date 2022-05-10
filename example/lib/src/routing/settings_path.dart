@@ -12,5 +12,5 @@ class SettingsPath extends RoutePath {
     );
 
   static RoutePath? fromUri(Uri uri) =>
-      uri.isSingleSegmentPath(resourceName) ? SettingsPath() : null;
+      uri.isSingleSegmentPath(resourceName) ? const SettingsPath() : null;
 }
