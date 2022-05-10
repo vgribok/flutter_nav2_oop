@@ -9,7 +9,7 @@ part of flutter_nav2_oop;
 class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<RoutePath> {
 
-  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
   /// Application state reference holder
   final NavAwareState navState;
@@ -37,6 +37,7 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
       transitionDelegate: NoAnimationTransitionDelegate(),
       pages: pageStack,
       onPopPage: _onBackButtonPress,
+      restorationScopeId: "main-navigator",
     );
   }
 

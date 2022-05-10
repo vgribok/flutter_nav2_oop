@@ -13,7 +13,12 @@ import 'package:example/theme.dart';
 import 'package:flutter_nav2_oop/all.dart';
 
 void main() {
-  runApp(NavAwareApp(stateFactory: () => BooksAppState()));
+  runApp(
+      NavAwareApp(
+        key: GlobalKey<BooksAppState>(debugLabel: "Books sample app"),
+        stateFactory: () => BooksAppState()
+      )
+  );
 }
 
 class BooksAppState extends NavAwareAppState {

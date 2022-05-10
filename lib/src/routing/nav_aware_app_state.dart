@@ -6,7 +6,7 @@ class NavAwareApp extends StatefulWidget {
 
   final NavAwareAppStateFactory stateFactory;
 
-  const NavAwareApp({Key? key, required this.stateFactory })
+  const NavAwareApp({required GlobalKey<NavAwareAppState> key, required this.stateFactory })
       : super(key: key);
 
   @override

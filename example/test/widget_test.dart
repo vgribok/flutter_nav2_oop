@@ -14,7 +14,12 @@ import 'package:example/main.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(NavAwareApp(stateFactory: () => BooksAppState()));
+    await tester.pumpWidget(
+      NavAwareApp(
+        key: GlobalKey<BooksAppState>(debugLabel: "Pumped test widget"),
+        stateFactory: () => BooksAppState()
+      )
+    );
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
