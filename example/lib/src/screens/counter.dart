@@ -4,6 +4,8 @@ import 'package:flutter_nav2_oop/all.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_restorable/flutter_riverpod_restorable.dart';
 
+import '../local_restorable_providers.dart';
+
 final counterProvider = RestorableProvider<RestorableInt>(
     (ref) => RestorableInt(0),
     restorationId: "counter"
@@ -17,9 +19,9 @@ class CounterScreen extends NavScreen {
 
   @override
   Widget buildBody(BuildContext context) =>
-      RestorableProviderScope(
+      LocalRestorableProviderScope(
           restorationId: "counter-scope",
-          restorableOverrides: [counterProvider.overrideWithRestorable(RestorableInt(0))],
+          restorableProviders: [counterProvider],
           child: const CounterWidget()
       );
 
