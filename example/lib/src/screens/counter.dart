@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_restorable/flutter_riverpod_restorable.dart';
 
 final counterProvider = RestorableProvider<RestorableInt>(
-    (ref) => RestorableInt(0),
+    (ref) => throw UnimplementedError("Initial value is supplied by the override"),
     restorationId: "counter"
 );
 
