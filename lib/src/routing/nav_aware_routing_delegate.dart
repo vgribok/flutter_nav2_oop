@@ -14,9 +14,13 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
   /// Application state reference holder
   final NavAwareState navState;
 
-  NavAwareRouterDelegate({
-    required this.navState,
-  }) {
+  final WidgetRef ref;
+
+  NavAwareRouterDelegate(this.ref,
+      {
+        required this.navState,
+      }
+  ) {
     navState.addListener(this.notifyListeners);
   }
 

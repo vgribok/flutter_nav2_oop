@@ -14,7 +14,9 @@ class NavAwareRouteInfoParser extends RouteInformationParser<RoutePath> {
   /// to entered URL
   final List<RoutePathFactory> _routeParsers;
 
-  const NavAwareRouteInfoParser({required List<RoutePathFactory> routeParsers})
+  final WidgetRef ref;
+
+  const NavAwareRouteInfoParser(this.ref, {required List<RoutePathFactory> routeParsers})
     : _routeParsers = routeParsers;
 
   @override
