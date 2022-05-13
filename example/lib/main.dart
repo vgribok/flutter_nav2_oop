@@ -12,23 +12,15 @@ import 'package:example/src/screens/book_list_screen.dart';
 import 'package:example/src/screens/settings_screen.dart';
 import 'package:example/src/screens/user_profile_screen.dart';
 import 'package:example/theme.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_nav2_oop/all.dart';
 
 void main() {
-  runApp(
-      ProviderScope(
-        child: NavAwareApp(
-          key: GlobalKey<BooksAppState>(debugLabel: "Books sample app"),
-          stateFactory: () => BooksAppState()
-        )
-      )
-  );
+  runApp(BooksApp());
 }
 
-class BooksAppState extends NavAwareAppState {
+class BooksApp extends NavAwareApp {
 
-  BooksAppState() :
+  BooksApp() :
       super(
         applicationId: "nav-aware-books-sample",
         appTitle: 'Books With Navigation',

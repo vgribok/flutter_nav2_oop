@@ -30,10 +30,16 @@ class NavAwareState extends ChangeNotifier {
   /// Only set when user explicitly tapped a nav tab.
   int? _prevSelectedTabIndex;
 
-  NavAwareState({NavType? navType}) : _navigationType = navType;
+  final NavType? navType;
+
+  NavAwareState({this.navType, required Iterable<TabInfo> tabs})
+    : _navigationType = navType
+  {
+    addTabs(tabs);
+  }
 
   /// Add tab definitions during application initialization
-  void addTabs(List<TabInfo> tabs) {
+  void addTabs(Iterable<TabInfo> tabs) {
     this.tabs.clear();
     this.tabs.addAll(tabs);
     //assertSingleStateItemOfEachType();

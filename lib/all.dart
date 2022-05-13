@@ -5,10 +5,10 @@ library flutter_nav2_oop;
 // TODO: add localization support
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 part './src/models/tab_info.dart';
 part './src/models/tab_nav_state.dart';
-part './src/models/nav_state_restorer.dart';
 
 part './src/routing/details_route_path.dart';
 part './src/routing/nav_aware_app_state.dart';
