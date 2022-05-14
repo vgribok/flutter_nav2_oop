@@ -1,6 +1,7 @@
 import 'package:example/src/routing/user_profile_path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nav2_oop/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class UserProfileScreen extends NavScreen {
 
@@ -13,11 +14,11 @@ class UserProfileScreen extends NavScreen {
   );
 
   @override
-  Widget buildBody(BuildContext context)  =>
-      Center(
+  Widget buildBody(BuildContext context, WidgetRef ref)  =>
+      const Center(
         child: Text('User Profile will go here'),
       );
 
   @override
-  RoutePath get routePath => UserProfilePath();
+  RoutePath get routePath => const UserProfilePath();
 }

@@ -19,10 +19,10 @@ class CounterScreen extends NavScreen {
   RoutePath get routePath => const CounterPath();
 
   @override
-  Widget buildBody(BuildContext context) =>
+  Widget buildBody(BuildContext context, WidgetRef ref) =>
     RestorableProviderScope(
       restorationId: "counter-scope",
-      restorableOverrides: [counterProvider.overrideWithRestorable(RestorableInt(0))],
+      restorableOverrides: [counterProvider.overrideWithRestorable(RestorableInt(10))],
       child: Consumer(
         builder: (context, ref, child) =>
          Scaffold(

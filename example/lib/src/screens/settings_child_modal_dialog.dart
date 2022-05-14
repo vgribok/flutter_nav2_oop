@@ -3,6 +3,7 @@ import 'package:example/src/models/show_settings_modal_state.dart';
 import 'package:example/src/routing/settings_modal_child_path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nav2_oop/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SettingsChildModalDialog extends FullScreenModalDialog {
 
@@ -13,7 +14,7 @@ class SettingsChildModalDialog extends FullScreenModalDialog {
     );
 
   @override
-  Widget buildBody(BuildContext context) =>
+  Widget buildBody(BuildContext context, WidgetRef ref) =>
       Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

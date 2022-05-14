@@ -3,6 +3,7 @@ import 'package:example/src/routing/settings_path.dart';
 import 'package:example/src/screens/settings_child_modal_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nav2_oop/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SettingsScreen extends NavScreen {
   static const int navTabIndex = 2;
@@ -15,7 +16,7 @@ class SettingsScreen extends NavScreen {
     );
 
   @override
-  Widget buildBody(BuildContext context) =>
+  Widget buildBody(BuildContext context, WidgetRef ref) =>
       Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

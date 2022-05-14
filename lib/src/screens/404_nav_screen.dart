@@ -33,7 +33,7 @@ class UrlNotFoundScreen extends NavScreen {
     );
 
   @override
-  Widget buildBody(BuildContext context) =>
+  Widget buildBody(BuildContext context, WidgetRef ref) =>
     Center(child:
       Column(
         mainAxisAlignment: MainAxisAlignment.center,

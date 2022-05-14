@@ -2,6 +2,7 @@ import 'package:example/src/models/book.dart';
 import 'package:example/src/routing/book_details_path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nav2_oop/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class BookDetailsScreen extends NavScreen {
   static const navTabIndex = 0;
@@ -20,7 +21,7 @@ class BookDetailsScreen extends NavScreen {
   );
 
   @override
-  Widget buildBody(BuildContext context) =>
+  Widget buildBody(BuildContext context, WidgetRef ref) =>
       Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(

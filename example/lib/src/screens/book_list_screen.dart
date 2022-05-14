@@ -2,6 +2,7 @@ import 'package:example/src/models/book.dart';
 import 'package:example/src/routing/book_list_path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nav2_oop/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'book_details_screen.dart';
 
@@ -12,7 +13,7 @@ class BooksListScreen extends NavScreen {
       : super(screenTitle: 'Books', tabIndex: navTabIndex, navState: navState);
 
   @override
-  Widget buildBody(BuildContext context) => ListView(children: [
+  Widget buildBody(BuildContext context, WidgetRef ref) => ListView(children: [
         for (var book in Books.allBooks)
           ListTile(
             title: Text(book.title),

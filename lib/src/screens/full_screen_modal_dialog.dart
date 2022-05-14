@@ -20,13 +20,13 @@ abstract class FullScreenModalDialog extends NavScreen {
   );
 
   @override
-  Widget? buildNavTabBar(BuildContext context) => null; // Hides bottom navbar
+  Widget? buildNavTabBar(BuildContext context, WidgetRef ref) => null; // Hides bottom navbar
 
   @override
-  Widget? buildDrawer(BuildContext context) => null; // Hides Drawer
+  Widget? buildDrawer(BuildContext context, WidgetRef ref) => null; // Hides Drawer
 
   @override
-  Widget buildVerticalRailAndBody(BuildContext context, Widget body) => body;
+  Widget buildVerticalRailAndBody(BuildContext context, WidgetRef ref, Widget body) => body;
 
   /// Closes the dialog
   void close(BuildContext context) => Navigator.pop(context);
@@ -34,10 +34,10 @@ abstract class FullScreenModalDialog extends NavScreen {
   /// Builds dialog-specific [AbbBar] with the
   /// Cancel icon instead of the back arrow.
   @override
-  PreferredSizeWidget? buildAppBar(BuildContext context) =>
+  PreferredSizeWidget? buildAppBar(BuildContext context, WidgetRef ref) =>
       AppBar(
-        title: Text(this.screenTitle),
-        leading: IconButton(icon: Icon(Icons.cancel), onPressed: () => close(context)),
+        title: Text(screenTitle),
+        leading: IconButton(icon: const Icon(Icons.cancel), onPressed: () => close(context)),
         actions: buildAppBarActions(context)
       );
 }

@@ -4,7 +4,7 @@ part of flutter_nav2_oop;
 /// navigation Widget - either a bottom tab bar, or
 /// a [Drawer]
 typedef NavigationWidgetBarBuilder = Widget Function(
-    NavScreen screen, BuildContext context, List<TabInfo>, int currentSelection, void Function(int index) tapHandler
+    NavScreen screen, BuildContext context, WidgetRef ref, List<TabInfo>, int currentSelection, void Function(int index) tapHandler
 );
 
 /// A signature of a programmer-replaceable method building
@@ -14,6 +14,7 @@ typedef OptionalWidgetBuilder = Widget? Function (NavScreen, BuildContext contex
 /// A signature of a programmer-replaceable method building
 /// vertical rail navigation widget
 typedef VerticalNavRailBuilder = Widget Function(Widget body, NavScreen screen,
+    WidgetRef ref,
     List<TabInfo> tabs, int currentSelection, ValueChanged<int> tapHandler);
 
 /// A signature of a programmer-replaceable method building
@@ -26,7 +27,7 @@ typedef AppBarBuilder = AppBar Function(NavScreen, BuildContext);
 /// and a [BottomNavigationBar] with tabs defined when
 /// [NavAwareApp] class is constructed by application's
 /// `main.dart`.
-abstract class NavScreen extends StatelessWidget {
+abstract class NavScreen extends ConsumerWidget {
 
   /// Screen title
   @protected
@@ -69,16 +70,16 @@ abstract class NavScreen extends StatelessWidget {
 
   /// Uses [Scaffold] to build navigation-aware screen UI
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return OrientationBuilder(builder: (context, orientation)
     {
       navState.isPortrait = orientation == Orientation.portrait;
 
-      var navBar = _buildNavTabBarInternal(context);
-      var appBar = buildAppBar(context);
-      var body = _buildBodyInternal(context);
-      var drawer = _buildDrawerInternal(context);
-      var actionButton = buildFloatingActionButton(context);
+      var navBar = _buildNavTabBarInternal(context, ref);
+      var appBar = buildAppBar(context, ref);
+      var body = _buildBodyInternal(context, ref);
+      var drawer = _buildDrawerInternal(context, ref);
+      var actionButton = buildFloatingActionButton(context, ref);
 
       return Scaffold(
         appBar: appBar,
@@ -111,16 +112,16 @@ abstract class NavScreen extends StatelessWidget {
     }
   }
 
-  Widget _buildBodyInternal(BuildContext context) {
-    final Widget body = buildBody(context);
+  Widget _buildBodyInternal(BuildContext context, WidgetRef ref) {
+    final Widget body = buildBody(context, ref);
 
     return navState.effectiveNavType == NavType.VerticalRail ?
-            buildVerticalRailAndBody(context, body) : body;
+            buildVerticalRailAndBody(context, ref, body) : body;
   }
 
   /// Override in subclasses to supply screen body
   @protected
-  Widget buildBody(BuildContext context);
+  Widget buildBody(BuildContext context, WidgetRef ref);
 
   /// Override to supply "child" screen based
   /// on the current state. Return null to keep
@@ -193,7 +194,8 @@ abstract class NavScreen extends StatelessWidget {
 
   /// Default implementation of the [tabBarBuilder] factory
   static Widget buildDefaultBottomTabBar(NavScreen screen,
-      BuildContext context, Iterable<TabInfo> tabs, int currentSelection, ValueChanged<int> tapHandler) =>
+      BuildContext context, WidgetRef ref,
+      Iterable<TabInfo> tabs, int currentSelection, ValueChanged<int> tapHandler) =>
       BottomNavigationBar(
           items: tabs.map(
              (tabInfo) => BottomNavigationBarItem(icon: Icon(tabInfo.icon), label: tabInfo.title)
@@ -205,7 +207,8 @@ abstract class NavScreen extends StatelessWidget {
 
   /// Default implementation of the [drawerBuilder] factory
   static Widget buildDefaultDrawer(NavScreen screen,
-      BuildContext context, List<TabInfo> tabs, int currentSelection, ValueChanged<int> tapHandler) {
+      BuildContext context, WidgetRef ref,
+      List<TabInfo> tabs, int currentSelection, ValueChanged<int> tapHandler) {
 
     Widget? drawerHeader = screen.buildDrawerHeader(context);
 
@@ -263,6 +266,7 @@ abstract class NavScreen extends StatelessWidget {
 
   /// Default implementation of the [verticalNavRailBuilder] factory
   static Widget buildDefaultVerticalNavRail(Widget body, NavScreen screen,
+    WidgetRef ref,
     List<TabInfo> tabs, int currentSelection, ValueChanged<int> tapHandler) =>
       Row(children: [
         NavigationRail(
@@ -287,12 +291,12 @@ abstract class NavScreen extends StatelessWidget {
   /// Default implementation calls application-wide [appBarBuilder]
   /// factory method building same app bar for every screen.
   @protected
-  PreferredSizeWidget? buildAppBar(BuildContext context) =>
+  PreferredSizeWidget? buildAppBar(BuildContext context, WidgetRef ref) =>
       appBarBuilder(this, context);
 
-  Widget? _buildNavTabBarInternal(BuildContext context) {
+  Widget? _buildNavTabBarInternal(BuildContext context, WidgetRef ref) {
     if (navState.effectiveNavType != NavType.BottomTabBar) return null;
-    return buildNavTabBar(context);
+    return buildNavTabBar(context, ref);
   }
 
   /// Method to override in subclasses to build screen-specific
@@ -302,14 +306,14 @@ abstract class NavScreen extends StatelessWidget {
   /// factory method building same bottom navigation bar for every
   /// screen.
   @protected
-  Widget? buildNavTabBar(BuildContext context) =>
-      tabBarBuilder(this, context, navState.tabs, navState.selectedTabIndex,
+  Widget? buildNavTabBar(BuildContext context, WidgetRef ref) =>
+      tabBarBuilder(this, context, ref, navState.tabs, navState.selectedTabIndex,
               (newTabIndex) => onNavItemTap(context, newTabIndex)
       );
 
-  Widget? _buildDrawerInternal(BuildContext context) {
+  Widget? _buildDrawerInternal(BuildContext context, WidgetRef ref) {
     if (navState.effectiveNavType != NavType.Drawer) return null;
-    return buildDrawer(context);
+    return buildDrawer(context, ref);
   }
 
   /// Method to override in subclasses to build screen-specific
@@ -319,9 +323,10 @@ abstract class NavScreen extends StatelessWidget {
   /// factory method building same drawer for every
   /// screen.
   @protected
-  Widget? buildDrawer(BuildContext context) =>
+  Widget? buildDrawer(BuildContext context, WidgetRef ref) =>
       drawerBuilder(this,
           context,
+          ref,
           navState.tabs,
           navState.selectedTabIndex,
           (newTabIndex) => onNavItemTap(context, newTabIndex)
@@ -352,12 +357,12 @@ abstract class NavScreen extends StatelessWidget {
   /// factory method building same vertical nav rail for every
   /// screen.
   @protected
-  Widget buildVerticalRailAndBody(BuildContext context, Widget body) =>
-      verticalNavRailBuilder(body, this, navState.tabs, navState.selectedTabIndex,
+  Widget buildVerticalRailAndBody(BuildContext context, WidgetRef ref, Widget body) =>
+      verticalNavRailBuilder(body, this, ref, navState.tabs, navState.selectedTabIndex,
               (newTabIndex) => onNavItemTap(context, newTabIndex)
       );
 
   @protected
-  Widget? buildFloatingActionButton(BuildContext context) => null;
+  Widget? buildFloatingActionButton(BuildContext context, WidgetRef ref) => null;
   //#endregion
 }
