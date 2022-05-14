@@ -106,6 +106,7 @@ class TabNavModel extends ChangeNotifier {
   /// Sets currently selected tab. Set [byUser] to `true` when this action
   /// is initiated be user tapping a tab, and to `else` otherwise.
   void _setSelectedTabIndex(int selectedTabIndex, {required bool byUser}) {
+    // TODO: the logic is faulty
     final beforeSelectedTabIndex = _selectedTabIndex;
     final beforeNotFoundUri = _notFoundUri;
     final beforePrevSelectedTabIndex = _prevSelectedTabIndex;
@@ -115,7 +116,7 @@ class TabNavModel extends ChangeNotifier {
       // if selected tab change was initiated by user tapping a a tab
       _notFoundUri = null;
       _prevSelectedTabIndex =
-          _selectedTabIndex == _prevSelectedTabIndex ? null : _selectedTabIndex;
+          selectedTabIndex == _prevSelectedTabIndex ? null : _selectedTabIndex;
     } else {
       // Disable back button navigation on tab switch if initiated
       // by the system
