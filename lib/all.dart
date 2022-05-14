@@ -6,6 +6,7 @@ library flutter_nav2_oop;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod_restorable/flutter_riverpod_restorable.dart';
 
 part './src/models/tab_info.dart';
 part './src/models/tab_nav_state.dart';

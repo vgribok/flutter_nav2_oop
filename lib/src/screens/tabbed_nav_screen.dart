@@ -70,19 +70,24 @@ abstract class NavScreen extends StatelessWidget {
   /// Uses [Scaffold] to build navigation-aware screen UI
   @override
   Widget build(BuildContext context) {
-    var navBar = _buildNavTabBarInternal(context);
-    var appBar = buildAppBar(context);
-    var body = _buildBodyInternal(context);
-    var drawer = _buildDrawerInternal(context);
-    var actionButton = buildFloatingActionButton(context);
+    return OrientationBuilder(builder: (context, orientation)
+    {
+      navState.isPortrait = orientation == Orientation.portrait;
 
-    return Scaffold(
-      appBar: appBar,
-      body: body,
-      bottomNavigationBar: navBar,
-      drawer: drawer,
-      floatingActionButton: actionButton,
-    );
+      var navBar = _buildNavTabBarInternal(context);
+      var appBar = buildAppBar(context);
+      var body = _buildBodyInternal(context);
+      var drawer = _buildDrawerInternal(context);
+      var actionButton = buildFloatingActionButton(context);
+
+      return Scaffold(
+        appBar: appBar,
+        body: body,
+        bottomNavigationBar: navBar,
+        drawer: drawer,
+        floatingActionButton: actionButton,
+      );
+    });
   }
 
   /// Invoked by the framework when navigation item,

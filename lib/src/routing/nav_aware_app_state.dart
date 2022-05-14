@@ -6,8 +6,19 @@ class NavAwareApp extends ConsumerWidget {
   final String _appTitle;
   final String applicationId;
   final ThemeData? _theme;
-  final NavAwareState navState;
   final List<RoutePathFactory> routeParsers;
+
+  // static final navModelProvider = RestorableProvider<NavType>(
+  //
+  // );
+
+  /// A singleton of [NavAwareState] accessible via [Provider]
+  static late Provider<NavAwareState> navModelProvider;
+
+  /// A singleton [Router] accessible via [Provider]
+  static final _routerDelegateProvider = Provider<NavAwareRouterDelegate>(
+      (ref) => NavAwareRouterDelegate(ref)
+  );
 
   NavAwareApp({
     /// Used for state restoration
@@ -25,26 +36,31 @@ class NavAwareApp extends ConsumerWidget {
     NavType? navType,
   }) :
     _appTitle = appTitle,
-    navState = NavAwareState(navType: navType, tabs: tabs),
-    _theme = theme;
+    _theme = theme
+  {
+    navModelProvider = Provider(
+            (ref) => NavAwareState(tabs: tabs, navType: navType)
+    );
+  }
 
   /// Returns [MaterialApp] instance returned by
   /// the [MaterialApp.router] method
   @override
   Widget build(BuildContext context, WidgetRef ref) =>
-      ProviderScope(child:
-        OrientationBuilder(builder: (context, orientation) {
-          navState.isPortrait = orientation == Orientation.portrait;
-
-          return MaterialApp.router(
+          MaterialApp.router(
               title: appTitle,
               theme: _theme,
-              routerDelegate: NavAwareRouterDelegate(ref, navState: navState),
+              routerDelegate: ref.read(_routerDelegateProvider),
               routeInformationParser: NavAwareRouteInfoParser(ref, routeParsers: routeParsers),
               restorationScopeId: "app-router-restoration-scope",
-              debugShowCheckedModeBanner: false // Hide 'Debug' ribbon on the AppBar
-          );
-        })
+              debugShowCheckedModeBanner: false, // Hide 'Debug' ribbon on the AppBar,
+              // builder: (context, child) => RestorableProviderRegister(
+              //   restorationId: 'application-ephemeral-state',
+              //   providers: [
+              //     // primaryMaterialColorProvider,
+              //   ],
+              //   child: child! // ?? const SizedBox.shrink(),
+              // )
       );
 
   /// Returns the name of the application

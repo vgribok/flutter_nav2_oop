@@ -11,15 +11,12 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
 
   static final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
-  /// Application state reference holder
-  final NavAwareState navState;
+  final Ref ref;
 
-  final WidgetRef ref;
+  /// Application state reference holder
+  NavAwareState get navState => ref.read(NavAwareApp.navModelProvider);
 
   NavAwareRouterDelegate(this.ref,
-      {
-        required this.navState,
-      }
   ) {
     navState.addListener(this.notifyListeners);
   }
