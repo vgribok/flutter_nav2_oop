@@ -1,7 +1,7 @@
 part of flutter_nav2_oop;
 
 /// Factory method signature for instantiating a screen for 404 situations
-typedef NotFoundScreenFactory = UrlNotFoundScreen Function(NavAwareState navState);
+typedef NotFoundScreenFactory = UrlNotFoundScreen Function(TabNavModel navState);
 
 /// A screen shown when user-typed URL in the browser address bar
 /// is invalid
@@ -24,7 +24,7 @@ class UrlNotFoundScreen extends NavScreen {
 
   /// Do not instantiate directly! Use [notFoundScreenFactory]
   /// instead.
-  UrlNotFoundScreen({required NavAwareState navState}) :
+  UrlNotFoundScreen({required TabNavModel navState}) :
     _notFoundUri = navState.notFoundUri!,
     super(
       screenTitle: defaultTitle,

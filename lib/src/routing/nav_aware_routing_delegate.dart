@@ -14,7 +14,7 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
   final Ref ref;
 
   /// Application state reference holder
-  NavAwareState get navState => ref.read(NavAwareApp.navModelProvider);
+  TabNavModel get navState => ref.read(NavAwareApp.navModelProvider);
 
   NavAwareRouterDelegate(this.ref,
   ) {

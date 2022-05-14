@@ -7,7 +7,7 @@ import 'package:flutter_nav2_oop/all.dart';
 class SettingsScreen extends NavScreen {
   static const int navTabIndex = 2;
 
-  const SettingsScreen(NavAwareState navState) :
+  const SettingsScreen(TabNavModel navState) :
     super(
       tabIndex: navTabIndex,
       navState: navState,

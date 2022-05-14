@@ -37,7 +37,7 @@ abstract class NavScreen extends StatelessWidget {
   /// Application state holder
 
   @protected
-  final NavAwareState navState;
+  final TabNavModel navState;
 
   const NavScreen(
       {

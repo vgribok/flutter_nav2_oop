@@ -12,7 +12,7 @@ final counterProvider = RestorableProvider<RestorableInt>(
 class CounterScreen extends NavScreen {
   static const int navTabIndex = 1;
 
-  const CounterScreen(NavAwareState navState, {Key? key})
+  const CounterScreen(TabNavModel navState, {Key? key})
       : super(screenTitle: "Counter", tabIndex: navTabIndex, navState: navState, key: key);
 
   @override

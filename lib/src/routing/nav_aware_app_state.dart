@@ -12,8 +12,8 @@ class NavAwareApp extends ConsumerWidget {
   //
   // );
 
-  /// A singleton of [NavAwareState] accessible via [Provider]
-  static late Provider<NavAwareState> navModelProvider;
+  /// A singleton of [TabNavModel] accessible via [Provider]
+  static late Provider<TabNavModel> navModelProvider;
 
   /// A singleton [Router] accessible via [Provider]
   static final _routerDelegateProvider = Provider<NavAwareRouterDelegate>(
@@ -39,7 +39,7 @@ class NavAwareApp extends ConsumerWidget {
     _theme = theme
   {
     navModelProvider = Provider(
-            (ref) => NavAwareState(tabs: tabs, navType: navType)
+            (ref) => TabNavModel(tabs: tabs, navType: navType)
     );
   }
 

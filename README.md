@@ -97,7 +97,7 @@ The [reusable library part](./lib/) takes care of the following application UI &
 4. No need to write [spaghetti code](https://gist.github.com/johnpryan/430c1d3ad771c43bf249c07fa3aeef14#file-main-dart-L36) parsing user-entered browser URLs to set the app state. Instead, each route class has a standard `fromUri(Uri)` [factory method](example/lib/src/routing/user_profile_path.dart) that looks at the user-entered URI and decides whether it matches.
 5. Use [`topScreen` property](example/lib/src/screens/book_list_screen.dart) override to check relevant state and tell the framework whether another "overlay" screen needs to be shown on top of the current one. **This is the famous `UI = f(state)` part in action**.
 6. Use [`removeFromNavStackTop()` method](example/lib/src/screens/book_details_screen.dart) override to update the state so that current screen would be removed from the top of the nav stack.
-7. Get consistent and straightforward access to mutable state by calling [`T stateByType<T()>` method](lib/src/models/tab_nav_state.dart).
+7. Get consistent and straightforward access to mutable state by calling [`T stateByType<T()>` method](lib/src/models/tab_nav_model.dart).
 8. Use factories to customize framework-defined UI, like AppBar colors, bottom nav tabs, and the 404 screen.
 
 > All of the above enables transparent routing and navigation implemented by the framework, leaving you with having to implement the screens, routes corresponding to the screens, and the wiring-it-together initialization logic.

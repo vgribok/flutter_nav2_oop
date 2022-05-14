@@ -12,7 +12,7 @@ class BookDetailsScreen extends NavScreen {
   BookDetailsScreen({
     required this.selectedBook,
     required this.selectedBookId,
-    required NavAwareState navState
+    required TabNavModel navState
   }) : super(
     screenTitle: selectedBook.title,
     tabIndex: navTabIndex,

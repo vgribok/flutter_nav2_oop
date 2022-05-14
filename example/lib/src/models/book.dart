@@ -34,7 +34,7 @@ class SelectedBookState extends ValueNotifier<Book?> {
   set selectedBookId(int bookId) => selectedBook = Books.bookById(bookId);
 }
 
-extension BookNavStateExtensions on NavAwareState {
+extension BookNavStateExtensions on TabNavModel {
   /// This is all-tabs-wide search for the [SelectedBookState] object.
   ///
   /// It's easier to use than similar tab-, screen- and route-specific

@@ -12,7 +12,7 @@ enum NavType {
 /// Also serves as a holder for other
 /// [ChangeNotifier]-derived application state
 /// objects.
-class NavAwareState extends ChangeNotifier {
+class TabNavModel extends ChangeNotifier {
 
   NavType? _navigationType;
 
@@ -32,7 +32,7 @@ class NavAwareState extends ChangeNotifier {
 
   final NavType? navType;
 
-  NavAwareState({this.navType, required Iterable<TabInfo> tabs})
+  TabNavModel({this.navType, required Iterable<TabInfo> tabs})
     : _navigationType = navType
   {
     addTabs(tabs);

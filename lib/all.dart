@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_restorable/flutter_riverpod_restorable.dart';
 
 part './src/models/tab_info.dart';
-part './src/models/tab_nav_state.dart';
+part './src/models/tab_nav_model.dart';
 
 part './src/routing/details_route_path.dart';
 part './src/routing/nav_aware_app_state.dart';
