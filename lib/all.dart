@@ -25,3 +25,4 @@ part './src/screens/full_screen_modal_dialog.dart';
 
 part './src/utility/uri_extensions.dart';
 part './src/utility/iterable_extensions.dart';
+part './src/utility/restorable_enum.dart';

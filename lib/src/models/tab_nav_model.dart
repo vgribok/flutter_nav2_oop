@@ -1,6 +1,6 @@
 part of flutter_nav2_oop;
 
-enum NavType {
+enum NavControlType {
   BottomTabBar,
   Drawer,
   VerticalRail
@@ -13,8 +13,6 @@ enum NavType {
 /// [ChangeNotifier]-derived application state
 /// objects.
 class TabNavModel extends ChangeNotifier {
-
-  NavType? _navigationType;
 
   /// State: collection of navigation tab
   /// definitions and tab state
@@ -30,10 +28,7 @@ class TabNavModel extends ChangeNotifier {
   /// Only set when user explicitly tapped a nav tab.
   int? _prevSelectedTabIndex;
 
-  final NavType? navType;
-
-  TabNavModel({this.navType, required Iterable<TabInfo> tabs})
-    : _navigationType = navType
+  TabNavModel({required Iterable<TabInfo> tabs})
   {
     addTabs(tabs);
   }
@@ -52,30 +47,6 @@ class TabNavModel extends ChangeNotifier {
   /// Returns currently selected navigation tab, as defined
   /// by [selectedTabIndex] property.
   TabInfo get selectedTab => tabs[selectedTabIndex];
-
-  /// Defines application navigation mode, like bottom tabs,
-  /// drawer, etc.
-  ///
-  /// If not specified, in portrait orientation bottom tabs are used,
-  /// and in landscape orientation, vertical nav rail is used.
-  NavType? get navigationType => _navigationType;
-  set navigationType(NavType? navType) {
-    if(_navigationType == navType) return;
-
-    _navigationType = navType;
-    notifyListeners();
-  }
-
-  /// Returns concrete navigation mode.
-  ///
-  /// When non-null navigation mode is set via [navigationType],
-  /// then that is the returned value. If [navigationType] is null,
-  /// device orientation determines navigation mode: in portrait
-  /// orientation bottom tab bar is used, and in landscape mode the
-  /// vertical rail is used.
-  NavType get effectiveNavType =>
-      _navigationType ??
-          (isPortrait ? NavType.BottomTabBar : NavType.VerticalRail);
 
   /// The *`UI = f(state)`* function.
   ///
@@ -157,17 +128,6 @@ class TabNavModel extends ChangeNotifier {
     if (_notFoundUri == uri) return;
 
     _notFoundUri = uri;
-    notifyListeners();
-  }
-
-  bool _isPortrait = true;
-
-  /// Returns current device orientation
-  bool get isPortrait => _isPortrait;
-  set isPortrait(bool newVal) {
-    if(_isPortrait == newVal) return;
-
-    _isPortrait = newVal;
     notifyListeners();
   }
 

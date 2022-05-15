@@ -8,10 +8,6 @@ class NavAwareApp extends ConsumerWidget {
   final ThemeData? _theme;
   final List<RoutePathFactory> routeParsers;
 
-  // static final navModelProvider = RestorableProvider<NavType>(
-  //
-  // );
-
   /// A singleton of [TabNavModel] accessible via [Provider]
   static late Provider<TabNavModel> navModelProvider;
 
@@ -19,6 +15,8 @@ class NavAwareApp extends ConsumerWidget {
   static final _routerDelegateProvider = Provider<NavAwareRouterDelegate>(
       (ref) => NavAwareRouterDelegate(ref)
   );
+
+  static late RestorableProvider<RestorableEnumN<NavControlType?>> navControlTypeProvider;
 
   NavAwareApp({
     /// Used for state restoration
@@ -33,13 +31,19 @@ class NavAwareApp extends ConsumerWidget {
     /// Application color theme
     ThemeData? theme,
     /// Navigation type. Auto if not specified.
-    NavType? navType,
+    NavControlType? navType,
+    //super.key
   }) :
     _appTitle = appTitle,
     _theme = theme
   {
     navModelProvider = Provider(
-            (ref) => TabNavModel(tabs: tabs, navType: navType)
+            (ref) => TabNavModel(tabs: tabs)
+    );
+
+    navControlTypeProvider = RestorableProvider<RestorableEnumN<NavControlType>>(
+            (ref) => RestorableEnumN<NavControlType>(NavControlType.values, initialValue: navType),
+            restorationId: "nav-control-type"
     );
   }
 
@@ -54,13 +58,21 @@ class NavAwareApp extends ConsumerWidget {
               routeInformationParser: NavAwareRouteInfoParser(ref, routeParsers: routeParsers),
               restorationScopeId: "app-router-restoration-scope",
               debugShowCheckedModeBanner: false, // Hide 'Debug' ribbon on the AppBar,
-              // builder: (context, child) => RestorableProviderRegister(
-              //   restorationId: 'application-ephemeral-state',
-              //   providers: [
-              //     // primaryMaterialColorProvider,
-              //   ],
-              //   child: child! // ?? const SizedBox.shrink(),
-              // )
+
+              // An observation critical to successfully implementing restorable state
+              // with the [MaterialApp.router] is that the builder can be used to
+              // supply restoration scope (restorationId). The key bit here is that
+              // you don't have to supply your own child to the builder - the child
+              // comes from the [MaterialApp], but that is not obvious unless one
+              // analyzed the framework source code. The real child supplier is still the
+              // RouterDelegate's Build() method. You're welcome :-).
+              builder: (context, router) => RestorableProviderRegister(
+                restorationId: 'application-ephemeral-state',
+                providers: [ // TODO: let specify user global restorable providers
+                  navControlTypeProvider,
+                ],
+                child: router! // ?? const SizedBox.shrink(),
+              )
       );
 
   /// Returns the name of the application

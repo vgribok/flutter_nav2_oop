@@ -12,7 +12,7 @@ final counterProvider = RestorableProvider<RestorableInt>(
 class CounterScreen extends NavScreen {
   static const int navTabIndex = 1;
 
-  const CounterScreen(TabNavModel navState, {Key? key})
+  CounterScreen(TabNavModel navState, {Key? key})
       : super(
           screenTitle: "Counter",
           tabIndex: navTabIndex,
@@ -26,7 +26,7 @@ class CounterScreen extends NavScreen {
   Widget buildBody(BuildContext context, WidgetRef ref) =>
     RestorableProviderScope(
       restorationId: "counter-scope",
-      restorableOverrides: [counterProvider.overrideWithRestorable(RestorableInt(10))],
+      restorableOverrides: [counterProvider.overrideWithRestorable(RestorableInt(0))],
       child: Consumer(
         builder: (context, ref, child) =>
          Scaffold(

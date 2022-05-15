@@ -40,6 +40,9 @@ abstract class NavScreen extends ConsumerWidget {
   @protected
   final TabNavModel navState;
 
+  static final isPortraitProvider = StateProvider((ref) => true);
+  static bool isPortrait(WidgetRef ref) => ref.read(isPortraitProvider);
+
   const NavScreen(
       {
         /// Screen title
@@ -73,12 +76,16 @@ abstract class NavScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return OrientationBuilder(builder: (context, orientation)
     {
-      navState.isPortrait = orientation == Orientation.portrait;
+      ref.read(isPortraitProvider.notifier).state = orientation == Orientation.portrait;
 
-      var navBar = _buildNavTabBarInternal(context, ref);
+      final NavControlType navControlType = effectiveNavType(ref,
+          ref.watch(NavAwareApp.navControlTypeProvider).enumValue
+      );
+
+      var navBar = _buildNavTabBarInternal(context, navControlType, ref);
       var appBar = buildAppBar(context, ref);
-      var body = _buildBodyInternal(context, ref);
-      var drawer = _buildDrawerInternal(context, ref);
+      var body = _buildBodyInternal(context, navControlType, ref);
+      var drawer = _buildDrawerInternal(context, navControlType, ref);
       var actionButton = buildFloatingActionButton(context, ref);
 
       return Scaffold(
@@ -91,12 +98,24 @@ abstract class NavScreen extends ConsumerWidget {
     });
   }
 
+  /// Returns concrete navigation mode.
+  ///
+  /// When non-null navigation mode is set via [navControlType],
+  /// then that is the returned value. If [navControlType] is null,
+  /// device orientation determines navigation mode: in portrait
+  /// orientation bottom tab bar is used, and in landscape mode the
+  /// vertical rail is used.
+  static NavControlType effectiveNavType(WidgetRef ref, NavControlType? navControlType) =>
+      navControlType
+          ?? ref.read(NavAwareApp.navControlTypeProvider).enumValue
+          ?? (isPortrait(ref) ? NavControlType.BottomTabBar : NavControlType.VerticalRail);
+
   /// Invoked by the framework when navigation item,
   /// like tab or drawer list item, is tapped
   @protected
-  void onNavItemTap(BuildContext context, int newTabIndex) {
+  void onNavItemTap(BuildContext context, WidgetRef ref, int newTabIndex) {
 
-    if(navState.effectiveNavType == NavType.Drawer) {
+    if(effectiveNavType(ref, null) == NavControlType.Drawer) {
       // Hide the Drawer
       Navigator.pop(context);
     }
@@ -112,10 +131,10 @@ abstract class NavScreen extends ConsumerWidget {
     }
   }
 
-  Widget _buildBodyInternal(BuildContext context, WidgetRef ref) {
+  Widget _buildBodyInternal(BuildContext context, NavControlType? navControlType, WidgetRef ref) {
     final Widget body = buildBody(context, ref);
 
-    return navState.effectiveNavType == NavType.VerticalRail ?
+    return navControlType == NavControlType.VerticalRail ?
             buildVerticalRailAndBody(context, ref, body) : body;
   }
 
@@ -294,8 +313,8 @@ abstract class NavScreen extends ConsumerWidget {
   PreferredSizeWidget? buildAppBar(BuildContext context, WidgetRef ref) =>
       appBarBuilder(this, context);
 
-  Widget? _buildNavTabBarInternal(BuildContext context, WidgetRef ref) {
-    if (navState.effectiveNavType != NavType.BottomTabBar) return null;
+  Widget? _buildNavTabBarInternal(BuildContext context, NavControlType navControlType, WidgetRef ref) {
+    if (navControlType != NavControlType.BottomTabBar) return null;
     return buildNavTabBar(context, ref);
   }
 
@@ -308,11 +327,11 @@ abstract class NavScreen extends ConsumerWidget {
   @protected
   Widget? buildNavTabBar(BuildContext context, WidgetRef ref) =>
       tabBarBuilder(this, context, ref, navState.tabs, navState.selectedTabIndex,
-              (newTabIndex) => onNavItemTap(context, newTabIndex)
+              (newTabIndex) => onNavItemTap(context, ref, newTabIndex)
       );
 
-  Widget? _buildDrawerInternal(BuildContext context, WidgetRef ref) {
-    if (navState.effectiveNavType != NavType.Drawer) return null;
+  Widget? _buildDrawerInternal(BuildContext context, NavControlType navControlType, WidgetRef ref) {
+    if (navControlType != NavControlType.Drawer) return null;
     return buildDrawer(context, ref);
   }
 
@@ -329,7 +348,7 @@ abstract class NavScreen extends ConsumerWidget {
           ref,
           navState.tabs,
           navState.selectedTabIndex,
-          (newTabIndex) => onNavItemTap(context, newTabIndex)
+          (newTabIndex) => onNavItemTap(context, ref, newTabIndex)
       );
 
   /// Method to override in subclasses to build screen-specific
@@ -359,7 +378,7 @@ abstract class NavScreen extends ConsumerWidget {
   @protected
   Widget buildVerticalRailAndBody(BuildContext context, WidgetRef ref, Widget body) =>
       verticalNavRailBuilder(body, this, ref, navState.tabs, navState.selectedTabIndex,
-              (newTabIndex) => onNavItemTap(context, newTabIndex)
+              (newTabIndex) => onNavItemTap(context, ref, newTabIndex)
       );
 
   @protected

@@ -7,7 +7,7 @@ class UserProfileScreen extends NavScreen {
 
   static const int navTabIndex = 3;
 
-  const UserProfileScreen(TabNavModel navState) : super(
+  UserProfileScreen(TabNavModel navState) : super(
     screenTitle: 'User Profile',
     tabIndex: navTabIndex,
     navState: navState

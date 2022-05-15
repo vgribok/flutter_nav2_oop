@@ -9,7 +9,7 @@ import 'book_details_screen.dart';
 class BooksListScreen extends NavScreen {
   static const int navTabIndex = 0;
 
-  const BooksListScreen(TabNavModel navState)
+  BooksListScreen(TabNavModel navState)
       : super(screenTitle: 'Books', tabIndex: navTabIndex, navState: navState);
 
   @override
