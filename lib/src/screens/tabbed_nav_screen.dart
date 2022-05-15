@@ -4,7 +4,7 @@ part of flutter_nav2_oop;
 /// navigation Widget - either a bottom tab bar, or
 /// a [Drawer]
 typedef NavigationWidgetBarBuilder = Widget Function(
-    NavScreen screen, BuildContext context, WidgetRef ref, List<TabInfo>, int currentSelection, void Function(int index) tapHandler
+    NavScreen, BuildContext, WidgetRef, void Function(int index) tapHandler
 );
 
 /// A signature of a programmer-replaceable method building
@@ -13,9 +13,8 @@ typedef OptionalWidgetBuilder = Widget? Function (NavScreen, BuildContext, Widge
 
 /// A signature of a programmer-replaceable method building
 /// vertical rail navigation widget
-typedef VerticalNavRailBuilder = Widget Function(Widget body, NavScreen screen,
-    WidgetRef ref,
-    List<TabInfo> tabs, int currentSelection, ValueChanged<int> tapHandler);
+typedef VerticalNavRailBuilder = Widget Function(Widget body, NavScreen,
+    WidgetRef, ValueChanged<int> tapHandler);
 
 /// A signature of a programmer-replaceable method building
 /// application screens' [AppBar]
@@ -38,7 +37,7 @@ abstract class NavScreen extends ConsumerWidget {
   /// Application state holder
 
   @protected
-  TabNavModel navState(WidgetRef ref) => ref.read(NavAwareApp.navModelProvider);
+  static TabNavModel navState(WidgetRef ref) => ref.read(NavAwareApp.navModelProvider);
 
   const NavScreen(
       {
@@ -193,23 +192,27 @@ abstract class NavScreen extends ConsumerWidget {
 
   /// Default implementation of the [tabBarBuilder] factory
   static Widget buildDefaultBottomTabBar(NavScreen screen,
-      BuildContext context, WidgetRef ref,
-      Iterable<TabInfo> tabs, int currentSelection, ValueChanged<int> tapHandler) =>
-      BottomNavigationBar(
-          items: tabs.map(
-             (tabInfo) => BottomNavigationBarItem(icon: Icon(tabInfo.icon), label: tabInfo.title)
-          ).toList(),
-          currentIndex: currentSelection,
-          onTap: tapHandler,
-          type: BottomNavigationBarType.fixed,
-      );
+      BuildContext context, WidgetRef ref, ValueChanged<int> tapHandler) {
+    final TabNavModel navModel = navState(ref);
+
+    return BottomNavigationBar(
+      items: navModel.tabs.map(
+              (tabInfo) =>
+              BottomNavigationBarItem(
+                  icon: Icon(tabInfo.icon), label: tabInfo.title)
+      ).toList(),
+      currentIndex: navModel.selectedTabIndex,
+      onTap: tapHandler,
+      type: BottomNavigationBarType.fixed,
+    );
+  }
 
   /// Default implementation of the [drawerBuilder] factory
   static Widget buildDefaultDrawer(NavScreen screen,
-      BuildContext context, WidgetRef ref,
-      List<TabInfo> tabs, int currentSelection, ValueChanged<int> tapHandler) {
+      BuildContext context, WidgetRef ref, ValueChanged<int> tapHandler) {
 
-    Widget? drawerHeader = screen.buildDrawerHeader(context, ref);
+    final Widget? drawerHeader = screen.buildDrawerHeader(context, ref);
+    final TabNavModel navModel = navState(ref);
 
     return Drawer(
       // Add a ListView to the drawer. This ensures the user can scroll
@@ -223,11 +226,11 @@ abstract class NavScreen extends ConsumerWidget {
             drawerHeader
           ,
           ...[
-            for(int i = 0; i < tabs.length; i++)
+            for(int i = 0; i < navModel.tabs.length; i++)
               ListTile(
-                title: Text(tabs[i].title!),
-                leading: Icon(tabs[i].icon),
-                selected: i == currentSelection,
+                title: Text(navModel.tabs[i].title!),
+                leading: Icon(navModel.tabs[i].icon),
+                selected: i == navModel.selectedTabIndex,
                 onTap: () => tapHandler(i),
               )
           ]
@@ -265,21 +268,25 @@ abstract class NavScreen extends ConsumerWidget {
 
   /// Default implementation of the [verticalNavRailBuilder] factory
   static Widget buildDefaultVerticalNavRail(Widget body, NavScreen screen,
-    WidgetRef ref,
-    List<TabInfo> tabs, int currentSelection, ValueChanged<int> tapHandler) =>
-      Row(children: [
-        NavigationRail(
-            selectedIndex: currentSelection,
-            onDestinationSelected: (index) => tapHandler(index),
-            labelType: NavigationRailLabelType.all,
-            destinations: tabs.map((tab) =>NavigationRailDestination(
-                icon: Icon(tab.icon),
-                label: Text(tab.title ?? '')
-            )).toList()
-        ),
-        const VerticalDivider(thickness: 1, width: 1),
-        Expanded(child: body)
-      ]);
+    WidgetRef ref, ValueChanged<int> tapHandler) {
+
+    final TabNavModel navModel = navState(ref);
+
+    return Row(children: [
+      NavigationRail(
+          selectedIndex: navModel.selectedTabIndex,
+          onDestinationSelected: (index) => tapHandler(index),
+          labelType: NavigationRailLabelType.all,
+          destinations: navModel.tabs.map((tab) =>
+              NavigationRailDestination(
+                  icon: Icon(tab.icon),
+                  label: Text(tab.title ?? '')
+              )).toList()
+      ),
+      const VerticalDivider(thickness: 1, width: 1),
+      Expanded(child: body)
+    ]);
+  }
 
   //#endregion
 
@@ -306,7 +313,7 @@ abstract class NavScreen extends ConsumerWidget {
   /// screen.
   @protected
   Widget? buildNavTabBar(BuildContext context, WidgetRef ref) =>
-      tabBarBuilder(this, context, ref, navState(ref).tabs, navState(ref).selectedTabIndex,
+      tabBarBuilder(this, context, ref,
               (newTabIndex) => onTabTap(context, ref, newTabIndex)
       );
 
@@ -326,8 +333,6 @@ abstract class NavScreen extends ConsumerWidget {
       drawerBuilder(this,
           context,
           ref,
-          navState(ref).tabs,
-          navState(ref).selectedTabIndex,
           (newTabIndex) => onTabTap(context, ref, newTabIndex)
       );
 
@@ -357,7 +362,7 @@ abstract class NavScreen extends ConsumerWidget {
   /// screen.
   @protected
   Widget buildVerticalRailAndBody(BuildContext context, WidgetRef ref, Widget body) =>
-      verticalNavRailBuilder(body, this, ref, navState(ref).tabs, navState(ref).selectedTabIndex,
+      verticalNavRailBuilder(body, this, ref,
               (newTabIndex) => onTabTap(context, ref, newTabIndex)
       );
 

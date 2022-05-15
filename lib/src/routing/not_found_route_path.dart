@@ -14,7 +14,7 @@ class NotFoundRoutePath extends RoutePath {
   @override
   // ignore: must_call_super
   Future<void> configureStateFromUri(WidgetRef ref) {
-    ref.read(NavAwareApp.navModelProvider).notFoundUri = notFoundUri;
+    RoutePath.navState(ref).notFoundUri = notFoundUri;
     return Future.value();
   }
 }

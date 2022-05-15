@@ -18,6 +18,9 @@ class RoutePath {
     required this.resource
   });
 
+  @protected
+  static TabNavModel navState(WidgetRef ref) => ref.read(NavAwareApp.navModelProvider);
+
   /// Framework calls this method to let subclasses construct valid
   /// state from a URL typed by a user into browser's address bar.
   ///
@@ -28,7 +31,7 @@ class RoutePath {
   @protected
   @mustCallSuper
   Future<void> configureStateFromUri(WidgetRef ref) {
-    ref.read(NavAwareApp.navModelProvider).selectedTabIndex = tabIndex;
+    navState(ref).selectedTabIndex = tabIndex;
     return Future.value();
   }
 

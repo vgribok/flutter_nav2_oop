@@ -36,7 +36,7 @@ class UrlNotFoundScreen extends NavScreen {
         children: [
           Text(defaultMessage),
           Text(
-              '"${navState(ref)._notFoundUri}"',
+              '"${NavScreen.navState(ref)._notFoundUri}"',
               style: const TextStyle(fontWeight: FontWeight.bold)
           ),
           const Divider(thickness: 1, indent: 50, endIndent: 50),
@@ -60,7 +60,7 @@ class UrlNotFoundScreen extends NavScreen {
   @override @protected
   // ignore: must_call_super
   void updateStateOnScreenRemovalFromNavStackTop(WidgetRef ref) =>
-      navState(ref).notFoundUri = null;
+      NavScreen.navState(ref).notFoundUri = null;
 
   @override @protected
   RoutePath get routePath => NotFoundRoutePath(notFoundUri: notFoundUri);
