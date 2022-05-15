@@ -14,14 +14,14 @@ class BooksListScreen extends NavScreen {
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) {
 
-    StateController<Book?> selectedBookState = Books.selectedBookProvider.writabe(ref);
+    RestorableValue<int?> selectedBookState = Books.selectedBookProvider.writable(ref);
 
     return ListView(children: [
       for (var book in Books.allBooks)
         ListTile(
           title: Text(book.title),
           subtitle: Text(book.author),
-          onTap: () => selectedBookState.state = book,
+          onTap: () => selectedBookState.value = book.id,
           key: book.key,
         )
     ]);
@@ -29,15 +29,16 @@ class BooksListScreen extends NavScreen {
 
   @override
   NavScreen? topScreen(WidgetRef ref) {
-    Book? selectedBook = ref.watch(Books.selectedBookProvider);
+    int? selectedBookId = ref.watch(Books.selectedBookProvider).value;
 
-    return selectedBook == null
+    return selectedBookId == null
         ? null
         : BookDetailsScreen(
-        selectedBook: selectedBook,
-        selectedBookId: selectedBook.id,
-        navState: navState);
-  }
+            selectedBook: Book.fromId(selectedBookId),
+            selectedBookId: selectedBookId,
+            navState: navState
+        );
+    }
 
   @override
   RoutePath get routePath => const BookListPath();

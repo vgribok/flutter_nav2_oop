@@ -63,7 +63,7 @@ class SettingsScreen extends NavScreen {
               const Divider(thickness: 1, indent: 50, endIndent: 50),
               ElevatedButton(
                   child: const Text('Show Modal Dialog'),
-                  onPressed: () => SettingsScreen.showSettingsDialogProvider.writabe(ref).state = true
+                  onPressed: () => SettingsScreen.showSettingsDialogProvider.writable(ref).state = true
               )
             ]
         )

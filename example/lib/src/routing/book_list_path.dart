@@ -17,7 +17,7 @@ class BookListPath extends RoutePath {
 
   @override
   Future<void> configureStateFromUri(TabNavModel navState, WidgetRef ref) {
-    Books.selectedBookProvider.writabe(ref).state = null;
+    Books.selectedBookProvider.writable(ref).value = null;
     return super.configureStateFromUri(navState, ref);
   }
 }

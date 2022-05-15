@@ -19,7 +19,7 @@ class SettingsModalChildPath extends RoutePath {
   @override
   Future<void> configureStateFromUri(TabNavModel navState, WidgetRef ref) {
     super.configureStateFromUri(navState, ref);
-    SettingsScreen.showSettingsDialogProvider.writabe(ref).state = true;
+    SettingsScreen.showSettingsDialogProvider.writable(ref).state = true;
     return Future.value();
   }
 }

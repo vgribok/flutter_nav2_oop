@@ -48,7 +48,7 @@ abstract class NavScreen extends ConsumerWidget {
         /// with the screen
         required this.tabIndex,
         /// Reference to an existing [TabNavState] instance
-        required this.navState,
+        required this.navState, // TODO: Remove here and access it via Riverpod
         /// Optional user-supplied key.
         /// If not supplied, route URI
         /// is used as the key

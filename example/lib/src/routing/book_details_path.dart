@@ -22,7 +22,7 @@ class BookDetailsPath extends DetailsRoutePath {
 
   @override
   Future<void> configureStateFromUri(TabNavModel navState, WidgetRef ref) {
-    Books.selectedBookProvider.writabe(ref).state = Books.allBooks[id];
+    Books.selectedBookProvider.writable(ref).value = id;
     return super.configureStateFromUri(navState, ref);
   }
 }

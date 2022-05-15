@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod_restorable/flutter_riverpod_restorable.dart';
 
 class Book {
   final String title;
@@ -21,7 +21,9 @@ class Books {
     Book('Fahrenheit 451', 'Ray Bradbury'),
   ];
 
-  static final selectedBookProvider = StateProvider<Book?>((ref) => null);
+  static final selectedBookProvider = RestorableProvider((ref) => RestorableIntN(null),
+    restorationId: "selected-book-id")
+  ;
 
   static bool isValidBookId(int? bookId) {
     return bookId != null && bookId >= 0 && bookId < allBooks.length;

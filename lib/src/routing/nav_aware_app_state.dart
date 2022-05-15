@@ -7,6 +7,7 @@ class NavAwareApp extends ConsumerWidget {
   final String applicationId;
   final ThemeData? _theme;
   final List<RoutePathFactory> routeParsers;
+  final List<RestorableProvider<RestorableProperty?>>? globalRestorableProviders;
 
   /// A singleton of [TabNavModel] accessible via [Provider]
   static late Provider<TabNavModel> navModelProvider;
@@ -27,6 +28,8 @@ class NavAwareApp extends ConsumerWidget {
     ThemeData? theme,
     /// Navigation type. Auto if not specified.
     NavControlType? navType,
+    /// Restorable state providers with global scope
+    this.globalRestorableProviders,
     super.key
   }) :
     _appTitle = appTitle,
@@ -65,6 +68,7 @@ class NavAwareApp extends ConsumerWidget {
                 restorationId: 'application-ephemeral-state',
                 providers: [ // TODO: let specify user global restorable providers
                   navControlTypeProvider,
+                  ... globalRestorableProviders ?? []
                 ],
                 child: router! // ?? const SizedBox.shrink(),
               )

@@ -39,7 +39,7 @@ class BookDetailsScreen extends NavScreen {
   @override
   void updateStateOnScreenRemovalFromNavStackTop(WidgetRef ref) {
     super.updateStateOnScreenRemovalFromNavStackTop(ref);
-    Books.selectedBookProvider.writabe(ref).state = null;
+    Books.selectedBookProvider.writable(ref).value = null;
   }
 
   @override

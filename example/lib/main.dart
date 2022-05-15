@@ -1,3 +1,4 @@
+import 'package:example/src/models/book.dart';
 import 'package:example/src/routing/counter_path.dart';
 import 'package:example/src/screens/counter.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,8 @@ class BooksApp extends NavAwareApp {
           SettingsModalChildPath.fromUri,
           CounterPath.fromUri
         ],
+
+        globalRestorableProviders: [Books.selectedBookProvider],
 
         tabs: [
           TabInfo(

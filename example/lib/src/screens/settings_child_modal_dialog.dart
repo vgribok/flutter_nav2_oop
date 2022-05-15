@@ -37,7 +37,7 @@ class SettingsChildModalDialog extends FullScreenModalDialog {
   void updateStateOnScreenRemovalFromNavStackTop(WidgetRef ref) =>
     // Set the state that will hide this screen
     // when UI is rebuilt due to this state change
-    SettingsScreen.showSettingsDialogProvider.writabe(ref).state = false;
+    SettingsScreen.showSettingsDialogProvider.writable(ref).state = false;
 
   @override
   List<Widget>? buildAppBarActions(BuildContext context, WidgetRef ref) =>
