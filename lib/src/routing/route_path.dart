@@ -27,8 +27,8 @@ class RoutePath {
   /// is changing current navigation tab.
   @protected
   @mustCallSuper
-  Future<void> configureStateFromUri(TabNavModel navState, WidgetRef ref) {
-    navState.selectedTabIndex = tabIndex;
+  Future<void> configureStateFromUri(WidgetRef ref) {
+    ref.read(NavAwareApp.navModelProvider).selectedTabIndex = tabIndex;
     return Future.value();
   }
 

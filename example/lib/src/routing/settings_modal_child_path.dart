@@ -17,8 +17,8 @@ class SettingsModalChildPath extends RoutePath {
       uri.pathsMatch(resourceName) ? const SettingsModalChildPath() : null;
 
   @override
-  Future<void> configureStateFromUri(TabNavModel navState, WidgetRef ref) {
-    super.configureStateFromUri(navState, ref);
+  Future<void> configureStateFromUri(WidgetRef ref) {
+    super.configureStateFromUri(ref);
     SettingsScreen.showSettingsDialogProvider.writable(ref).state = true;
     return Future.value();
   }
