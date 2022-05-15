@@ -105,8 +105,7 @@ abstract class NavScreen extends ConsumerWidget {
   /// Invoked by the framework when navigation item,
   /// like tab or drawer list item, is tapped
   @protected
-  void onNavItemTap(BuildContext context, WidgetRef ref, int newTabIndex) {
-    // TODO: review pop() logic in this method
+  void onTabTap(BuildContext context, WidgetRef ref, int newTabIndex) {
     if(effectiveNavType(context, ref, null) == NavControlType.Drawer) {
       // Hide the Drawer
       Navigator.pop(context);
@@ -308,7 +307,7 @@ abstract class NavScreen extends ConsumerWidget {
   @protected
   Widget? buildNavTabBar(BuildContext context, WidgetRef ref) =>
       tabBarBuilder(this, context, ref, navState(ref).tabs, navState(ref).selectedTabIndex,
-              (newTabIndex) => onNavItemTap(context, ref, newTabIndex)
+              (newTabIndex) => onTabTap(context, ref, newTabIndex)
       );
 
   Widget? _buildDrawerInternal(BuildContext context, NavControlType navControlType, WidgetRef ref) {
@@ -329,7 +328,7 @@ abstract class NavScreen extends ConsumerWidget {
           ref,
           navState(ref).tabs,
           navState(ref).selectedTabIndex,
-          (newTabIndex) => onNavItemTap(context, ref, newTabIndex)
+          (newTabIndex) => onTabTap(context, ref, newTabIndex)
       );
 
   /// Method to override in subclasses to build screen-specific
@@ -359,7 +358,7 @@ abstract class NavScreen extends ConsumerWidget {
   @protected
   Widget buildVerticalRailAndBody(BuildContext context, WidgetRef ref, Widget body) =>
       verticalNavRailBuilder(body, this, ref, navState(ref).tabs, navState(ref).selectedTabIndex,
-              (newTabIndex) => onNavItemTap(context, ref, newTabIndex)
+              (newTabIndex) => onTabTap(context, ref, newTabIndex)
       );
 
   @protected

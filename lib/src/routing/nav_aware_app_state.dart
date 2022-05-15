@@ -66,7 +66,7 @@ class NavAwareApp extends ConsumerWidget {
               // RouterDelegate's Build() method. You're welcome :-).
               builder: (context, router) => RestorableProviderRegister(
                 restorationId: 'application-ephemeral-state',
-                providers: [ // TODO: let specify user global restorable providers
+                providers: [
                   navControlTypeProvider,
                   ... globalRestorableProviders ?? []
                 ],
