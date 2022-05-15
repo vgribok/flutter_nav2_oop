@@ -1,4 +1,4 @@
-import 'package:example/src/screens/counter.dart';
+import 'package:example/src/screens/counter_screen.dart';
 import 'package:flutter_nav2_oop/all.dart';
 
 class CounterPath extends RoutePath {

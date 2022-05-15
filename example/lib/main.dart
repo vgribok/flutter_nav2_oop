@@ -1,6 +1,6 @@
 import 'package:example/src/models/book.dart';
 import 'package:example/src/routing/counter_path.dart';
-import 'package:example/src/screens/counter.dart';
+import 'package:example/src/screens/counter_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:example/src/routing/book_details_path.dart';
@@ -20,7 +20,7 @@ void main() {
 
 class BooksApp extends NavAwareApp {
 
-  BooksApp() :
+  BooksApp({super.key}) :
       super(
         applicationId: "nav-aware-books-sample",
         appTitle: 'Books With Navigation',
@@ -35,7 +35,10 @@ class BooksApp extends NavAwareApp {
           CounterPath.fromUri
         ],
 
-        globalRestorableProviders: [Books.selectedBookProvider],
+        globalRestorableProviders: [
+          Books.selectedBookProvider,
+          CounterScreen.counterProvider
+        ],
 
         tabs: [
           TabInfo(

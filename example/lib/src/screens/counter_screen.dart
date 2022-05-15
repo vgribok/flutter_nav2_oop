@@ -4,13 +4,14 @@ import 'package:flutter_nav2_oop/all.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_restorable/flutter_riverpod_restorable.dart';
 
-final counterProvider = RestorableProvider<RestorableInt>(
-    (ref) => throw UnimplementedError("Initial value is supplied by the override"),
-    restorationId: "counter"
-);
-
 class CounterScreen extends NavScreen {
   static const int navTabIndex = 1;
+
+  static final counterProvider = RestorableProvider<RestorableInt>(
+          (ref) => RestorableInt(0),
+      restorationId: "counter"
+  );
+
 
   CounterScreen(TabNavModel navState, {Key? key})
       : super(
@@ -24,10 +25,7 @@ class CounterScreen extends NavScreen {
 
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) =>
-    RestorableProviderScope(
-      restorationId: "counter-scope",
-      restorableOverrides: [counterProvider.overrideWithRestorable(RestorableInt(0))],
-      child: Consumer(
+    Consumer(
         builder: (context, ref, child) =>
          Scaffold(
            body: Center(
@@ -49,6 +47,5 @@ class CounterScreen extends NavScreen {
              child: const Icon(Icons.add),
            )
          )
-      )
     );
 }
