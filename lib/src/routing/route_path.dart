@@ -27,7 +27,7 @@ class RoutePath {
   /// is changing current navigation tab.
   @protected
   @mustCallSuper
-  Future<void> configureStateFromUri(TabNavModel navState) {
+  Future<void> configureStateFromUri(TabNavModel navState, WidgetRef ref) {
     navState.selectedTabIndex = tabIndex;
     return Future.value();
   }
@@ -43,16 +43,4 @@ class RoutePath {
 
   /// Maps current route object to Flutter-required [RouteInformation] object
   RouteInformation? get _routeInformation => RouteInformation(location: location);
-
-  /// Convenience method surfacing [TabNavModel] ability
-  /// to find state object by its type
-  T? stateByType<T extends ChangeNotifier>(
-      TabNavModel navState,
-      {
-        /// Set to true to search all tab state
-        /// object collections, as opposed to
-        /// just screen's tab state object collection
-        bool stateObjectIsInAnotherTab = false
-      }) =>
-    navState.stateByType<T>(tabIndex: tabIndex, searchOtherTabs: stateObjectIsInAnotherTab);
 }

@@ -6,7 +6,7 @@ extension BuildContextExtensions on BuildContext {
     ScaffoldMessenger.of(this).showSnackBar(
         SnackBar(
             content: content,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
+            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
             behavior: SnackBarBehavior.floating
         )
     );

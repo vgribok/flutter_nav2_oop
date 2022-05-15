@@ -11,12 +11,11 @@ abstract class FullScreenModalDialog extends NavScreen {
     /// Optional user-supplied key.
     /// If not supplied, route URI
     /// is used as the key
-    LocalKey? key
+    super.key
   }) : super(
     screenTitle: screenTitle,
     tabIndex: parent.tabIndex,
     navState: parent.navState,
-    key: key
   );
 
   @override
@@ -38,6 +37,6 @@ abstract class FullScreenModalDialog extends NavScreen {
       AppBar(
         title: Text(screenTitle),
         leading: IconButton(icon: const Icon(Icons.cancel), onPressed: () => close(context)),
-        actions: buildAppBarActions(context)
+        actions: buildAppBarActions(context, ref)
       );
 }

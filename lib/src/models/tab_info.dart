@@ -21,10 +21,6 @@ class TabInfo {
   /// when the tab gets selected.
   final TabRootScreenFactory rootScreenFactory;
 
-  /// A collection of state objects used by screens belonging
-  /// to the tab
-  final List<ChangeNotifier> stateItems;
-
   const TabInfo({
     /// Tab icon
     required this.icon,
@@ -32,11 +28,7 @@ class TabInfo {
     this.title,
     /// Function instantiating the root screen of the tab.
     required this.rootScreenFactory,
-    /// A collection of state objects used by screens belonging
-    /// to the tab
-    List<ChangeNotifier>? stateItems
-  })
-    : this.stateItems = stateItems ?? const [];
+  });
 
   /// Calculates the basis of the screen navigation stack
   /// for the tab, when it's selected.
@@ -44,7 +36,7 @@ class TabInfo {
   /// The last screen in the returned collection will be displayed,
   /// unless the framework needs to show the 404 screen on top of it
   /// in response to user's invalid input into browser's address bar.
-  Iterable<NavScreen> _screenStack(TabNavModel navState) sync* {
+  Iterable<NavScreen> _screenStack(TabNavModel navState, WidgetRef ref) sync* {
 
     // Let application code instantiate the root screen for the tab
     final NavScreen rootScreen = rootScreenFactory(navState);
@@ -53,51 +45,19 @@ class TabInfo {
     // Build screen stack by calling each screen's [topScreen]
     // property to see whether the screen needs to show another
     // screen on top
-    for (NavScreen? nextScreen = rootScreen.topScreen;
+    for (NavScreen? nextScreen = rootScreen.topScreen(ref);
         nextScreen != null;
-        nextScreen = nextScreen.topScreen)
+        nextScreen = nextScreen.topScreen(ref))
       yield nextScreen;
   }
 
-  /// Finds a state object by its type in tab's state object collection
-  T? stateByType<T extends ChangeNotifier>() =>
-      stateItems.firstSafe((e) => e is T) as T?;
-
-  /// Attaches external listener of state change notifications.
-  ///
-  /// This method, along with the [_removeListener] method,
-  /// optimize number of UI rebuilds by ignoring state
-  /// changes affecting inactive tab screens.
-  void _addListener(VoidCallback listener) =>
-      stateItems.forEach((stateItem) {
-        // ignore: invalid_use_of_protected_member
-        assert(!stateItem.hasListeners);
-        stateItem.addListener(listener);
-      });
-
-  /// Removes external listener of state change notifications
-  ///
-  /// This method, along with the [_addListener] method,
-  /// optimize number of UI rebuilds by ignoring state
-  /// changes affecting inactive tab screens.
-  void _removeListener(VoidCallback listener) =>
-      stateItems.forEach((stateItem) {
-        // ignore: invalid_use_of_protected_member
-        assert(stateItem.hasListeners);
-
-        stateItem.removeListener(listener);
-
-        // ignore: invalid_use_of_protected_member
-        assert(!stateItem.hasListeners);
-      });
-
   /// Returns `true` if this tab has more than one screen
   /// in its screen stack.
-  bool hasMultipleScreensInStack(TabNavModel navState) =>
-      _screenStack(navState).take(2).length == 2;
+  bool hasMultipleScreensInStack(TabNavModel navState, WidgetRef ref) =>
+      _screenStack(navState, ref).take(2).length == 2;
 
   /// Returns `true` if this tab has only one screen
   /// in its screen stack.
-  bool hasOnlyOneScreenInStack(TabNavModel navState) =>
-      _screenStack(navState).take(2).length == 1;
+  bool hasOnlyOneScreenInStack(TabNavModel navState, WidgetRef ref) =>
+      _screenStack(navState, ref).take(2).length == 1;
 }

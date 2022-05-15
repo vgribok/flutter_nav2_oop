@@ -11,11 +11,6 @@ class NavAwareApp extends ConsumerWidget {
   /// A singleton of [TabNavModel] accessible via [Provider]
   static late Provider<TabNavModel> navModelProvider;
 
-  /// A singleton [Router] accessible via [Provider]
-  static final _routerDelegateProvider = Provider<NavAwareRouterDelegate>(
-      (ref) => NavAwareRouterDelegate(ref)
-  );
-
   static late RestorableProvider<RestorableEnumN<NavControlType?>> navControlTypeProvider;
 
   NavAwareApp({
@@ -32,7 +27,7 @@ class NavAwareApp extends ConsumerWidget {
     ThemeData? theme,
     /// Navigation type. Auto if not specified.
     NavControlType? navType,
-    //super.key
+    super.key
   }) :
     _appTitle = appTitle,
     _theme = theme
@@ -54,7 +49,7 @@ class NavAwareApp extends ConsumerWidget {
           MaterialApp.router(
               title: appTitle,
               theme: _theme,
-              routerDelegate: ref.read(_routerDelegateProvider),
+              routerDelegate: NavAwareRouterDelegate(ref) ,// ref.read(_routerDelegateProvider),
               routeInformationParser: NavAwareRouteInfoParser(ref, routeParsers: routeParsers),
               restorationScopeId: "app-router-restoration-scope",
               debugShowCheckedModeBanner: false, // Hide 'Debug' ribbon on the AppBar,

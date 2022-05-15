@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_nav2_oop/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Book {
   final String title;
   final String author;
 
   const Book(this.title, this.author);
+
+  factory Book.fromId(int id) => Books.allBooks[id];
+
+  int get id => Books.allBooks.indexOf(this);
+
+  Key get key => ValueKey("book-$author-$title");
 }
 
 class Books {
@@ -15,31 +21,12 @@ class Books {
     Book('Fahrenheit 451', 'Ray Bradbury'),
   ];
 
+  static final selectedBookProvider = StateProvider<Book?>((ref) => null);
+
   static bool isValidBookId(int? bookId) {
     return bookId != null && bookId >= 0 && bookId < allBooks.length;
   }
 
-  static int bookId(Book? book) => book == null ? -1 : allBooks.indexOf(book);
-  static Book? bookById(int bookId) => isValidBookId(bookId) ? null : allBooks[bookId];
-}
-
-class SelectedBookState extends ValueNotifier<Book?> {
-
-  SelectedBookState() : super(null);
-
-  Book? get selectedBook => value;
-  set selectedBook(Book? book) => value = book;
-
-  int get selectedBookId => Books.bookId(selectedBook);
-  set selectedBookId(int bookId) => selectedBook = Books.bookById(bookId);
-}
-
-extension BookNavStateExtensions on TabNavModel {
-  /// This is all-tabs-wide search for the [SelectedBookState] object.
-  ///
-  /// It's easier to use than similar tab-, screen- and route-specific
-  /// methods, but it requires the programmer to be sure that
-  /// there is only a single [SelectedBookState] object in all tab state
-  /// collections.
-  SelectedBookState get selectedBookState => this.stateByType<SelectedBookState>();
+  static int bookId(Book? book) => book?.id ?? -1;
+  static Book? bookById(int bookId) => isValidBookId(bookId) ? null : Book.fromId(bookId);
 }

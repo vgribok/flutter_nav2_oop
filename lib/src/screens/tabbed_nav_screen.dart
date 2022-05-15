@@ -19,7 +19,7 @@ typedef VerticalNavRailBuilder = Widget Function(Widget body, NavScreen screen,
 
 /// A signature of a programmer-replaceable method building
 /// application screens' [AppBar]
-typedef AppBarBuilder = AppBar Function(NavScreen, BuildContext);
+typedef AppBarBuilder = AppBar Function(NavScreen, BuildContext, WidgetRef ref);
 
 /// A base class for all application screens.
 ///
@@ -40,9 +40,6 @@ abstract class NavScreen extends ConsumerWidget {
   @protected
   final TabNavModel navState;
 
-  static final isPortraitProvider = StateProvider((ref) => true);
-  static bool isPortrait(WidgetRef ref) => ref.read(isPortraitProvider);
-
   const NavScreen(
       {
         /// Screen title
@@ -55,9 +52,8 @@ abstract class NavScreen extends ConsumerWidget {
         /// Optional user-supplied key.
         /// If not supplied, route URI
         /// is used as the key
-        Key? key,
-      }):
-        super(key: key);
+        super.key,
+      });
 
   /// Returns a Page instance used by the [Navigator] Widget
   Page get _page => MaterialPage(key: ValueKey(routePath.location), child: this, restorationId: routePath.location);
@@ -76,9 +72,7 @@ abstract class NavScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return OrientationBuilder(builder: (context, orientation)
     {
-      ref.read(isPortraitProvider.notifier).state = orientation == Orientation.portrait;
-
-      final NavControlType navControlType = effectiveNavType(ref,
+      final NavControlType navControlType = effectiveNavType(context, ref,
           ref.watch(NavAwareApp.navControlTypeProvider).enumValue
       );
 
@@ -105,23 +99,23 @@ abstract class NavScreen extends ConsumerWidget {
   /// device orientation determines navigation mode: in portrait
   /// orientation bottom tab bar is used, and in landscape mode the
   /// vertical rail is used.
-  static NavControlType effectiveNavType(WidgetRef ref, NavControlType? navControlType) =>
+  static NavControlType effectiveNavType(BuildContext context, WidgetRef ref, NavControlType? navControlType) =>
       navControlType
           ?? ref.read(NavAwareApp.navControlTypeProvider).enumValue
-          ?? (isPortrait(ref) ? NavControlType.BottomTabBar : NavControlType.VerticalRail);
+          ?? (context.isPortrait ? NavControlType.BottomTabBar : NavControlType.VerticalRail);
 
   /// Invoked by the framework when navigation item,
   /// like tab or drawer list item, is tapped
   @protected
   void onNavItemTap(BuildContext context, WidgetRef ref, int newTabIndex) {
 
-    if(effectiveNavType(ref, null) == NavControlType.Drawer) {
+    if(effectiveNavType(context, ref, null) == NavControlType.Drawer) {
       // Hide the Drawer
       Navigator.pop(context);
     }
 
     bool tappedSameTabWithMultipleScreensInStack =
-        newTabIndex == tabIndex && tab.hasMultipleScreensInStack(navState);
+        newTabIndex == tabIndex && tab.hasMultipleScreensInStack(navState, ref);
 
     if(tappedSameTabWithMultipleScreensInStack) {
       // Remove top screen from the stack
@@ -150,7 +144,7 @@ abstract class NavScreen extends ConsumerWidget {
   /// it's called frequently to test-build
   /// screen stack.
   @protected
-  NavScreen? get topScreen => null;
+  NavScreen? topScreen(WidgetRef ref) => null;
 
   /// Non-root screens should override this method
   /// and call this one via super, to update the
@@ -158,19 +152,8 @@ abstract class NavScreen extends ConsumerWidget {
   /// removed from the top of the nav stack
   @protected
   @mustCallSuper
-  void updateStateOnScreenRemovalFromNavStackTop() =>
-      navState.changeTabOnBackArrowTapIfNecessary(this);
-
-  /// Convenience method surfacing [TabNavState] ability
-  /// to find state object by its type
-  @protected
-  T? stateByType<T extends ChangeNotifier>({
-    /// Set to true to search all tab state
-    /// object collections, as opposed to
-    /// just screen's tab state object collection
-    bool stateObjectIsInAnotherTab = false
-  }) =>
-      navState.stateByType<T>(tabIndex: tabIndex, searchOtherTabs: stateObjectIsInAnotherTab);
+  void updateStateOnScreenRemovalFromNavStackTop(WidgetRef ref) =>
+      navState.changeTabOnBackArrowTapIfNecessary(this, ref);
 
   //#region App-wide screen customization factories
 
@@ -205,10 +188,10 @@ abstract class NavScreen extends ConsumerWidget {
   static AppBarBuilder appBarBuilder = buildDefaultAppBar;
 
   /// Default implementation of the [appBarBuilder] factory
-  static AppBar buildDefaultAppBar(NavScreen screen, BuildContext context) =>
+  static AppBar buildDefaultAppBar(NavScreen screen, BuildContext context, WidgetRef ref) =>
       AppBar(
           title: Text(screen.screenTitle),
-          actions: screen.buildAppBarActions(context)
+          actions: screen.buildAppBarActions(context, ref)
       );
 
   /// Default implementation of the [tabBarBuilder] factory
@@ -311,7 +294,7 @@ abstract class NavScreen extends ConsumerWidget {
   /// factory method building same app bar for every screen.
   @protected
   PreferredSizeWidget? buildAppBar(BuildContext context, WidgetRef ref) =>
-      appBarBuilder(this, context);
+      appBarBuilder(this, context, ref);
 
   Widget? _buildNavTabBarInternal(BuildContext context, NavControlType navControlType, WidgetRef ref) {
     if (navControlType != NavControlType.BottomTabBar) return null;
@@ -366,7 +349,7 @@ abstract class NavScreen extends ConsumerWidget {
   /// Default implementation returns null resulting
   /// in no action Widgets added
   @protected
-  List<Widget>? buildAppBarActions(BuildContext context) => null;
+  List<Widget>? buildAppBarActions(BuildContext context, WidgetRef ref) => null;
 
   /// Method to override in subclasses to build screen-specific
   /// vertical rial navigation widget. May return `[body]` to

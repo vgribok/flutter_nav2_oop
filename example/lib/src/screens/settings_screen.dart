@@ -1,4 +1,3 @@
-import 'package:example/src/models/show_settings_modal_state.dart';
 import 'package:example/src/routing/settings_path.dart';
 import 'package:example/src/screens/settings_child_modal_dialog.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +7,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class SettingsScreen extends NavScreen {
   static const int navTabIndex = 2;
 
-  SettingsScreen(TabNavModel navState) :
+  static final showSettingsDialogProvider = StateProvider<bool>((ref) => false);
+
+  const SettingsScreen(TabNavModel navState) :
     super(
       tabIndex: navTabIndex,
       navState: navState,
@@ -62,8 +63,7 @@ class SettingsScreen extends NavScreen {
               const Divider(thickness: 1, indent: 50, endIndent: 50),
               ElevatedButton(
                   child: const Text('Show Modal Dialog'),
-                  onPressed: () =>
-                    showSettingsModalState.showSettingsModal = true
+                  onPressed: () => SettingsScreen.showSettingsDialogProvider.writabe(ref).state = true
               )
             ]
         )
@@ -71,13 +71,9 @@ class SettingsScreen extends NavScreen {
   }
 
   @override
-  RoutePath get routePath => SettingsPath();
-
-  SettingsShowModalState get showSettingsModalState =>
-    stateByType<SettingsShowModalState>()!;
+  RoutePath get routePath => const SettingsPath();
 
   @override
-  NavScreen? get topScreen =>
-    showSettingsModalState.showSettingsModal ?
+  NavScreen? topScreen(WidgetRef ref) => ref.watch(showSettingsDialogProvider) ?
       SettingsChildModalDialog(parent: this) : null;
 }

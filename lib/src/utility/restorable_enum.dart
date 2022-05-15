@@ -1,7 +1,6 @@
 part of flutter_nav2_oop;
 
-/// Implements ephemeral state restoration for nullable
-/// enums
+/// Implements ephemeral state restoration for nullable enums
 class RestorableEnumN<T> extends RestorableString {
   final Iterable<T> enumValues;
 
@@ -14,8 +13,7 @@ class RestorableEnumN<T> extends RestorableString {
   );
 }
 
-/// Implements ephemeral state restoration for non-nullable
-/// enums
+/// Implements ephemeral state restoration for non-nullable enums
 class RestorableEnum<T> extends RestorableEnumN {
   final T defaultValue;
 

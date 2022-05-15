@@ -24,7 +24,7 @@ class UrlNotFoundScreen extends NavScreen {
 
   /// Do not instantiate directly! Use [notFoundScreenFactory]
   /// instead.
-  UrlNotFoundScreen({required TabNavModel navState}) :
+  UrlNotFoundScreen({required TabNavModel navState, super.key}) :
     _notFoundUri = navState.notFoundUri!,
     super(
       screenTitle: defaultTitle,
@@ -41,29 +41,30 @@ class UrlNotFoundScreen extends NavScreen {
         children: [
           Text(defaultMessage),
           Text(
-              '\"$_notFoundUri\"',
-              style: TextStyle(fontWeight: FontWeight.bold)
+              '"$_notFoundUri"',
+              style: const TextStyle(fontWeight: FontWeight.bold)
           ),
-          Divider(thickness: 1, indent: 50, endIndent: 50),
+          const Divider(thickness: 1, indent: 50, endIndent: 50),
           ElevatedButton(
               child: Text(defaultCloseButtonText),
-              onPressed: updateStateOnScreenRemovalFromNavStackTop
+              onPressed: () => updateStateOnScreenRemovalFromNavStackTop(ref)
           )
         ])
     );
 
   @override
-  List<Widget>? buildAppBarActions(BuildContext context) =>
+  List<Widget>? buildAppBarActions(BuildContext context, WidgetRef ref) =>
       [
         IconButton(
             icon: const Icon(Icons.cancel),
             tooltip: defaultCloseButtonText,
-            onPressed: updateStateOnScreenRemovalFromNavStackTop
+            onPressed: () => updateStateOnScreenRemovalFromNavStackTop(ref)
         )
       ];
 
   @override @protected
-  void updateStateOnScreenRemovalFromNavStackTop() =>
+  // ignore: must_call_super
+  void updateStateOnScreenRemovalFromNavStackTop(WidgetRef ref) =>
       navState.notFoundUri = null;
 
   @override @protected

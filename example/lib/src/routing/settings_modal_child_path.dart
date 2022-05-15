@@ -1,7 +1,7 @@
-import 'package:example/src/models/show_settings_modal_state.dart';
 import 'package:example/src/routing/settings_path.dart';
 import 'package:example/src/screens/settings_screen.dart';
 import 'package:flutter_nav2_oop/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SettingsModalChildPath extends RoutePath {
 
@@ -17,9 +17,9 @@ class SettingsModalChildPath extends RoutePath {
       uri.pathsMatch(resourceName) ? const SettingsModalChildPath() : null;
 
   @override
-  Future<void> configureStateFromUri(TabNavModel navState) {
-    super.configureStateFromUri(navState);
-    stateByType<SettingsShowModalState>(navState)!.showSettingsModal = true;
+  Future<void> configureStateFromUri(TabNavModel navState, WidgetRef ref) {
+    super.configureStateFromUri(navState, ref);
+    SettingsScreen.showSettingsDialogProvider.writabe(ref).state = true;
     return Future.value();
   }
 }

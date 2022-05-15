@@ -13,7 +13,8 @@ class BookDetailsScreen extends NavScreen {
   BookDetailsScreen({
     required this.selectedBook,
     required this.selectedBookId,
-    required TabNavModel navState
+    required TabNavModel navState,
+    super.key
   }) : super(
     screenTitle: selectedBook.title,
     tabIndex: navTabIndex,
@@ -35,12 +36,10 @@ class BookDetailsScreen extends NavScreen {
         ),
       );
 
-  SelectedBookState get selectedBookState => stateByType<SelectedBookState>()!;
-
   @override
-  void updateStateOnScreenRemovalFromNavStackTop() {
-    super.updateStateOnScreenRemovalFromNavStackTop();
-    selectedBookState.value = null;
+  void updateStateOnScreenRemovalFromNavStackTop(WidgetRef ref) {
+    super.updateStateOnScreenRemovalFromNavStackTop(ref);
+    Books.selectedBookProvider.writabe(ref).state = null;
   }
 
   @override

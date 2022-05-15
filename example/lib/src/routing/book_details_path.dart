@@ -2,6 +2,7 @@ import 'package:example/src/models/book.dart';
 import 'package:example/src/screens/book_details_screen.dart';
 import 'package:flutter_nav2_oop/all.dart';
 import 'book_list_path.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class BookDetailsPath extends DetailsRoutePath {
 
@@ -19,12 +20,9 @@ class BookDetailsPath extends DetailsRoutePath {
       return Books.isValidBookId(bookId) ? BookDetailsPath(bookId: bookId!) : null;
     });
 
-  SelectedBookState selectedBookState(TabNavModel navState) =>
-      stateByType<SelectedBookState>(navState)!;
-
   @override
-  Future<void> configureStateFromUri(TabNavModel navState) {
-    selectedBookState(navState).value = Books.allBooks[id];
-    return super.configureStateFromUri(navState);
+  Future<void> configureStateFromUri(TabNavModel navState, WidgetRef ref) {
+    Books.selectedBookProvider.writabe(ref).state = Books.allBooks[id];
+    return super.configureStateFromUri(navState, ref);
   }
 }

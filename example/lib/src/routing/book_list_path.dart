@@ -1,6 +1,7 @@
 import 'package:example/src/models/book.dart';
 import 'package:example/src/screens/book_list_screen.dart';
 import 'package:flutter_nav2_oop/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class BookListPath extends RoutePath {
   static const String resourceName = 'books';
@@ -12,14 +13,11 @@ class BookListPath extends RoutePath {
 
   static RoutePath? fromUri(Uri uri) =>
       uri.path == '/' || uri.isSingleSegmentPath(resourceName) ?
-        BookListPath() : null;
-
-  SelectedBookState selectedBookState(TabNavModel navState) =>
-      stateByType<SelectedBookState>(navState)!;
+        const BookListPath() : null;
 
   @override
-  Future<void> configureStateFromUri(TabNavModel navState) {
-    selectedBookState(navState).value = null;
-    return super.configureStateFromUri(navState);
+  Future<void> configureStateFromUri(TabNavModel navState, WidgetRef ref) {
+    Books.selectedBookProvider.writabe(ref).state = null;
+    return super.configureStateFromUri(navState, ref);
   }
 }

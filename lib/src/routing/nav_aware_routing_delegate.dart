@@ -11,14 +11,14 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
 
   static final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
-  final Ref ref;
+  final WidgetRef ref;
 
   /// Application state reference holder
   TabNavModel get navState => ref.read(NavAwareApp.navModelProvider);
 
   NavAwareRouterDelegate(this.ref,
   ) {
-    navState.addListener(this.notifyListeners);
+    navState.addListener(notifyListeners);
   }
 
   @override
@@ -27,7 +27,7 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
     // Call the function converting state
     // into the stack of screens.
     final List<Page<dynamic>> pageStack =
-      navState._buildNavigatorScreenStack()
+      navState._buildNavigatorScreenStack(ref)
           .map((screen) => screen._page)
           .toList();
 
@@ -49,7 +49,7 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
     }
 
     NavScreen navScreen = _screenFromRoute(route);
-    navScreen.updateStateOnScreenRemovalFromNavStackTop();
+    navScreen.updateStateOnScreenRemovalFromNavStackTop(ref);
 
     return true;
   }
@@ -71,7 +71,7 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
   /// supplied here), and then ask the screen for its route.
   @override
   RoutePath get currentConfiguration =>
-      navState._buildNavigatorScreenStack().last.routePath;
+      navState._buildNavigatorScreenStack(ref).last.routePath;
 
   /// Updates application navigation state based on
   /// user-typed URL, so that a screen corresponding
@@ -79,7 +79,7 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
   /// navigation stack.
   @override
   Future<void> setNewRoutePath(RoutePath path) =>
-      path.configureStateFromUri(navState);
+      path.configureStateFromUri(navState, ref);
 
   @override
   GlobalKey<NavigatorState>? get navigatorKey => _navigatorKey;

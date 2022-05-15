@@ -1,6 +1,6 @@
 import 'package:example/src/extension-classes/build_context_extensions.dart';
-import 'package:example/src/models/show_settings_modal_state.dart';
 import 'package:example/src/routing/settings_modal_child_path.dart';
+import 'package:example/src/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nav2_oop/all.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,10 +20,10 @@ class SettingsChildModalDialog extends FullScreenModalDialog {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text('Full-Screen Modal Dialog'),
-            Divider(thickness: 1, indent: 50, endIndent: 50),
+            const Text('Full-Screen Modal Dialog'),
+            const Divider(thickness: 1, indent: 50, endIndent: 50),
             ElevatedButton(
-                child: Text('Close Me'),
+                child: const Text('Close Me'),
                 onPressed: () => close(context)
             )
           ]
@@ -31,21 +31,16 @@ class SettingsChildModalDialog extends FullScreenModalDialog {
     );
 
   @override
-  RoutePath get routePath => SettingsModalChildPath();
-
-  /// Convenience accessor to the state object
-  @protected
-  SettingsShowModalState get showSettingsModalState =>
-      stateByType<SettingsShowModalState>()!;
+  RoutePath get routePath => const SettingsModalChildPath();
 
   @override
-  void updateStateOnScreenRemovalFromNavStackTop() =>
+  void updateStateOnScreenRemovalFromNavStackTop(WidgetRef ref) =>
     // Set the state that will hide this screen
     // when UI is rebuilt due to this state change
-    showSettingsModalState.showSettingsModal = false;
+    SettingsScreen.showSettingsDialogProvider.writabe(ref).state = false;
 
   @override
-  List<Widget>? buildAppBarActions(BuildContext context) =>
+  List<Widget>? buildAppBarActions(BuildContext context, WidgetRef ref) =>
     [
       IconButton(
         icon: const Icon(Icons.save),

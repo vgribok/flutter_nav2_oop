@@ -2,8 +2,6 @@ import 'package:example/src/routing/counter_path.dart';
 import 'package:example/src/screens/counter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:example/src/models/book.dart';
-import 'package:example/src/models/show_settings_modal_state.dart';
 import 'package:example/src/routing/book_details_path.dart';
 import 'package:example/src/routing/book_list_path.dart';
 import 'package:example/src/routing/settings_modal_child_path.dart';
@@ -40,7 +38,6 @@ class BooksApp extends NavAwareApp {
           TabInfo(
               icon: Icons.home,
               title: 'Books',
-              stateItems: [SelectedBookState()],
               rootScreenFactory: (nvState) => BooksListScreen(nvState)),
           TabInfo(
             icon: Icons.plus_one,
@@ -50,7 +47,6 @@ class BooksApp extends NavAwareApp {
           TabInfo(
               icon: Icons.settings,
               title: 'Settings',
-              stateItems: [SettingsShowModalState()],
               rootScreenFactory: (nvState) => SettingsScreen(nvState)
           ),
           TabInfo(

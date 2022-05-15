@@ -13,7 +13,7 @@ class NotFoundRoutePath extends RoutePath {
 
   @override
   // ignore: must_call_super
-  Future<void> configureStateFromUri(TabNavModel navState) {
+  Future<void> configureStateFromUri(TabNavModel navState, WidgetRef ref) {
     navState.notFoundUri = notFoundUri;
     return Future.value();
   }
