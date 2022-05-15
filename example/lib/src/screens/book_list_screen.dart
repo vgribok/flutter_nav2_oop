@@ -8,8 +8,8 @@ import 'book_details_screen.dart';
 class BooksListScreen extends NavScreen {
   static const int navTabIndex = 0;
 
-  const BooksListScreen(TabNavModel navState, {super.key})
-      : super(screenTitle: 'Books', tabIndex: navTabIndex, navState: navState);
+  const BooksListScreen({super.key})
+      : super(screenTitle: 'Books', tabIndex: navTabIndex);
 
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) {
@@ -36,7 +36,6 @@ class BooksListScreen extends NavScreen {
         : BookDetailsScreen(
             selectedBook: Book.fromId(selectedBookId),
             selectedBookId: selectedBookId,
-            navState: navState
         );
     }
 

@@ -56,15 +56,15 @@ class TabNavModel extends ChangeNotifier {
     if (_prevSelectedTabIndex != null &&
         _prevSelectedTabIndex != _selectedTabIndex)
       // Enable back arrow navigation for a previously selected tab
-      yield* tabs[_prevSelectedTabIndex!]._screenStack(this, ref);
+      yield* tabs[_prevSelectedTabIndex!]._screenStack(ref);
 
     // Return a screen stack for the currently selected tab
-    yield* selectedTab._screenStack(this, ref);
+    yield* selectedTab._screenStack(ref);
 
     if (notFoundUri != null) {
       // Put 404 screen on top of all others if user typed in
       // an invalid URL into the browser address bar.
-      yield UrlNotFoundScreen.notFoundScreenFactory(this);
+      yield UrlNotFoundScreen.notFoundScreenFactory(selectedTabIndex, notFoundUri!);
     }
   }
 
@@ -134,7 +134,7 @@ class TabNavModel extends ChangeNotifier {
 
     assert(topScreen.tabIndex == _selectedTabIndex);
 
-    if (topScreen.tab.hasOnlyOneScreenInStack(this, ref)) {
+    if (topScreen.tab(ref).hasOnlyOneScreenInStack(ref)) {
       // Tab screen stack has only one (current) screen,
       // meaning back arrow tap should change the tab.
       selectedTabIndex = _prevSelectedTabIndex!;

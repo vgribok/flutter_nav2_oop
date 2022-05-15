@@ -44,21 +44,22 @@ class BooksApp extends NavAwareApp {
           TabInfo(
               icon: Icons.home,
               title: 'Books',
-              rootScreenFactory: (nvState) => BooksListScreen(nvState)),
+              rootScreenFactory: () => const BooksListScreen()
+          ),
           TabInfo(
             icon: Icons.plus_one,
             title: 'Counter',
-            rootScreenFactory: (nvState) => CounterScreen(nvState)
+            rootScreenFactory: () => const CounterScreen()
           ),
           TabInfo(
               icon: Icons.settings,
               title: 'Settings',
-              rootScreenFactory: (nvState) => SettingsScreen(nvState)
+              rootScreenFactory: () => const SettingsScreen()
           ),
           TabInfo(
               icon: Icons.person,
               title: 'User',
-              rootScreenFactory: (nvState) => UserProfileScreen(nvState)
+              rootScreenFactory: () => const UserProfileScreen()
           ),
         ]
       );

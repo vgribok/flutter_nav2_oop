@@ -7,11 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SettingsChildModalDialog extends FullScreenModalDialog {
 
-  SettingsChildModalDialog({required NavScreen parent})
-    : super(
-        parent: parent,
-        screenTitle: 'Modal Demo',
-    );
+  SettingsChildModalDialog({required super.tabIndex})
+    : super(screenTitle: 'Modal Demo');
 
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) =>
@@ -34,6 +31,7 @@ class SettingsChildModalDialog extends FullScreenModalDialog {
   RoutePath get routePath => const SettingsModalChildPath();
 
   @override
+  // ignore: must_call_super
   void updateStateOnScreenRemovalFromNavStackTop(WidgetRef ref) =>
     // Set the state that will hide this screen
     // when UI is rebuilt due to this state change

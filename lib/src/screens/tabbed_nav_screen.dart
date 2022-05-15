@@ -9,7 +9,7 @@ typedef NavigationWidgetBarBuilder = Widget Function(
 
 /// A signature of a programmer-replaceable method building
 /// navigation drawer header widget
-typedef OptionalWidgetBuilder = Widget? Function (NavScreen, BuildContext context);
+typedef OptionalWidgetBuilder = Widget? Function (NavScreen, BuildContext, WidgetRef);
 
 /// A signature of a programmer-replaceable method building
 /// vertical rail navigation widget
@@ -19,7 +19,7 @@ typedef VerticalNavRailBuilder = Widget Function(Widget body, NavScreen screen,
 
 /// A signature of a programmer-replaceable method building
 /// application screens' [AppBar]
-typedef AppBarBuilder = AppBar Function(NavScreen, BuildContext, WidgetRef ref);
+typedef AppBarBuilder = AppBar Function(NavScreen, BuildContext, WidgetRef);
 
 /// A base class for all application screens.
 ///
@@ -38,7 +38,7 @@ abstract class NavScreen extends ConsumerWidget {
   /// Application state holder
 
   @protected
-  final TabNavModel navState;
+  TabNavModel navState(WidgetRef ref) => ref.read(NavAwareApp.navModelProvider);
 
   const NavScreen(
       {
@@ -47,8 +47,6 @@ abstract class NavScreen extends ConsumerWidget {
         /// Index of the navigation tab associated
         /// with the screen
         required this.tabIndex,
-        /// Reference to an existing [TabNavState] instance
-        required this.navState, // TODO: Remove here and access it via Riverpod
         /// Optional user-supplied key.
         /// If not supplied, route URI
         /// is used as the key
@@ -65,7 +63,7 @@ abstract class NavScreen extends ConsumerWidget {
   RoutePath get routePath;
 
   /// Returns tab reference associated with this screen
-  TabInfo get tab => navState[tabIndex];
+  TabInfo tab(WidgetRef ref) => navState(ref)[tabIndex];
 
   /// Uses [Scaffold] to build navigation-aware screen UI
   @override
@@ -108,20 +106,20 @@ abstract class NavScreen extends ConsumerWidget {
   /// like tab or drawer list item, is tapped
   @protected
   void onNavItemTap(BuildContext context, WidgetRef ref, int newTabIndex) {
-
+    // TODO: review pop() logic in this method
     if(effectiveNavType(context, ref, null) == NavControlType.Drawer) {
       // Hide the Drawer
       Navigator.pop(context);
     }
 
     bool tappedSameTabWithMultipleScreensInStack =
-        newTabIndex == tabIndex && tab.hasMultipleScreensInStack(navState, ref);
+        newTabIndex == tabIndex && tab(ref).hasMultipleScreensInStack(ref);
 
     if(tappedSameTabWithMultipleScreensInStack) {
       // Remove top screen from the stack
       Navigator.pop(context);
     }else {
-      navState._setSelectedTabIndex(newTabIndex, byUser: true);
+      navState(ref)._setSelectedTabIndex(newTabIndex, byUser: true);
     }
   }
 
@@ -153,7 +151,7 @@ abstract class NavScreen extends ConsumerWidget {
   @protected
   @mustCallSuper
   void updateStateOnScreenRemovalFromNavStackTop(WidgetRef ref) =>
-      navState.changeTabOnBackArrowTapIfNecessary(this, ref);
+      navState(ref).changeTabOnBackArrowTapIfNecessary(this, ref);
 
   //#region App-wide screen customization factories
 
@@ -212,7 +210,7 @@ abstract class NavScreen extends ConsumerWidget {
       BuildContext context, WidgetRef ref,
       List<TabInfo> tabs, int currentSelection, ValueChanged<int> tapHandler) {
 
-    Widget? drawerHeader = screen.buildDrawerHeader(context);
+    Widget? drawerHeader = screen.buildDrawerHeader(context, ref);
 
     return Drawer(
       // Add a ListView to the drawer. This ensures the user can scroll
@@ -240,7 +238,7 @@ abstract class NavScreen extends ConsumerWidget {
   }
 
   /// Default implementation of the [drawerHeaderBuilder] factory
-  static Widget buildDefaultDrawerHeader(NavScreen screen, BuildContext context) {
+  static Widget buildDefaultDrawerHeader(NavScreen screen, BuildContext context, WidgetRef ref) {
 
     final ThemeData theme = Theme.of(context);
 
@@ -252,7 +250,7 @@ abstract class NavScreen extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start, // Align to the top of the Drawer Header
         children: [
           Row(children: [ // Align icon and text at text baseline
-            Icon(screen.tab.icon, color: theme.colorScheme.secondary),
+            Icon(screen.tab(ref).icon, color: theme.colorScheme.secondary),
             const Text(' '),
             Text(screen.screenTitle,
               style: TextStyle(
@@ -309,7 +307,7 @@ abstract class NavScreen extends ConsumerWidget {
   /// screen.
   @protected
   Widget? buildNavTabBar(BuildContext context, WidgetRef ref) =>
-      tabBarBuilder(this, context, ref, navState.tabs, navState.selectedTabIndex,
+      tabBarBuilder(this, context, ref, navState(ref).tabs, navState(ref).selectedTabIndex,
               (newTabIndex) => onNavItemTap(context, ref, newTabIndex)
       );
 
@@ -329,8 +327,8 @@ abstract class NavScreen extends ConsumerWidget {
       drawerBuilder(this,
           context,
           ref,
-          navState.tabs,
-          navState.selectedTabIndex,
+          navState(ref).tabs,
+          navState(ref).selectedTabIndex,
           (newTabIndex) => onNavItemTap(context, ref, newTabIndex)
       );
 
@@ -340,8 +338,8 @@ abstract class NavScreen extends ConsumerWidget {
   /// Default implementation calls application-wide [drawerHeaderBuilder]
   /// factory method building same drawer header for every
   /// screen.
-  Widget? buildDrawerHeader(BuildContext context) =>
-      drawerHeaderBuilder(this, context);
+  Widget? buildDrawerHeader(BuildContext context, WidgetRef ref) =>
+      drawerHeaderBuilder(this, context, ref);
 
   /// Provides ability to set screen-specific actions
   /// on the right side of the [AppBar].
@@ -360,7 +358,7 @@ abstract class NavScreen extends ConsumerWidget {
   /// screen.
   @protected
   Widget buildVerticalRailAndBody(BuildContext context, WidgetRef ref, Widget body) =>
-      verticalNavRailBuilder(body, this, ref, navState.tabs, navState.selectedTabIndex,
+      verticalNavRailBuilder(body, this, ref, navState(ref).tabs, navState(ref).selectedTabIndex,
               (newTabIndex) => onNavItemTap(context, ref, newTabIndex)
       );
 

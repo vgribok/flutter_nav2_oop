@@ -1,7 +1,7 @@
 part of flutter_nav2_oop;
 
 /// Signature of a method instantiating a root screen for a tab
-typedef TabRootScreenFactory = NavScreen Function(TabNavModel navState);
+typedef TabRootScreenFactory = NavScreen Function();
 
 /// Defines both mutable and immutable parts of navigation tab's state.
 ///
@@ -36,10 +36,10 @@ class TabInfo {
   /// The last screen in the returned collection will be displayed,
   /// unless the framework needs to show the 404 screen on top of it
   /// in response to user's invalid input into browser's address bar.
-  Iterable<NavScreen> _screenStack(TabNavModel navState, WidgetRef ref) sync* {
+  Iterable<NavScreen> _screenStack(WidgetRef ref) sync* {
 
     // Let application code instantiate the root screen for the tab
-    final NavScreen rootScreen = rootScreenFactory(navState);
+    final NavScreen rootScreen = rootScreenFactory();
     yield rootScreen;
 
     // Build screen stack by calling each screen's [topScreen]
@@ -53,11 +53,11 @@ class TabInfo {
 
   /// Returns `true` if this tab has more than one screen
   /// in its screen stack.
-  bool hasMultipleScreensInStack(TabNavModel navState, WidgetRef ref) =>
-      _screenStack(navState, ref).take(2).length == 2;
+  bool hasMultipleScreensInStack(WidgetRef ref) =>
+      _screenStack(ref).take(2).length == 2;
 
   /// Returns `true` if this tab has only one screen
   /// in its screen stack.
-  bool hasOnlyOneScreenInStack(TabNavModel navState, WidgetRef ref) =>
-      _screenStack(navState, ref).take(2).length == 1;
+  bool hasOnlyOneScreenInStack(WidgetRef ref) =>
+      _screenStack(ref).take(2).length == 1;
 }

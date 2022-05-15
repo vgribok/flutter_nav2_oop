@@ -4,18 +4,17 @@ part of flutter_nav2_oop;
 abstract class FullScreenModalDialog extends NavScreen {
 
   FullScreenModalDialog({
-    /// Dialog's parent screen
-    required NavScreen parent,
     /// Screen title
     required String screenTitle,
+    /// Tab index
+    required int tabIndex,
     /// Optional user-supplied key.
     /// If not supplied, route URI
     /// is used as the key
     super.key
   }) : super(
     screenTitle: screenTitle,
-    tabIndex: parent.tabIndex,
-    navState: parent.navState,
+    tabIndex: tabIndex,
   );
 
   @override

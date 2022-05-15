@@ -1,7 +1,7 @@
 part of flutter_nav2_oop;
 
 /// Factory method signature for instantiating a screen for 404 situations
-typedef NotFoundScreenFactory = UrlNotFoundScreen Function(TabNavModel navState);
+typedef NotFoundScreenFactory = UrlNotFoundScreen Function(int, Uri);
 
 /// A screen shown when user-typed URL in the browser address bar
 /// is invalid
@@ -10,7 +10,7 @@ class UrlNotFoundScreen extends NavScreen {
   /// User-replaceable factory instantiating the
   /// [UrlNotFoundScreen]
   static NotFoundScreenFactory notFoundScreenFactory =
-      (navState) => UrlNotFoundScreen(navState: navState);
+      (tabIndex, notFoundUrl) => UrlNotFoundScreen(tabIndex: tabIndex, notFoundUri: notFoundUrl);
 
   /// User-replaceable message to be shown on the screen
   static String defaultMessage = 'Following URI is incorrect: ';
@@ -20,17 +20,12 @@ class UrlNotFoundScreen extends NavScreen {
 
   /// Invalid URL typed in the web browser
   /// address bar by the user
-  final Uri _notFoundUri;
+  final Uri notFoundUri;
 
   /// Do not instantiate directly! Use [notFoundScreenFactory]
   /// instead.
-  UrlNotFoundScreen({required TabNavModel navState, super.key}) :
-    _notFoundUri = navState.notFoundUri!,
-    super(
-      screenTitle: defaultTitle,
-      tabIndex: navState.selectedTabIndex,
-      navState: navState
-    );
+  UrlNotFoundScreen({required super.tabIndex, required this.notFoundUri, super.key}) :
+    super(screenTitle: defaultTitle);
 
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) =>
@@ -41,7 +36,7 @@ class UrlNotFoundScreen extends NavScreen {
         children: [
           Text(defaultMessage),
           Text(
-              '"$_notFoundUri"',
+              '"${navState(ref)._notFoundUri}"',
               style: const TextStyle(fontWeight: FontWeight.bold)
           ),
           const Divider(thickness: 1, indent: 50, endIndent: 50),
@@ -65,8 +60,8 @@ class UrlNotFoundScreen extends NavScreen {
   @override @protected
   // ignore: must_call_super
   void updateStateOnScreenRemovalFromNavStackTop(WidgetRef ref) =>
-      navState.notFoundUri = null;
+      navState(ref).notFoundUri = null;
 
   @override @protected
-  RoutePath get routePath => NotFoundRoutePath(notFoundUri: _notFoundUri);
+  RoutePath get routePath => NotFoundRoutePath(notFoundUri: notFoundUri);
 }

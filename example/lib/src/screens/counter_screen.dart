@@ -13,11 +13,10 @@ class CounterScreen extends NavScreen {
   );
 
 
-  CounterScreen(TabNavModel navState, {Key? key})
+  const CounterScreen({super.key})
       : super(
           screenTitle: "Counter",
           tabIndex: navTabIndex,
-          navState: navState
         );
 
   @override
