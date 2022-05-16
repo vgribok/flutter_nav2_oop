@@ -1,4 +1,3 @@
-import 'package:example/src/extension-classes/build_context_extensions.dart';
 import 'package:example/src/routing/settings_modal_child_path.dart';
 import 'package:example/src/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SettingsChildModalDialog extends FullScreenModalDialog {
 
-  SettingsChildModalDialog({required super.tabIndex})
+  SettingsChildModalDialog({required super.tabIndex, super.key})
     : super(screenTitle: 'Modal Demo');
 
   @override

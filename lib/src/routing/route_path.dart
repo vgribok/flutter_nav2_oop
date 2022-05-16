@@ -1,5 +1,6 @@
 part of flutter_nav2_oop;
 
+// TODO: Refactor the project to make routes primary sources of state and sole factories of screens
 /// Represents current navigation state as a URI.
 ///
 /// Provides bi-directional mapping between
