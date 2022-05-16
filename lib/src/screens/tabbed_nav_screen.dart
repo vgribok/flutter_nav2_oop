@@ -45,7 +45,7 @@ abstract class NavScreen extends ConsumerWidget {
         required this.screenTitle,
         /// Index of the navigation tab associated
         /// with the screen
-        required this.tabIndex,
+        required this.tabIndex, // TODO: Make NavScreen take RoutePath as an argument
         /// Optional user-supplied key.
         /// If not supplied, route URI
         /// is used as the key

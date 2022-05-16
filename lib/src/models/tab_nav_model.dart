@@ -13,6 +13,7 @@ enum NavControlType {
 /// [ChangeNotifier]-derived application state
 /// objects.
 class TabNavModel extends ChangeNotifier {
+  // TODO: consider splitting non-tabbed and tab-based navigation models
 
   /// State: collection of navigation tab
   /// definitions and tab state

@@ -11,14 +11,19 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
 
   static final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
+  /// Riverpod state accessor
   final WidgetRef ref;
 
   /// Application state reference holder
   TabNavModel get navState => ref.read(NavAwareApp.navModelProvider);
 
-  NavAwareRouterDelegate(this.ref,
-  ) {
+  NavAwareRouterDelegate(this.ref) {
     navState.addListener(notifyListeners);
+  }
+
+  @override
+  Future<void> setInitialRoutePath(RoutePath configuration) {
+    return super.setInitialRoutePath(configuration);
   }
 
   @override
@@ -39,6 +44,7 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
       pages: pageStack,
       onPopPage: _onBackButtonPress,
       restorationScopeId: "main-navigator",
+      // initialRoute: "/counter",
     );
   }
 

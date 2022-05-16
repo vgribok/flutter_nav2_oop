@@ -8,10 +8,12 @@ class NavAwareApp extends ConsumerWidget {
   final ThemeData? _theme;
   final List<RoutePathFactory> routeParsers;
   final List<RestorableProvider<RestorableProperty?>>? globalRestorableProviders;
+  final RoutePath initialPath;
 
   /// A singleton of [TabNavModel] accessible via [Provider]
   static late Provider<TabNavModel> navModelProvider;
 
+  /// A singleton of the [NavControlType] accessible via [RestorableProvider]
   static late RestorableProvider<RestorableEnumN<NavControlType?>> navControlTypeProvider;
 
   NavAwareApp({
@@ -30,6 +32,8 @@ class NavAwareApp extends ConsumerWidget {
     NavControlType? navType,
     /// Restorable state providers with global scope
     this.globalRestorableProviders,
+    required this.initialPath,
+
     super.key
   }) :
     _appTitle = appTitle,
@@ -48,31 +52,37 @@ class NavAwareApp extends ConsumerWidget {
   /// Returns [MaterialApp] instance returned by
   /// the [MaterialApp.router] method
   @override
-  Widget build(BuildContext context, WidgetRef ref) =>
-          MaterialApp.router(
-              title: appTitle,
-              theme: _theme,
-              routerDelegate: NavAwareRouterDelegate(ref) ,// ref.read(_routerDelegateProvider),
-              routeInformationParser: NavAwareRouteInfoParser(ref, routeParsers: routeParsers),
-              restorationScopeId: "app-router-restoration-scope",
-              debugShowCheckedModeBanner: false, // Hide 'Debug' ribbon on the AppBar,
+  Widget build(BuildContext context, WidgetRef ref) {
 
-              // An observation critical to successfully implementing restorable state
-              // with the [MaterialApp.router] is that the builder can be used to
-              // supply restoration scope (restorationId). The key bit here is that
-              // you don't have to supply your own child to the builder - the child
-              // comes from the [MaterialApp], but that is not obvious unless one
-              // analyzed the framework source code. The real child supplier is still the
-              // RouterDelegate's Build() method. You're welcome :-).
-              builder: (context, router) => RestorableProviderRegister(
+    Future<void> future = initialPath.configureStateFromUri(ref); // TODO: allow time for this to complete
+    
+    return MaterialApp.router(
+        title: appTitle,
+        theme: _theme,
+        routerDelegate: NavAwareRouterDelegate(ref),
+        routeInformationParser: NavAwareRouteInfoParser(
+            ref, routeParsers: routeParsers),
+        restorationScopeId: "app-router-restoration-scope",
+        debugShowCheckedModeBanner: false, // Hide 'Debug' ribbon on the AppBar,
+
+        // An observation critical to successfully implementing restorable state
+        // with the [MaterialApp.router] is that the builder can be used to
+        // supply restoration scope (restorationId). The key bit here is that
+        // you don't have to supply your own child to the builder - the child
+        // comes from the [MaterialApp], but that is not obvious unless one
+        // analyzed the framework source code. The real child supplier is still the
+        // RouterDelegate's Build() method. You're welcome :-).
+        builder: (context, router) =>
+            RestorableProviderRegister(
                 restorationId: 'application-ephemeral-state',
                 providers: [
                   navControlTypeProvider,
                   ... globalRestorableProviders ?? []
                 ],
                 child: router! // ?? const SizedBox.shrink(),
-              )
-      );
+            )
+    );
+  }
 
   /// Returns the name of the application
   String get appTitle => _appTitle;

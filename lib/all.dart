@@ -12,7 +12,7 @@ part './src/models/tab_info.dart';
 part './src/models/tab_nav_model.dart';
 
 part './src/routing/details_route_path.dart';
-part './src/routing/nav_aware_app_state.dart';
+part './src/routing/nav_aware_app.dart';
 part './src/routing/nav_aware_route_info_parser.dart';
 part './src/routing/nav_aware_routing_delegate.dart';
 part './src/routing/no_animation_transition_delegate.dart';

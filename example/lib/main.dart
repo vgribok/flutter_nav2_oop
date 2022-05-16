@@ -25,6 +25,7 @@ class BooksApp extends NavAwareApp {
         applicationId: "nav-aware-books-sample",
         appTitle: 'Books With Navigation',
         theme: myTheme,
+        initialPath: const CounterPath(),
 
         routeParsers: [
           BookListPath.fromUri,
