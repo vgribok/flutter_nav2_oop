@@ -3,7 +3,7 @@ part of flutter_nav2_oop;
 /// A base class for full-screen modal dialogs
 abstract class FullScreenModalDialog extends NavScreen {
 
-  FullScreenModalDialog({
+  const FullScreenModalDialog({
     /// Screen title
     required String screenTitle,
     /// Tab index

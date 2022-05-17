@@ -14,7 +14,7 @@ class BooksListScreen extends NavScreen {
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) {
 
-    RestorableValue<int?> selectedBookState = Books.selectedBookProvider.writable(ref);
+    final RestorableValue<int?> selectedBookState = Books.selectedBookProvider.writable(ref);
 
     return ListView(children: [
       for (var book in Books.allBooks)
@@ -29,7 +29,7 @@ class BooksListScreen extends NavScreen {
 
   @override
   NavScreen? topScreen(WidgetRef ref) {
-    int? selectedBookId = ref.watch(Books.selectedBookProvider).value;
+    final int? selectedBookId = ref.watch(Books.selectedBookProvider).value;
 
     return selectedBookId == null
         ? null

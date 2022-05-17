@@ -9,7 +9,7 @@ class SettingsScreen extends NavScreen {
 
   static final showSettingsDialogProvider = StateProvider<bool>((ref) => false);
 
-  const SettingsScreen() :
+  const SettingsScreen({super.key}) :
     super(
       tabIndex: navTabIndex,
       screenTitle: 'Settings'

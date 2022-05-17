@@ -8,7 +8,7 @@ class CounterScreen extends NavScreen {
   static const int navTabIndex = 1;
 
   static final counterProvider = RestorableProvider<RestorableInt>(
-          (ref) => RestorableInt(0),
+      (ref) => RestorableInt(0),
       restorationId: "counter"
   );
 
