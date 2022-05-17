@@ -11,7 +11,9 @@ enum NavControlType {
 ///
 /// Also serves as a holder for other
 /// [ChangeNotifier]-derived application state
-/// objects.
+/// objects. Does not need state persistence or restorability because
+/// [Navigator] class has its own built-in state restoration that is enabled
+/// by supplying restorationId.
 class TabNavModel extends ChangeNotifier {
   // TODO: consider splitting non-tabbed and tab-based navigation models
 
@@ -27,6 +29,7 @@ class TabNavModel extends ChangeNotifier {
 
   /// State: Index of a previously selected navigation tab.
   /// Only set when user explicitly tapped a nav tab.
+  /// Enables back arrow navigation for switching between nav tabs.
   int? _prevSelectedTabIndex;
 
   TabNavModel({required Iterable<TabInfo> tabs})
@@ -55,9 +58,10 @@ class TabNavModel extends ChangeNotifier {
   Iterable<NavScreen> _buildNavigatorScreenStack(WidgetRef ref) sync* {
 
     if (_prevSelectedTabIndex != null &&
-        _prevSelectedTabIndex != _selectedTabIndex)
+        _prevSelectedTabIndex != _selectedTabIndex) {
       // Enable back arrow navigation for a previously selected tab
       yield* tabs[_prevSelectedTabIndex!]._screenStack(ref);
+    }
 
     // Return a screen stack for the currently selected tab
     yield* selectedTab._screenStack(ref);
@@ -98,9 +102,10 @@ class TabNavModel extends ChangeNotifier {
       debugPrint(
           'Selected tab index $selectedTabIndex is outside the [0..${tabs.length - 1}] range. Setting index to 0.');
       _selectedTabIndex = 0;
-    } else
+    } else {
       _selectedTabIndex = selectedTabIndex;
-
+    }
+    
     if (beforeSelectedTabIndex != _selectedTabIndex) {
       // Notify the UI to rebuild due to selected tab change
       notifyListeners();
@@ -140,7 +145,4 @@ class TabNavModel extends ChangeNotifier {
       selectedTabIndex = _prevSelectedTabIndex!;
     }
   }
-
-  /// A convenience method for iterating tabs
-  Iterable<T> mapTabs<T>(T f(E)) => tabs.map(f);
 }

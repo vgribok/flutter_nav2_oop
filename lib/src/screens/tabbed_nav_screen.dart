@@ -34,10 +34,11 @@ abstract class NavScreen extends ConsumerWidget {
 
   /// Index of navigation tab associated with this screen
   final int tabIndex;
-  /// Application state holder
 
   @protected
-  static TabNavModel navState(WidgetRef ref) => ref.read(NavAwareApp.navModelProvider);
+  static TabNavModel navState(WidgetRef ref, {bool watch=false}) =>
+      watch ? ref.watch(NavAwareApp.navModelProvider) :
+              ref.read(NavAwareApp.navModelProvider);
 
   const NavScreen(
       {
@@ -193,7 +194,7 @@ abstract class NavScreen extends ConsumerWidget {
   /// Default implementation of the [tabBarBuilder] factory
   static Widget buildDefaultBottomTabBar(NavScreen screen,
       BuildContext context, WidgetRef ref, ValueChanged<int> tapHandler) {
-    final TabNavModel navModel = navState(ref);
+    final TabNavModel navModel = navState(ref, watch: true);
 
     return BottomNavigationBar(
       items: navModel.tabs.map(
@@ -211,8 +212,8 @@ abstract class NavScreen extends ConsumerWidget {
   static Widget buildDefaultDrawer(NavScreen screen,
       BuildContext context, WidgetRef ref, ValueChanged<int> tapHandler) {
 
+    final TabNavModel navModel = navState(ref, watch: true);
     final Widget? drawerHeader = screen.buildDrawerHeader(context, ref);
-    final TabNavModel navModel = navState(ref);
 
     return Drawer(
       // Add a ListView to the drawer. This ensures the user can scroll
@@ -270,7 +271,7 @@ abstract class NavScreen extends ConsumerWidget {
   static Widget buildDefaultVerticalNavRail(Widget body, NavScreen screen,
     WidgetRef ref, ValueChanged<int> tapHandler) {
 
-    final TabNavModel navModel = navState(ref);
+    final TabNavModel navModel = navState(ref, watch: true);
 
     return Row(children: [
       NavigationRail(

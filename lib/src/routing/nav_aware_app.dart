@@ -11,7 +11,7 @@ class NavAwareApp extends ConsumerWidget {
   final RoutePath initialPath;
 
   /// A singleton of [TabNavModel] accessible via [Provider]
-  static late Provider<TabNavModel> navModelProvider;
+  static late ChangeNotifierProvider<TabNavModel> navModelProvider;
 
   /// A singleton of the [NavControlType] accessible via [RestorableProvider]
   static late RestorableProvider<RestorableEnumN<NavControlType?>> navControlTypeProvider;
@@ -39,7 +39,7 @@ class NavAwareApp extends ConsumerWidget {
     _appTitle = appTitle,
     _theme = theme
   {
-    navModelProvider = Provider(
+    navModelProvider = ChangeNotifierProvider(
             (ref) => TabNavModel(tabs: tabs)
     );
 
@@ -54,7 +54,7 @@ class NavAwareApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-    Future<void> future = initialPath.configureStateFromUri(ref); // TODO: allow time for this to complete
+    // Future<void> future = initialPath.configureStateFromUri(ref); // TODO: allow time for this to complete
     
     return MaterialApp.router(
         title: appTitle,
