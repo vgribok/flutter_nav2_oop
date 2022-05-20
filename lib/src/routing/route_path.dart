@@ -7,6 +7,9 @@ part of flutter_nav2_oop;
 ///
 /// Provides bi-directional mapping between
 /// routes and corresponding state objects.
+/// Routes are not aware of screens - only of the state.
+/// Screens are aware of routes, i.e. screens report to the system
+/// which route Web browser should be showing.
 class RoutePath {
 
   /// Resource name, as in REST.

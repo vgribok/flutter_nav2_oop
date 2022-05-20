@@ -22,11 +22,6 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
   }
 
   @override
-  Future<void> setInitialRoutePath(RoutePath configuration) {
-    return super.setInitialRoutePath(configuration);
-  }
-
-  @override
   Widget build(BuildContext context) {
 
     // Call the function converting state

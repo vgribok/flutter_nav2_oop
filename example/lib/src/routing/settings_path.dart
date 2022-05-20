@@ -6,9 +6,12 @@ class SettingsPath extends RoutePath {
   /// Tab index for when the the route is typed by a user in the browser URL bar
   static const int defaultTabIndex = 2;
 
-  const SettingsPath({required super.tabIndex}) :
-    super(resource: resourceName);
+  SettingsPath({required super.tabIndex}) :
+    super(resource: resourceName)
+  {
+    assert(tabIndex == defaultTabIndex);
+  }
 
   static RoutePath? fromUri(Uri uri) =>
-      uri.isSingleSegmentPath(resourceName) ? const SettingsPath(tabIndex: defaultTabIndex) : null;
+      uri.isSingleSegmentPath(resourceName) ? SettingsPath(tabIndex: defaultTabIndex) : null;
 }

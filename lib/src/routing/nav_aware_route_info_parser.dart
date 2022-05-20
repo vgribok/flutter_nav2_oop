@@ -29,6 +29,7 @@ class NavAwareRouteInfoParser extends RouteInformationParser<RoutePath> {
       .map((parser) => parser(uri))
       .firstSafe((path) => path != null);
 
+    // TODO: BUG: parsing typed Url after 404 always results in 404 even for valid URLs
     if(path == null) {
       // None of URL parsers have recognized the URL.
       // Return the 404 route object.
