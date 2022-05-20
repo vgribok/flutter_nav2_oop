@@ -15,8 +15,6 @@ class BookListPath extends RoutePath {
       uri.isSingleSegmentPath(resourceName) ? const BookListPath(tabIndex: defaultTabIndex) : null;
 
   @override
-  Future<void> configureStateFromUri(WidgetRef ref) {
+  void configureStateFromUri(WidgetRef ref) =>
     Books.selectedBookProvider.writable(ref).value = null;
-    return super.configureStateFromUri(ref);
-  }
 }

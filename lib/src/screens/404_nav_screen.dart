@@ -63,5 +63,5 @@ class UrlNotFoundScreen extends NavScreen {
       NavScreen.navState(ref).notFoundUri = null;
 
   @override @protected
-  RoutePath get routePath => NotFoundRoutePath(notFoundUri: notFoundUri);
+  RoutePath get routePath => NotFoundRoutePath(notFoundUri: notFoundUri, tabIndex: tabIndex);
 }

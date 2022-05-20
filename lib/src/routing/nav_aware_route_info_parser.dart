@@ -14,6 +14,7 @@ class NavAwareRouteInfoParser extends RouteInformationParser<RoutePath> {
   /// to entered URL
   final List<RoutePathFactory> _routeParsers;
 
+  /// Riverpod context reference
   final WidgetRef ref;
 
   const NavAwareRouteInfoParser(this.ref, {required List<RoutePathFactory> routeParsers})
@@ -28,11 +29,14 @@ class NavAwareRouteInfoParser extends RouteInformationParser<RoutePath> {
       .map((parser) => parser(uri))
       .firstSafe((path) => path != null);
 
-    // None of URL parsers have recognized the URL.
-    // Return the 404 route object.
-    return Future.value(
-        path ?? NotFoundRoutePath(notFoundUri: uri)
-    );
+    if(path == null) {
+      // None of URL parsers have recognized the URL.
+      // Return the 404 route object.
+      final int currentTabIndex = ref.read(NavAwareApp.navModelProvider).selectedTabIndex;
+      path = NotFoundRoutePath(notFoundUri: uri, tabIndex: currentTabIndex);
+    }
+
+    return Future.value(path);
   }
 
   @override

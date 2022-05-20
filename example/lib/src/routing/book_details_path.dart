@@ -19,8 +19,6 @@ class BookDetailsPath extends DetailsRoutePath {
     });
 
   @override
-  Future<void> configureStateFromUri(WidgetRef ref) {
+  void configureStateFromUri(WidgetRef ref) =>
     Books.selectedBookProvider.writable(ref).value = id;
-    return super.configureStateFromUri(ref);
-  }
 }

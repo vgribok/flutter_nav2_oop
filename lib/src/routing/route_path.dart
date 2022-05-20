@@ -2,6 +2,8 @@ part of flutter_nav2_oop;
 
 // TODO: Refactor the project to make routes primary sources of state and sole factories of screens
 /// Represents current navigation state as a URI.
+/// [RoutePath]s gets constructed by [NavScreen]s to report current
+/// screen path, and by the typed URL parser (for Web).
 ///
 /// Provides bi-directional mapping between
 /// routes and corresponding state objects.
@@ -24,6 +26,7 @@ class RoutePath {
 
   /// Framework calls this method to let subclasses construct valid
   /// state from a URL typed by a user into browser's address bar.
+  /// User if need async, and for sync cases override [configureStateFromUri].
   ///
   /// Classes overriding this method should call `super` method
   /// to ensure correct selected tab switching.
@@ -31,10 +34,18 @@ class RoutePath {
   /// is changing current navigation tab.
   @protected
   @mustCallSuper
-  Future<void> configureStateFromUri(WidgetRef ref) {
+  Future<void> configureStateFromUriFuture(WidgetRef ref) {
     navState(ref).selectedTabIndex = tabIndex;
+    configureStateFromUri(ref);
     return Future.value();
   }
+
+  /// Framework calls this method to let subclasses construct valid
+  /// state from a URL typed by a user into browser's address bar.
+  ///
+  /// Overriding this method is not required if all that needed
+  /// is changing current navigation tab.  @protected
+  void configureStateFromUri(WidgetRef ref) {}
 
   /// Returns location URI for the given route.
   ///

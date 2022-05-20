@@ -85,7 +85,7 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
   /// navigation stack.
   @override
   Future<void> setNewRoutePath(RoutePath path) =>
-      path.configureStateFromUri(ref);
+      path.configureStateFromUriFuture(ref);
 
   @override
   GlobalKey<NavigatorState>? get navigatorKey => _navigatorKey;
