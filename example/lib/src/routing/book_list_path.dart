@@ -7,13 +7,13 @@ class BookListPath extends RoutePath {
   static const String resourceName = 'books';
 
   const BookListPath() :
-        super(
-          tabIndex: BooksListScreen.navTabIndex,
-          resource: resourceName);
+      super(
+        tabIndex: BooksListScreen.navTabIndex,
+        resource: resourceName
+      );
 
   static RoutePath? fromUri(Uri uri) =>
-      uri.path == '/' || uri.isSingleSegmentPath(resourceName) ?
-        const BookListPath() : null;
+      uri.isSingleSegmentPath(resourceName) ? const BookListPath() : null;
 
   @override
   Future<void> configureStateFromUri(WidgetRef ref) {

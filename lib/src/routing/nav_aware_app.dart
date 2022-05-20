@@ -6,7 +6,7 @@ class NavAwareApp extends ConsumerWidget {
   final String _appTitle;
   final String applicationId;
   final ThemeData? _theme;
-  final List<RoutePathFactory> routeParsers;
+  late List<RoutePathFactory> _routeParsers;
   final List<RestorableProvider<RestorableProperty?>>? globalRestorableProviders;
   final RoutePath initialPath;
 
@@ -23,7 +23,9 @@ class NavAwareApp extends ConsumerWidget {
     required String appTitle,
     /// Collection of factory methods test-converting
     /// user-typed URLs into [RoutePath] subclass instances
-    required this.routeParsers,
+    required List<RoutePathFactory> routeParsers,
+    /// Initial route to be shown on application start
+    required this.initialPath,
     /// Application navigation tab definitions
     required List<TabInfo> tabs,
     /// Application color theme
@@ -32,7 +34,6 @@ class NavAwareApp extends ConsumerWidget {
     NavControlType? navType,
     /// Restorable state providers with global scope
     this.globalRestorableProviders,
-    required this.initialPath,
 
     super.key
   }) :
@@ -47,6 +48,8 @@ class NavAwareApp extends ConsumerWidget {
             (ref) => RestorableEnumN<NavControlType>(NavControlType.values, initialValue: navType),
             restorationId: "nav-control-type"
     );
+
+    _routeParsers = [...routeParsers, _parseHome];
   }
 
   /// Returns [MaterialApp] instance returned by
@@ -61,7 +64,7 @@ class NavAwareApp extends ConsumerWidget {
         theme: _theme,
         routerDelegate: NavAwareRouterDelegate(ref),
         routeInformationParser: NavAwareRouteInfoParser(
-            ref, routeParsers: routeParsers),
+            ref, routeParsers: _routeParsers),
         restorationScopeId: "app-router-restoration-scope",
         debugShowCheckedModeBanner: false, // Hide 'Debug' ribbon on the AppBar,
 
@@ -86,4 +89,7 @@ class NavAwareApp extends ConsumerWidget {
 
   /// Returns the name of the application
   String get appTitle => _appTitle;
+
+  /// Returns path object for the "/" (home) route
+  RoutePath? _parseHome(Uri uri) => uri.path == '/' ? initialPath : null;
 }

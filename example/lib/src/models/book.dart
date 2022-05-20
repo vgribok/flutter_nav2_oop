@@ -21,6 +21,8 @@ class Books {
     Book('Fahrenheit 451', 'Ray Bradbury'),
   ];
 
+  /// We need to store selected book as a Restorable to maintain its state
+  /// even when its route is not store in the Navigator history.
   static final selectedBookProvider = RestorableProvider((ref) => RestorableIntN(null),
     restorationId: "selected-book-id")
   ;
