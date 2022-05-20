@@ -15,13 +15,10 @@ abstract class DetailsRoutePath<T> extends RoutePath {
   final T id;
 
   const DetailsRoutePath({
-    required int navTabIndex,
+    required super.tabIndex,
     required this.id,
-    required String resource
-  }) : super(
-      tabIndex: navTabIndex,
-      resource: resource
-  );
+    required super.resource
+  });
 
   /// Returns URL path in the form of
   /// '/resourcename/object-id'

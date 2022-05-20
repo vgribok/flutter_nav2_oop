@@ -1,7 +1,7 @@
 part of flutter_nav2_oop;
 
 /// Signature of a method instantiating a root screen for a tab
-typedef TabRootScreenFactory = NavScreen Function();
+typedef TabRootScreenFactory = NavScreen Function(int tabIndex);
 
 /// Defines both mutable and immutable parts of navigation tab's state.
 ///
@@ -21,7 +21,10 @@ class TabInfo {
   /// when the tab gets selected.
   final TabRootScreenFactory rootScreenFactory;
 
-  const TabInfo({
+  /// Index of the navigation tab in the tab navigation bar
+  int? _tabIndex;
+
+  TabInfo({
     /// Tab icon
     required this.icon,
     /// Optional tab title
@@ -39,7 +42,7 @@ class TabInfo {
   Iterable<NavScreen> _screenStack(WidgetRef ref) sync* {
 
     // Let application code instantiate the root screen for the tab
-    final NavScreen rootScreen = rootScreenFactory();
+    final NavScreen rootScreen = rootScreenFactory(_tabIndex!);
     yield rootScreen;
 
     // Build screen stack by calling each screen's [topScreen]
@@ -48,7 +51,9 @@ class TabInfo {
     for (NavScreen? nextScreen = rootScreen.topScreen(ref);
         nextScreen != null;
         nextScreen = nextScreen.topScreen(ref))
+    {
       yield nextScreen;
+    }
   }
 
   /// Returns `true` if this tab has more than one screen

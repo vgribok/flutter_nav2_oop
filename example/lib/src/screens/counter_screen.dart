@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_restorable/flutter_riverpod_restorable.dart';
 
 class CounterScreen extends NavScreen {
-  static const int navTabIndex = 1;
 
   static final counterProvider = RestorableProvider<RestorableInt>(
       (ref) => RestorableInt(0),
@@ -13,14 +12,11 @@ class CounterScreen extends NavScreen {
   );
 
 
-  const CounterScreen({super.key})
-      : super(
-          screenTitle: "Counter",
-          tabIndex: navTabIndex,
-        );
+  const CounterScreen({super.key, required super.tabIndex})
+      : super(screenTitle: "Counter");
 
   @override
-  RoutePath get routePath => const CounterPath();
+  RoutePath get routePath => CounterPath(tabIndex: tabIndex);
 
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) =>

@@ -5,7 +5,6 @@ import 'package:flutter_nav2_oop/all.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class BookDetailsScreen extends NavScreen {
-  static const navTabIndex = 0;
 
   final Book selectedBook;
   final int selectedBookId;
@@ -13,10 +12,10 @@ class BookDetailsScreen extends NavScreen {
   BookDetailsScreen({
     required this.selectedBook,
     required this.selectedBookId,
-    super.key
+    super.key,
+    required super.tabIndex
   }) : super(
     screenTitle: selectedBook.title,
-    tabIndex: navTabIndex,
   );
 
   @override
@@ -41,5 +40,5 @@ class BookDetailsScreen extends NavScreen {
   }
 
   @override
-  RoutePath get routePath => BookDetailsPath(bookId: selectedBookId);
+  RoutePath get routePath => BookDetailsPath(bookId: selectedBookId, tabIndex: tabIndex);
 }

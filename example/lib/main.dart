@@ -25,7 +25,7 @@ class BooksApp extends NavAwareApp {
         applicationId: "nav-aware-books-sample",
         appTitle: 'Books With Navigation',
         theme: myTheme,
-        initialPath: const CounterPath(),
+        initialPath: const CounterPath(tabIndex: CounterPath.defaultTaxIndex),
 
         routeParsers: [
           BookListPath.fromUri,
@@ -45,22 +45,22 @@ class BooksApp extends NavAwareApp {
           TabInfo(
               icon: Icons.home,
               title: 'Books',
-              rootScreenFactory: () => const BooksListScreen()
+              rootScreenFactory: (tabIndex) => BooksListScreen(tabIndex: tabIndex)
           ),
           TabInfo(
             icon: Icons.plus_one,
             title: 'Counter',
-            rootScreenFactory: () => const CounterScreen()
+            rootScreenFactory: (tabIndex) => CounterScreen(tabIndex: tabIndex)
           ),
           TabInfo(
               icon: Icons.settings,
               title: 'Settings',
-              rootScreenFactory: () => const SettingsScreen()
+              rootScreenFactory: (tabIndex) => SettingsScreen(tabIndex: tabIndex)
           ),
           TabInfo(
               icon: Icons.person,
               title: 'User',
-              rootScreenFactory: () => const UserProfileScreen()
+              rootScreenFactory: (tabIndex) => UserProfileScreen(tabIndex: tabIndex)
           ),
         ]
       );

@@ -6,10 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'book_details_screen.dart';
 
 class BooksListScreen extends NavScreen {
-  static const int navTabIndex = 0;
 
-  const BooksListScreen({super.key})
-      : super(screenTitle: 'Books', tabIndex: navTabIndex);
+  const BooksListScreen({super.key, required super.tabIndex})
+      : super(screenTitle: 'Books');
 
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) {
@@ -36,9 +35,10 @@ class BooksListScreen extends NavScreen {
         : BookDetailsScreen(
             selectedBook: Book.fromId(selectedBookId),
             selectedBookId: selectedBookId,
+            tabIndex: tabIndex,
         );
     }
 
   @override
-  RoutePath get routePath => const BookListPath();
+  RoutePath get routePath => BookListPath(tabIndex: tabIndex);
 }

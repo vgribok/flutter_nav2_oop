@@ -7,14 +7,14 @@ class SettingsModalChildPath extends RoutePath {
 
   static const String resourceName = '${SettingsPath.resourceName}/modal-child';
 
-  const SettingsModalChildPath() :
-      super(
-        tabIndex: SettingsScreen.navTabIndex,
-        resource: resourceName
-      );
+  /// Tab index for when the the route is typed by a user in the browser URL bar
+  static const int defaultTaxIndex = 1;
+
+  const SettingsModalChildPath({required super.tabIndex}) :
+      super(resource: resourceName);
 
   static RoutePath? fromUri(Uri uri) =>
-      uri.pathsMatch(resourceName) ? const SettingsModalChildPath() : null;
+      uri.pathsMatch(resourceName) ? const SettingsModalChildPath(tabIndex: SettingsPath.defaultTabIndex) : null;
 
   @override
   Future<void> configureStateFromUri(WidgetRef ref) {

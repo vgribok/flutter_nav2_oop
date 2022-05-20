@@ -5,15 +5,11 @@ import 'package:flutter_nav2_oop/all.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SettingsScreen extends NavScreen {
-  static const int navTabIndex = 2;
 
   static final showSettingsDialogProvider = StateProvider<bool>((ref) => false);
 
-  const SettingsScreen({super.key}) :
-    super(
-      tabIndex: navTabIndex,
-      screenTitle: 'Settings'
-    );
+  const SettingsScreen({super.key, required super.tabIndex}) :
+    super(screenTitle: 'Settings');
 
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) {
@@ -70,7 +66,7 @@ class SettingsScreen extends NavScreen {
   }
 
   @override
-  RoutePath get routePath => const SettingsPath();
+  RoutePath get routePath => SettingsPath(tabIndex: tabIndex);
 
   @override
   NavScreen? topScreen(WidgetRef ref) => ref.watch(showSettingsDialogProvider) ?

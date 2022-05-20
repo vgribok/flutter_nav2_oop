@@ -40,7 +40,12 @@ class TabNavModel extends ChangeNotifier {
   /// Add tab definitions during application initialization
   void addTabs(Iterable<TabInfo> tabs) {
     this.tabs.clear();
-    this.tabs.addAll(tabs);
+
+    int i = 0;
+    for(final tab in tabs) {
+      this.tabs.add(tab);
+      tab._tabIndex = i++;
+    }
   }
 
   /// Returns a navigation tab definition by its index
