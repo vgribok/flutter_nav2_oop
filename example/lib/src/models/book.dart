@@ -23,9 +23,10 @@ class Books {
 
   /// We need to store selected book as a Restorable to maintain its state
   /// even when its route is not store in the Navigator history.
-  static final selectedBookProvider = RestorableProvider((ref) => RestorableIntN(null),
-    restorationId: "selected-book-id")
-  ;
+  static final selectedBookProvider = RestorableProvider(
+    (_) => RestorableIntN(null),
+    restorationId: "selected-book-id"
+  )  ;
 
   static bool isValidBookId(int? bookId) {
     return bookId != null && bookId >= 0 && bookId < allBooks.length;

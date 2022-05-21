@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 part of flutter_nav2_oop;
 
 enum NavControlType {
@@ -32,7 +34,7 @@ class TabNavModel extends ChangeNotifier {
   /// Enables back arrow navigation for switching between nav tabs.
   int? _prevSelectedTabIndex;
 
-  TabNavModel({required Iterable<TabInfo> tabs})
+  TabNavModel(Iterable<TabInfo> tabs)
   {
     addTabs(tabs);
   }

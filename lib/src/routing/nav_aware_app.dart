@@ -8,7 +8,6 @@ class NavAwareApp extends ConsumerWidget {
   final ThemeData? _theme;
   final List<RoutePathFactory> _routeParsers;
   final List<RestorableProvider<RestorableProperty?>>? globalRestorableProviders;
-  final RoutePath initialPath;
 
   /// A singleton of [TabNavModel] accessible via [Provider]
   static late ChangeNotifierProvider<TabNavModel> navModelProvider;
@@ -25,7 +24,7 @@ class NavAwareApp extends ConsumerWidget {
     /// user-typed (Web) URLs into [RoutePath] subclass instances
     required List<RoutePathFactory> routeParsers,
     /// Initial route to be shown on application start
-    required this.initialPath,
+    required RoutePath initialPath, // TODO: bad UX - need to set state before the first frame
     /// Application navigation tab definitions
     required List<TabInfo> tabs,
     /// Application color theme
@@ -45,11 +44,11 @@ class NavAwareApp extends ConsumerWidget {
     ]
   {
     navModelProvider = ChangeNotifierProvider(
-            (ref) => TabNavModel(tabs: tabs)
+            (_) => TabNavModel(tabs)
     );
 
-    navControlTypeProvider = RestorableProvider<RestorableEnumN<NavControlType>>(
-            (ref) => RestorableEnumN<NavControlType>(NavControlType.values, initialValue: navType),
+    navControlTypeProvider = RestorableProvider(
+            (_) => RestorableEnumN(NavControlType.values, navType),
             restorationId: "nav-control-type"
     );
   }
@@ -57,11 +56,8 @@ class NavAwareApp extends ConsumerWidget {
   /// Returns [MaterialApp] instance returned by
   /// the [MaterialApp.router] method
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-
-    // Future<void> future = initialPath.configureStateFromUri(ref); // TODO: allow time for this to complete
-    
-    return MaterialApp.router(
+  Widget build(BuildContext context, WidgetRef ref) =>
+    MaterialApp.router(
         title: appTitle,
         theme: _theme,
         routerDelegate: NavAwareRouterDelegate(ref),
@@ -87,7 +83,6 @@ class NavAwareApp extends ConsumerWidget {
                 child: router! // ?? const SizedBox.shrink(),
             )
     );
-  }
 
   /// Returns the name of the application
   String get appTitle => _appTitle;

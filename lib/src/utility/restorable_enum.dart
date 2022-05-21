@@ -4,7 +4,7 @@ part of flutter_nav2_oop;
 class RestorableEnumN<T> extends RestorableString {
   final Iterable<T> enumValues;
 
-  RestorableEnumN(this.enumValues, {T? initialValue})
+  RestorableEnumN(this.enumValues, T? initialValue)
     : super(initialValue?.toString() ?? "");
 
   set enumValue(T? value) => super.value = (value?.toString() ?? "");
@@ -17,8 +17,8 @@ class RestorableEnumN<T> extends RestorableString {
 class RestorableEnum<T> extends RestorableEnumN {
   final T defaultValue;
 
-  RestorableEnum(Iterable<T> enumValues, {required this.defaultValue})
-      : super(enumValues, initialValue: defaultValue);
+  RestorableEnum(Iterable<T> enumValues, this.defaultValue)
+      : super(enumValues, defaultValue);
 
   @override
   set enumValue(dynamic value) => super.enumValue = value;
