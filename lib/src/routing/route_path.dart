@@ -1,6 +1,5 @@
 part of flutter_nav2_oop;
 
-// TODO: Refactor the project to make routes primary sources of state and sole factories of screens
 /// Represents current navigation state as a URI.
 /// [RoutePath]s gets constructed by [NavScreen]s to report current
 /// screen path, and by the typed URL parser (for Web).

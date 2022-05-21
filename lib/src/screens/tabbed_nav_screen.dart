@@ -46,7 +46,7 @@ abstract class NavScreen extends ConsumerWidget {
         required this.screenTitle,
         /// Index of the navigation tab associated
         /// with the screen
-        required this.tabIndex, // TODO: Make NavScreen take RoutePath as an argument
+        required this.tabIndex,
         /// Optional user-supplied key.
         /// If not supplied, route URI
         /// is used as the key
@@ -197,7 +197,7 @@ abstract class NavScreen extends ConsumerWidget {
     final TabNavModel navModel = navState(ref, watch: true);
 
     return BottomNavigationBar(
-      items: navModel.tabs.map(
+      items: navModel._tabs.map(
               (tabInfo) =>
               BottomNavigationBarItem(
                   icon: Icon(tabInfo.icon), label: tabInfo.title)
@@ -227,10 +227,10 @@ abstract class NavScreen extends ConsumerWidget {
             drawerHeader
           ,
           ...[
-            for(int i = 0; i < navModel.tabs.length; i++)
+            for(int i = 0; i < navModel._tabs.length; i++)
               ListTile(
-                title: Text(navModel.tabs[i].title!),
-                leading: Icon(navModel.tabs[i].icon),
+                title: Text(navModel._tabs[i].title!),
+                leading: Icon(navModel._tabs[i].icon),
                 selected: i == navModel.selectedTabIndex,
                 onTap: () => tapHandler(i),
               )
@@ -278,7 +278,7 @@ abstract class NavScreen extends ConsumerWidget {
           selectedIndex: navModel.selectedTabIndex,
           onDestinationSelected: (index) => tapHandler(index),
           labelType: NavigationRailLabelType.all,
-          destinations: navModel.tabs.map((tab) =>
+          destinations: navModel._tabs.map((tab) =>
               NavigationRailDestination(
                   icon: Icon(tab.icon),
                   label: Text(tab.title ?? '')

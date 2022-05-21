@@ -24,7 +24,7 @@ class NavAwareApp extends ConsumerWidget {
     /// user-typed (Web) URLs into [RoutePath] subclass instances
     required List<RoutePathFactory> routeParsers,
     /// Initial route to be shown on application start
-    required RoutePath initialPath, // TODO: bad UX - need to set state before the first frame
+    required RoutePath initialPath,
     /// Application navigation tab definitions
     required List<TabInfo> tabs,
     /// Application color theme
@@ -44,12 +44,12 @@ class NavAwareApp extends ConsumerWidget {
     ]
   {
     navModelProvider = ChangeNotifierProvider(
-            (_) => TabNavModel(tabs)
+      (_) => TabNavModel(tabs, initialPath.tabIndex)
     );
 
     navControlTypeProvider = RestorableProvider(
-            (_) => RestorableEnumN(NavControlType.values, navType),
-            restorationId: "nav-control-type"
+        (_) => RestorableEnumN(NavControlType.values, navType),
+        restorationId: "nav-control-type"
     );
   }
 
@@ -57,14 +57,15 @@ class NavAwareApp extends ConsumerWidget {
   /// the [MaterialApp.router] method
   @override
   Widget build(BuildContext context, WidgetRef ref) =>
-    MaterialApp.router(
+      MaterialApp.router(
         title: appTitle,
         theme: _theme,
         routerDelegate: NavAwareRouterDelegate(ref),
         routeInformationParser: NavAwareRouteInfoParser(
             ref, routeParsers: _routeParsers),
         restorationScopeId: "app-router-restoration-scope",
-        debugShowCheckedModeBanner: false, // Hide 'Debug' ribbon on the AppBar,
+        debugShowCheckedModeBanner: false,
+        // Hide 'Debug' ribbon on the AppBar,
 
         // An observation critical to successfully implementing restorable state
         // with the [MaterialApp.router] is that the builder can be used to

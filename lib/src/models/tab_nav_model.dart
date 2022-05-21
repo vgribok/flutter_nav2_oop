@@ -21,7 +21,7 @@ class TabNavModel extends ChangeNotifier {
 
   /// State: collection of navigation tab
   /// definitions and tab state
-  final List<TabInfo> tabs = [];
+  final List<TabInfo> _tabs = [];
 
   /// State: index of the currently selected navigation tab
   int _selectedTabIndex = 0;
@@ -32,30 +32,31 @@ class TabNavModel extends ChangeNotifier {
   /// State: Index of a previously selected navigation tab.
   /// Only set when user explicitly tapped a nav tab.
   /// Enables back arrow navigation for switching between nav tabs.
-  int? _prevSelectedTabIndex;
+  int? _prevSelectedTabIndex; // TODO: make restorable to preserve back arrow on state restoration
 
-  TabNavModel(Iterable<TabInfo> tabs)
+  TabNavModel(Iterable<TabInfo> tabs, int initialTabIndex)
+    : _selectedTabIndex = initialTabIndex
   {
     addTabs(tabs);
   }
 
   /// Add tab definitions during application initialization
   void addTabs(Iterable<TabInfo> tabs) {
-    this.tabs.clear();
+    _tabs.clear();
 
     int i = 0;
     for(final tab in tabs) {
-      this.tabs.add(tab);
+      _tabs.add(tab);
       tab._tabIndex = i++;
     }
   }
 
   /// Returns a navigation tab definition by its index
-  TabInfo operator [](int index) => tabs[index];
+  TabInfo operator [](int index) => _tabs[index];
 
   /// Returns currently selected navigation tab, as defined
   /// by [selectedTabIndex] property.
-  TabInfo get selectedTab => tabs[selectedTabIndex];
+  TabInfo get selectedTab => _tabs[selectedTabIndex];
 
   /// The *`UI = f(state)`* function.
   ///
@@ -67,7 +68,7 @@ class TabNavModel extends ChangeNotifier {
     if (_prevSelectedTabIndex != null &&
         _prevSelectedTabIndex != _selectedTabIndex) {
       // Enable back arrow navigation for a previously selected tab
-      yield* tabs[_prevSelectedTabIndex!]._screenStack(ref);
+      yield* _tabs[_prevSelectedTabIndex!]._screenStack(ref);
     }
 
     // Return a screen stack for the currently selected tab
@@ -104,10 +105,10 @@ class TabNavModel extends ChangeNotifier {
       _prevSelectedTabIndex = null;
     }
 
-    if (selectedTabIndex < 0 || selectedTabIndex >= tabs.length) {
+    if (selectedTabIndex < 0 || selectedTabIndex >= _tabs.length) {
       // If `selectedTabIndex` is out of range, set it to 0
       debugPrint(
-          'Selected tab index $selectedTabIndex is outside the [0..${tabs.length - 1}] range. Setting index to 0.');
+          'Selected tab index $selectedTabIndex is outside the [0..${_tabs.length - 1}] range. Setting index to 0.');
       _selectedTabIndex = 0;
     } else {
       _selectedTabIndex = selectedTabIndex;
