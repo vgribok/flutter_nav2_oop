@@ -2,7 +2,6 @@ import 'package:example/src/models/book.dart';
 import 'package:example/src/routing/counter_path.dart';
 import 'package:example/src/screens/counter_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:example/src/routing/book_details_path.dart';
 import 'package:example/src/routing/book_list_path.dart';
 import 'package:example/src/routing/settings_modal_child_path.dart';
@@ -15,13 +14,14 @@ import 'package:example/theme.dart';
 import 'package:flutter_nav2_oop/all.dart';
 
 void main() {
-  runApp(ProviderScope(child: BooksApp()));
+  runApp(BooksApp().riverpodApp);
 }
 
 class BooksApp extends NavAwareApp {
 
-  BooksApp({super.key}) :
+  BooksApp() :
       super(
+        key: const ValueKey("Sample Books App"),
         applicationId: "nav-aware-books-sample",
         appTitle: 'Books With Navigation',
         theme: myTheme,

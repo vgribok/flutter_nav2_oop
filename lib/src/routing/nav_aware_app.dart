@@ -6,7 +6,7 @@ class NavAwareApp extends ConsumerWidget {
   final String _appTitle;
   final String applicationId;
   final ThemeData? _theme;
-  late List<RoutePathFactory> _routeParsers;
+  final List<RoutePathFactory> _routeParsers;
   final List<RestorableProvider<RestorableProperty?>>? globalRestorableProviders;
   final RoutePath initialPath;
 
@@ -22,7 +22,7 @@ class NavAwareApp extends ConsumerWidget {
     /// Application name
     required String appTitle,
     /// Collection of factory methods test-converting
-    /// user-typed URLs into [RoutePath] subclass instances
+    /// user-typed (Web) URLs into [RoutePath] subclass instances
     required List<RoutePathFactory> routeParsers,
     /// Initial route to be shown on application start
     required this.initialPath,
@@ -38,7 +38,11 @@ class NavAwareApp extends ConsumerWidget {
     super.key
   }) :
     _appTitle = appTitle,
-    _theme = theme
+    _theme = theme,
+    _routeParsers = [
+      ...routeParsers,
+      (uri) => _parseHome(uri, initialPath)
+    ]
   {
     navModelProvider = ChangeNotifierProvider(
             (ref) => TabNavModel(tabs: tabs)
@@ -48,8 +52,6 @@ class NavAwareApp extends ConsumerWidget {
             (ref) => RestorableEnumN<NavControlType>(NavControlType.values, initialValue: navType),
             restorationId: "nav-control-type"
     );
-
-    _routeParsers = [...routeParsers, _parseHome];
   }
 
   /// Returns [MaterialApp] instance returned by
@@ -91,5 +93,10 @@ class NavAwareApp extends ConsumerWidget {
   String get appTitle => _appTitle;
 
   /// Returns path object for the "/" (home) route
-  RoutePath? _parseHome(Uri uri) => uri.path == '/' ? initialPath : null;
+  static RoutePath? _parseHome(Uri uri, RoutePath initPath) =>
+      uri.path == '/' ? initPath : null;
+
+  /// Returns [ProviderScope] - a required wrapper for an app
+  /// using Riverpod state management.
+  ProviderScope get riverpodApp => ProviderScope(child: this);
 }
