@@ -40,13 +40,10 @@ abstract class NavScreen extends ConsumerWidget {
       watch ? ref.watch(NavAwareApp.navModelProvider).value :
               ref.read(NavAwareApp.navModelProvider).value;
 
-  const NavScreen(
+  const NavScreen(this.tabIndex,
       {
         /// Screen title
         required this.screenTitle,
-        /// Index of the navigation tab associated
-        /// with the screen
-        required this.tabIndex,
         /// Optional user-supplied key.
         /// If not supplied, route URI
         /// is used as the key

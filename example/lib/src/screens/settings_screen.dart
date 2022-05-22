@@ -8,7 +8,7 @@ class SettingsScreen extends NavScreen {
 
   static final showSettingsDialogProvider = StateProvider<bool>((ref) => false);
 
-  const SettingsScreen({super.key, required super.tabIndex}) :
+  const SettingsScreen(super.tabIndex, {super.key}) :
     super(screenTitle: 'Settings');
 
   @override
@@ -70,5 +70,5 @@ class SettingsScreen extends NavScreen {
 
   @override
   NavScreen? topScreen(WidgetRef ref) => ref.watch(showSettingsDialogProvider) ?
-      SettingsChildModalDialog(tabIndex: tabIndex,) : null;
+      SettingsChildModalDialog(tabIndex) : null;
 }

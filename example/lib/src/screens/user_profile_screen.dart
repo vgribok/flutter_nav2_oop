@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class UserProfileScreen extends NavScreen {
 
-  const UserProfileScreen({super.key, required super.tabIndex}) :
+  const UserProfileScreen(super.tabIndex, {super.key}) :
         super(screenTitle: 'User Profile');
 
   @override

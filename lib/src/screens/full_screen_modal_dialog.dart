@@ -3,19 +3,15 @@ part of flutter_nav2_oop;
 /// A base class for full-screen modal dialogs
 abstract class FullScreenModalDialog extends NavScreen {
 
-  const FullScreenModalDialog({
+  const FullScreenModalDialog(super.tabIndex,
+  {
     /// Screen title
-    required String screenTitle,
-    /// Tab index
-    required int tabIndex,
+    required super.screenTitle,
     /// Optional user-supplied key.
     /// If not supplied, route URI
     /// is used as the key
     super.key
-  }) : super(
-    screenTitle: screenTitle,
-    tabIndex: tabIndex,
-  );
+  });
 
   @override
   Widget? buildNavTabBar(BuildContext context, WidgetRef ref) => null; // Hides bottom navbar

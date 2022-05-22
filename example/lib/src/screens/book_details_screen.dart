@@ -9,11 +9,11 @@ class BookDetailsScreen extends NavScreen {
   final Book selectedBook;
   final int selectedBookId;
 
-  BookDetailsScreen({
+  BookDetailsScreen(super.tabIndex,
+  {
     required this.selectedBook,
     required this.selectedBookId,
     super.key,
-    required super.tabIndex
   }) : super(
     screenTitle: selectedBook.title,
   );

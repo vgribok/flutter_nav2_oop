@@ -12,7 +12,7 @@ class CounterScreen extends NavScreen {
   );
 
 
-  const CounterScreen({super.key, required super.tabIndex})
+  const CounterScreen(super.tabIndex, {super.key})
       : super(screenTitle: "Counter");
 
   @override

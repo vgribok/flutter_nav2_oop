@@ -10,7 +10,7 @@ class UrlNotFoundScreen extends NavScreen {
   /// User-replaceable factory instantiating the
   /// [UrlNotFoundScreen]
   static NotFoundScreenFactory notFoundScreenFactory =
-      (tabIndex, notFoundUrl) => UrlNotFoundScreen(tabIndex: tabIndex, notFoundUri: notFoundUrl);
+      (tabIndex, notFoundUrl) => UrlNotFoundScreen(tabIndex, notFoundUri: notFoundUrl);
 
   /// User-replaceable message to be shown on the screen
   static String defaultMessage = 'Following URI is incorrect: ';
@@ -24,7 +24,7 @@ class UrlNotFoundScreen extends NavScreen {
 
   /// Do not instantiate directly! Use [notFoundScreenFactory]
   /// instead.
-  UrlNotFoundScreen({required super.tabIndex, required this.notFoundUri, super.key}) :
+  UrlNotFoundScreen(super.tabIndex, {required this.notFoundUri, super.key}) :
     super(screenTitle: defaultTitle);
 
   @override
