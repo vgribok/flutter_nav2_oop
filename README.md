@@ -14,6 +14,9 @@ Features delivered by this library out-of-the-box are:
 As you can see, this is significantly more than the "Counter" or a "Hello, World!" examples could ever teach you.
 
 Your application `main.dart` will look like this:
+<details>
+    <summary>Click to show imports...</summary>
+    
 ```dart
 import 'package:example/src/models/book.dart';
 import 'package:example/src/routing/counter_path.dart';
@@ -29,61 +32,43 @@ import 'package:example/src/screens/settings_screen.dart';
 import 'package:example/src/screens/user_profile_screen.dart';
 import 'package:example/theme.dart';
 import 'package:flutter_nav2_oop/all.dart';
-
-void main() {
-  runApp(BooksApp().riverpodApp);
-}
-
-class BooksApp extends NavAwareApp {
-
-  BooksApp() :
-      super(
-        applicationId: "nav-aware-books-sample",
-        appTitle: 'Books With Navigation',
-        theme: myTheme,
-        initialPath: CounterPath(tabIndex: CounterPath.defaultTabIndex),
-        key: const ValueKey("books-sample-app"),
-
-        routeParsers: [
-          BookListPath.fromUri,
-          BookDetailsPath.fromUri,
-          UserProfilePath.fromUri,
-          SettingsPath.fromUri,
-          SettingsModalChildPath.fromUri,
-          CounterPath.fromUri
-        ],
-
-        globalRestorableProviders: [
-          Books.selectedBookProvider,
-          CounterScreen.counterProvider
-        ],
-
-        tabs: [
-          TabInfo(
-              icon: Icons.home,
-              title: 'Books',
-              rootScreenFactory: BooksListScreen.new
-          ),
-          TabInfo(
-            icon: Icons.plus_one,
-            title: 'Counter',
-            rootScreenFactory: CounterScreen.new
-          ),
-          TabInfo(
-              icon: Icons.settings,
-              title: 'Settings',
-              rootScreenFactory: SettingsScreen.new
-          ),
-          TabInfo(
-              icon: Icons.person,
-              title: 'User',
-              rootScreenFactory: UserProfileScreen.new
-          ),
-        ]
-      );
-}
 ```
+</details>
 
+```dart
+void main() {
+  runApp(theApp.riverpodApp);
+}
+
+NavAwareApp get theApp => NavAwareApp (
+    applicationId: "nav-aware-books-sample",
+    appTitle: 'Books With Navigation',
+    theme: myTheme,
+    initialPath: CounterPath(tabIndex: CounterPath.defaultTabIndex),
+    key: const ValueKey("books-sample-app"),
+
+    routeParsers: const [
+      BookListPath.fromUri,
+      BookDetailsPath.fromUri,
+      UserProfilePath.fromUri,
+      SettingsPath.fromUri,
+      SettingsModalChildPath.fromUri,
+      CounterPath.fromUri
+    ],
+
+    globalRestorableProviders: [
+      Books.selectedBookProvider,
+      CounterScreen.counterProvider
+    ],
+
+    tabs: [
+      TabInfo(Icons.home, title: 'Books', rootScreenFactory: BooksListScreen.new),
+      TabInfo(Icons.plus_one, title: 'Counter', rootScreenFactory: CounterScreen.new),
+      TabInfo(Icons.settings, title: 'Settings', rootScreenFactory: SettingsScreen.new),
+      TabInfo(Icons.person, title: 'User', rootScreenFactory: UserProfileScreen.new),
+    ]
+);
+```
 
 Once your [screen](example/lib/src/screens/book_list_screen.dart) and [route](example/lib/src/routing/book_details_path.dart) classes are implemented,
 you get your app looking like this on Android, iPhone or Web.

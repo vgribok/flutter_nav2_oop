@@ -14,54 +14,34 @@ import 'package:example/theme.dart';
 import 'package:flutter_nav2_oop/all.dart';
 
 void main() {
-  runApp(BooksApp().riverpodApp);
+  runApp(theApp.riverpodApp);
 }
 
-class BooksApp extends NavAwareApp {
+NavAwareApp get theApp => NavAwareApp (
+  applicationId: "nav-aware-books-sample",
+  appTitle: 'Books With Navigation',
+  theme: myTheme,
+  initialPath: CounterPath(tabIndex: CounterPath.defaultTabIndex),
+  key: const ValueKey("books-sample-app"),
 
-  BooksApp() :
-      super(
-        applicationId: "nav-aware-books-sample",
-        appTitle: 'Books With Navigation',
-        theme: myTheme,
-        initialPath: CounterPath(tabIndex: CounterPath.defaultTabIndex),
-        key: const ValueKey("books-sample-app"),
+  routeParsers: const [
+    BookListPath.fromUri,
+    BookDetailsPath.fromUri,
+    UserProfilePath.fromUri,
+    SettingsPath.fromUri,
+    SettingsModalChildPath.fromUri,
+    CounterPath.fromUri
+  ],
 
-        routeParsers: [
-          BookListPath.fromUri,
-          BookDetailsPath.fromUri,
-          UserProfilePath.fromUri,
-          SettingsPath.fromUri,
-          SettingsModalChildPath.fromUri,
-          CounterPath.fromUri
-        ],
+  globalRestorableProviders: [
+    Books.selectedBookProvider,
+    CounterScreen.counterProvider
+  ],
 
-        globalRestorableProviders: [
-          Books.selectedBookProvider,
-          CounterScreen.counterProvider
-        ],
-
-        tabs: [
-          TabInfo(
-              icon: Icons.home,
-              title: 'Books',
-              rootScreenFactory: BooksListScreen.new
-          ),
-          TabInfo(
-            icon: Icons.plus_one,
-            title: 'Counter',
-            rootScreenFactory: CounterScreen.new
-          ),
-          TabInfo(
-              icon: Icons.settings,
-              title: 'Settings',
-              rootScreenFactory: SettingsScreen.new
-          ),
-          TabInfo(
-              icon: Icons.person,
-              title: 'User',
-              rootScreenFactory: UserProfileScreen.new
-          ),
-        ]
-      );
-}
+  tabs: [
+    TabInfo(Icons.home, title: 'Books', rootScreenFactory: BooksListScreen.new),
+    TabInfo(Icons.plus_one, title: 'Counter', rootScreenFactory: CounterScreen.new),
+    TabInfo(Icons.settings, title: 'Settings', rootScreenFactory: SettingsScreen.new),
+    TabInfo(Icons.person, title: 'User', rootScreenFactory: UserProfileScreen.new),
+  ]
+);

@@ -24,14 +24,16 @@ class TabInfo {
   /// Index of the navigation tab in the tab navigation bar
   int? _tabIndex;
 
-  TabInfo({
+  TabInfo(
     /// Tab icon
-    required this.icon,
-    /// Optional tab title
-    this.title,
-    /// Function instantiating the root screen of the tab.
-    required this.rootScreenFactory,
-  });
+    this.icon,
+    {
+      /// Optional tab title
+      this.title,
+      /// Function instantiating the root screen of the tab.
+      required this.rootScreenFactory,
+    }
+  );
 
   /// Calculates the basis of the screen navigation stack
   /// for the tab, when it's selected.

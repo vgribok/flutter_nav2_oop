@@ -1,8 +1,8 @@
 library flutter_nav2_oop;
 
+// TODO: add localization support
 // TODO: rename the package as nav2_with_tabs
 // TODO: publish the library on pub.dev
-// TODO: add localization support
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
