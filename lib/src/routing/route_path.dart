@@ -27,6 +27,7 @@ class RoutePath {
   static TabNavModel navState(WidgetRef ref) => ref.read(NavAwareApp.navModelProvider).value;
 
   Future<void> _configureStateFromUriFuture(WidgetRef ref) {
+    navState(ref).notFoundUri = null; // cleans up 404 url before another attempt at paring user-typed URL
     configureStateFromUri(ref);
     return configureStateFromUriFuture(ref);
   }

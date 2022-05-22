@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_renaming_method_parameters
+
 part of flutter_nav2_oop;
 
 /// Factory method signature for converting URLs
@@ -29,7 +31,6 @@ class NavAwareRouteInfoParser extends RouteInformationParser<RoutePath> {
       .map((parser) => parser(uri))
       .firstSafe((path) => path != null);
 
-    // TODO: BUG: parsing typed Url after 404 always results in 404 even for valid URLs
     if(path == null) {
       // None of URL parsers have recognized the URL.
       // Return the 404 route object.
@@ -41,5 +42,6 @@ class NavAwareRouteInfoParser extends RouteInformationParser<RoutePath> {
   }
 
   @override
-  RouteInformation? restoreRouteInformation(RoutePath path) => path._routeInformation;
+  RouteInformation? restoreRouteInformation(RoutePath path) =>
+      path._routeInformation;
 }
