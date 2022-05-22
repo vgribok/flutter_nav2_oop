@@ -4,7 +4,8 @@
 
 Features delivered by this library out-of-the-box are:
 - Near zero boilerplate code in the application (see the main.dart example below).
-- Tab-based navigation using Flutter Router instead of the Navigator. That complies with Flutter v2 declarative navigation approach, but more importantly it supports routing for user-typed URLs.
+- Tab-based navigation using Flutter Router instead of the Navigator. 
+- Flutter v2 declarative navigation approach that supports routing for user-typed (Web) URL parsing.
 - Properly wired [Riverpod](https://pub.dev/packages/flutter_riverpod) app state management.
 - Ephemeral state restoration with [Riverpod Restorable](https://pub.dev/packages/flutter_riverpod_restorable).
 - In landscape orientation, Navigation controls going from the bottom to the left, and back when device is in the portrait orientation.
