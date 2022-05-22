@@ -62,10 +62,14 @@ NavAwareApp get theApp => NavAwareApp (
     ],
 
     tabs: [
-      TabInfo(Icons.home, title: 'Books', rootScreenFactory: BooksListScreen.new),
-      TabInfo(Icons.plus_one, title: 'Counter', rootScreenFactory: CounterScreen.new),
-      TabInfo(Icons.settings, title: 'Settings', rootScreenFactory: SettingsScreen.new),
-      TabInfo(Icons.person, title: 'User', rootScreenFactory: UserProfileScreen.new),
+      TabInfo(Icons.home, title: 'Books', 
+          rootScreenFactory: BooksListScreen.new),
+      TabInfo(Icons.plus_one, title: 'Counter', 
+          rootScreenFactory: CounterScreen.new),
+      TabInfo(Icons.settings, title: 'Settings', 
+          rootScreenFactory: SettingsScreen.new),
+      TabInfo(Icons.person, title: 'User', 
+          rootScreenFactory: UserProfileScreen.new),
     ]
 );
 ```
