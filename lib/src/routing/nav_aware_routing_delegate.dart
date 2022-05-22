@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_renaming_method_parameters
+
 part of flutter_nav2_oop;
 
 /// Abstracts away boilerplate implementation of the
@@ -15,14 +17,19 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
   final WidgetRef ref;
 
   /// Application state reference holder
-  TabNavModel get navState => ref.read(NavAwareApp.navModelProvider);
+  TabNavModel get navState => ref.read(NavAwareApp.navModelProvider).value;
 
-  NavAwareRouterDelegate(this.ref) {
-    navState.addListener(notifyListeners);
-  }
+  bool _attachedListenerToNavState = false;
+
+  NavAwareRouterDelegate(this.ref);
 
   @override
   Widget build(BuildContext context) {
+
+    if(!_attachedListenerToNavState) {
+      _attachedListenerToNavState = true;
+      navState.addListener(notifyListeners);
+    }
 
     // Call the function converting state
     // into the stack of screens.
@@ -79,8 +86,18 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
   /// to the entered route would be on top of the
   /// navigation stack.
   @override
-  Future<void> setNewRoutePath(RoutePath path) =>
-      path.configureStateFromUriFuture(ref);
+  Future<void> setNewRoutePath(RoutePath path) {
+    navState.selectedTabIndex = path.tabIndex;
+    return path._configureStateFromUriFuture(ref);
+  }
+
+  /// Called when routing delegate's ephemeral state gets restored
+  @override
+  Future<void> setRestoredRoutePath(RoutePath path) =>
+    // skips calling super to skip calling [setNewRoutePath]
+    // which changes selected tab and this way messes up
+    // restored state.
+    path._configureStateFromUriFuture(ref);
 
   @override
   GlobalKey<NavigatorState>? get navigatorKey => _navigatorKey;

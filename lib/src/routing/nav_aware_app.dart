@@ -10,7 +10,7 @@ class NavAwareApp extends ConsumerWidget {
   final List<RestorableProvider<RestorableProperty?>>? globalRestorableProviders;
 
   /// A singleton of [TabNavModel] accessible via [Provider]
-  static late ChangeNotifierProvider<TabNavModel> navModelProvider;
+  static late RestorableProvider<_NavStateRestorer> navModelProvider;
 
   /// A singleton of the [NavControlType] accessible via [RestorableProvider]
   static late RestorableProvider<RestorableEnumN<NavControlType?>> navControlTypeProvider;
@@ -43,13 +43,14 @@ class NavAwareApp extends ConsumerWidget {
       (uri) => _parseHome(uri, initialPath)
     ]
   {
-    navModelProvider = ChangeNotifierProvider(
-      (_) => TabNavModel(tabs, initialPath.tabIndex)
+    navModelProvider = RestorableProvider(
+      (_) => _NavStateRestorer(TabNavModel(tabs, initialPath.tabIndex)),
+      restorationId: "nav-state-restorer"
     );
 
     navControlTypeProvider = RestorableProvider(
-        (_) => RestorableEnumN(NavControlType.values, navType),
-        restorationId: "nav-control-type"
+      (_) => RestorableEnumN(NavControlType.values, navType),
+      restorationId: "nav-control-type"
     );
   }
 
@@ -79,6 +80,7 @@ class NavAwareApp extends ConsumerWidget {
                 restorationId: 'application-ephemeral-state',
                 providers: [
                   navControlTypeProvider,
+                  navModelProvider,
                   ... globalRestorableProviders ?? []
                 ],
                 child: router! // ?? const SizedBox.shrink(),

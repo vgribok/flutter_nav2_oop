@@ -37,8 +37,8 @@ abstract class NavScreen extends ConsumerWidget {
 
   @protected
   static TabNavModel navState(WidgetRef ref, {bool watch=false}) =>
-      watch ? ref.watch(NavAwareApp.navModelProvider) :
-              ref.read(NavAwareApp.navModelProvider);
+      watch ? ref.watch(NavAwareApp.navModelProvider).value :
+              ref.read(NavAwareApp.navModelProvider).value;
 
   const NavScreen(
       {

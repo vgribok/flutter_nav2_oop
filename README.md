@@ -5,7 +5,7 @@
 Features delivered by this library out-of-the-box are:
 - Near zero boilerplate code in the application (see the main.dart example below).
 - Tab-based navigation using Flutter Router instead of the Navigator. That complies with Flutter v2 declarative navigation approach, but more importantly it supports routing for user-typed URLs.
-- Properly-wired [Riverpod](https://pub.dev/packages/flutter_riverpod) app state management.
+- Properly wired [Riverpod](https://pub.dev/packages/flutter_riverpod) app state management.
 - Ephemeral state restoration with [Riverpod Restorable](https://pub.dev/packages/flutter_riverpod_restorable).
 - In landscape orientation, Navigation controls going from the bottom to the left, and back when device is in the portrait orientation.
 - Support of the 404 page when user types an unknown URL in the browser URL bar.
@@ -18,7 +18,6 @@ import 'package:example/src/models/book.dart';
 import 'package:example/src/routing/counter_path.dart';
 import 'package:example/src/screens/counter_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:example/src/routing/book_details_path.dart';
 import 'package:example/src/routing/book_list_path.dart';
 import 'package:example/src/routing/settings_modal_child_path.dart';
@@ -31,16 +30,18 @@ import 'package:example/theme.dart';
 import 'package:flutter_nav2_oop/all.dart';
 
 void main() {
-  runApp(ProviderScope(child: BooksApp()));
+  runApp(BooksApp().riverpodApp);
 }
 
 class BooksApp extends NavAwareApp {
 
-  BooksApp({super.key}) :
+  BooksApp() :
       super(
+        key: const ValueKey("Sample Books App"),
         applicationId: "nav-aware-books-sample",
         appTitle: 'Books With Navigation',
         theme: myTheme,
+        initialPath: CounterPath(tabIndex: CounterPath.defaultTabIndex),
 
         routeParsers: [
           BookListPath.fromUri,
@@ -60,22 +61,22 @@ class BooksApp extends NavAwareApp {
           TabInfo(
               icon: Icons.home,
               title: 'Books',
-              rootScreenFactory: () => const BooksListScreen()
+              rootScreenFactory: (tabIndex) => BooksListScreen(tabIndex: tabIndex)
           ),
           TabInfo(
             icon: Icons.plus_one,
             title: 'Counter',
-            rootScreenFactory: () => const CounterScreen()
+            rootScreenFactory: (tabIndex) => CounterScreen(tabIndex: tabIndex)
           ),
           TabInfo(
               icon: Icons.settings,
               title: 'Settings',
-              rootScreenFactory: () => const SettingsScreen()
+              rootScreenFactory: (tabIndex) => SettingsScreen(tabIndex: tabIndex)
           ),
           TabInfo(
               icon: Icons.person,
               title: 'User',
-              rootScreenFactory: () => const UserProfileScreen()
+              rootScreenFactory: (tabIndex) => UserProfileScreen(tabIndex: tabIndex)
           ),
         ]
       );

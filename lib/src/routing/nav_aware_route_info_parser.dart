@@ -33,7 +33,7 @@ class NavAwareRouteInfoParser extends RouteInformationParser<RoutePath> {
     if(path == null) {
       // None of URL parsers have recognized the URL.
       // Return the 404 route object.
-      final int currentTabIndex = ref.read(NavAwareApp.navModelProvider).selectedTabIndex;
+      final int currentTabIndex = ref.read(NavAwareApp.navModelProvider).value.selectedTabIndex;
       path = NotFoundRoutePath(notFoundUri: uri, tabIndex: currentTabIndex);
     }
 

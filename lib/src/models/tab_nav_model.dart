@@ -32,7 +32,7 @@ class TabNavModel extends ChangeNotifier {
   /// State: Index of a previously selected navigation tab.
   /// Only set when user explicitly tapped a nav tab.
   /// Enables back arrow navigation for switching between nav tabs.
-  int? _prevSelectedTabIndex; // TODO: make restorable to preserve back arrow on state restoration
+  int? _prevSelectedTabIndex;
 
   TabNavModel(Iterable<TabInfo> tabs, int initialTabIndex)
     : _selectedTabIndex = initialTabIndex
@@ -153,4 +153,42 @@ class TabNavModel extends ChangeNotifier {
       selectedTabIndex = _prevSelectedTabIndex!;
     }
   }
+}
+
+/// Saves and restores a [ChangeNotifier] ViewModel like [TabNavModel]
+/// to/from the ephemeral state.
+class _NavStateRestorer extends RestorableListenable<TabNavModel> {
+
+  final TabNavModel _tabNavModel;
+
+  _NavStateRestorer(this._tabNavModel) {
+    _tabNavModel.addListener(notifyListeners);
+  }
+
+  @override
+  TabNavModel createDefaultValue() => _tabNavModel;
+
+  @override
+  TabNavModel fromPrimitives(Object? data) {
+    final savedData = Map<String, dynamic>.from(data as Map);
+
+    final int? prevSelectedTabIndex = savedData["nav_prev_selected_index"] as int?;
+    final Uri? notFoundUri = savedData["nav_not_found_uri"] as Uri?;
+    final int selectedTabIndex = savedData["nav_tab_index"] as int;
+
+    final navState = createDefaultValue();
+
+    navState._selectedTabIndex = selectedTabIndex;
+    navState._prevSelectedTabIndex = prevSelectedTabIndex;
+    navState._notFoundUri = notFoundUri;
+
+    return navState;
+  }
+
+  @override
+  Object? toPrimitives() => <String, dynamic>{
+    "nav_tab_index": value.selectedTabIndex,
+    "nav_prev_selected_index": value._prevSelectedTabIndex,
+    "nav_not_found_uri": value.notFoundUri
+  };
 }

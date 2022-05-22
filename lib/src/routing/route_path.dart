@@ -24,23 +24,21 @@ class RoutePath {
   });
 
   @protected
-  static TabNavModel navState(WidgetRef ref) => ref.read(NavAwareApp.navModelProvider);
+  static TabNavModel navState(WidgetRef ref) => ref.read(NavAwareApp.navModelProvider).value;
+
+  Future<void> _configureStateFromUriFuture(WidgetRef ref) {
+    configureStateFromUri(ref);
+    return configureStateFromUriFuture(ref);
+  }
 
   /// Framework calls this method to let subclasses construct valid
   /// state from a URL typed by a user into browser's address bar.
   /// User if need async, and for sync cases override [configureStateFromUri].
   ///
-  /// Classes overriding this method should call `super` method
-  /// to ensure correct selected tab switching.
   /// Overriding this method is not required if all that needed
   /// is changing current navigation tab.
   @protected
-  @mustCallSuper
-  Future<void> configureStateFromUriFuture(WidgetRef ref) {
-    navState(ref).selectedTabIndex = tabIndex;
-    configureStateFromUri(ref);
-    return Future.value();
-  }
+  Future<void> configureStateFromUriFuture(WidgetRef ref) async {}
 
   /// Framework calls this method to let subclasses construct valid
   /// state from a URL typed by a user into browser's address bar.
