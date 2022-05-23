@@ -19,21 +19,17 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
   /// Application state reference holder
   TabNavModel get navState => ref.read(NavAwareApp.navModelProvider).value;
 
-  bool _attachedListenerToNavState = false;
+  late bool _attachedListenerToNavState = false;
 
   NavAwareRouterDelegate(this.ref);
 
   @override
   Widget build(BuildContext context) {
-
-    if(!_attachedListenerToNavState) {
-      _attachedListenerToNavState = true;
-      navState.addListener(notifyListeners);
-    }
+    _attachDelegateListenerToNavStateNotifier();
 
     // Call the function converting state
     // into the stack of screens.
-    final List<Page<dynamic>> pageStack =
+    final List<Page> pageStack =
       navState._buildNavigatorScreenStack(ref)
           .map((screen) => screen._page)
           .toList();
@@ -101,4 +97,19 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
 
   @override
   GlobalKey<NavigatorState>? get navigatorKey => _navigatorKey;
+
+  /// Need to attach [RouterDelegate] listener to [TabNavModel]
+  /// notifier to repaint the screen when tabs are clicked.
+  /// Attaching can be done only after the [RestorableProvider]
+  /// was registered and navState is accessible.
+  void _attachDelegateListenerToNavStateNotifier() {
+    if(!_attachedListenerToNavState) {
+      // Have to do it here because access to [TabNavModel]
+      // is absent in the constructor due to restorable
+      // not getting registered by then. Had to have this hack here
+      // as it's unclear what would be a better place to attach.
+      _attachedListenerToNavState = true;
+      navState.addListener(notifyListeners);
+    }
+  }
 }

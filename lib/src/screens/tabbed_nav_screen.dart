@@ -51,7 +51,11 @@ abstract class NavScreen extends ConsumerWidget {
       });
 
   /// Returns a Page instance used by the [Navigator] Widget
-  Page get _page => MaterialPage(key: ValueKey(routePath.location), child: this, restorationId: routePath.location);
+  Page get _page => MaterialPage(
+      key: ValueKey(routePath.location),
+      child: this,
+      restorationId: routePath.location
+  );
 
   /// Overridden by subclasses, returns
   /// [RoutePath] instance corresponding to
