@@ -33,5 +33,5 @@ class Books {
   }
 
   static int bookId(Book? book) => book?.id ?? -1;
-  static Book? bookById(int bookId) => isValidBookId(bookId) ? null : Book.fromId(bookId);
+  static Book? bookById(int bookId) => isValidBookId(bookId) ? Book.fromId(bookId) : null;
 }

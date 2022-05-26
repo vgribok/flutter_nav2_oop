@@ -136,6 +136,10 @@ abstract class NavScreen extends ConsumerWidget {
   /// Override to supply "child" screen based
   /// on the current state. Return null to keep
   /// this screen shown when its tab is selected.
+  /// This method is called from a build() method
+  /// of another class, so using ref.watch(provider)
+  /// to trigger navigation to the overlaid screen is
+  /// both appropriate and the best practice.
   ///
   /// Be sure to make this method very fast as
   /// it's called frequently to test-build

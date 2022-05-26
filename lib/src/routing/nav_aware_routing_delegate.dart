@@ -17,7 +17,7 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
   final WidgetRef ref;
 
   /// Application state reference holder
-  TabNavModel get navState => ref.read(NavAwareApp.navModelProvider).value;
+  TabNavModel get navModel => ref.read(NavAwareApp.navModelProvider).value;
 
   late bool _attachedListenerToNavState = false;
 
@@ -30,7 +30,7 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
     // Call the function converting state
     // into the stack of screens.
     final List<Page> pageStack =
-      navState._buildNavigatorScreenStack(ref)
+      navModel._buildNavigatorScreenStack(ref)
           .map((screen) => screen._page)
           .toList();
 
@@ -75,7 +75,7 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
   /// supplied here), and then ask the screen for its route.
   @override
   RoutePath get currentConfiguration =>
-      navState._buildNavigatorScreenStack(ref).last.routePath;
+      navModel._buildNavigatorScreenStack(ref).last.routePath;
 
   /// Updates application navigation state based on
   /// user-typed URL, so that a screen corresponding
@@ -83,7 +83,7 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
   /// navigation stack.
   @override
   Future<void> setNewRoutePath(RoutePath path) {
-    navState.selectedTabIndex = path.tabIndex;
+    navModel.selectedTabIndex = path.tabIndex;
     return path._configureStateFromUriFuture(ref);
   }
 
@@ -109,7 +109,7 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
       // not getting registered by then. Had to have this hack here
       // as it's unclear what would be a better place to attach.
       _attachedListenerToNavState = true;
-      navState.addListener(notifyListeners);
+      navModel.addListener(notifyListeners);
     }
   }
 }
