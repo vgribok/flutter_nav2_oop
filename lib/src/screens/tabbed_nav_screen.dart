@@ -68,8 +68,8 @@ abstract class NavScreen extends ConsumerWidget {
 
   /// Uses [Scaffold] to build navigation-aware screen UI
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return OrientationBuilder(builder: (context, orientation)
+  Widget build(BuildContext context, WidgetRef ref) =>
+    OrientationBuilder(builder: (context, orientation)
     {
       final NavControlType navControlType = effectiveNavType(context, ref,
           ref.watch(NavAwareApp.navControlTypeProvider).enumValue
@@ -89,7 +89,6 @@ abstract class NavScreen extends ConsumerWidget {
         floatingActionButton: actionButton,
       );
     });
-  }
 
   /// Returns concrete navigation mode.
   ///
