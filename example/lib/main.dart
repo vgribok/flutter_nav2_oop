@@ -39,13 +39,13 @@ NavAwareApp get theApp => NavAwareApp (
   ],
 
   tabs: [
-    TabInfo(Icons.home, title: 'Books',
+    TabScreenSlot(Icons.home, title: 'Books',
         rootScreenFactory: (tabIndex, ref) => BooksListScreen(tabIndex)),
-    TabInfo(Icons.plus_one, title: 'Counter',
+    TabScreenSlot(Icons.plus_one, title: 'Counter',
         rootScreenFactory: (tabIndex, ref) => CounterScreen(tabIndex)),
-    TabInfo(Icons.settings, title: 'Settings',
+    TabScreenSlot(Icons.settings, title: 'Settings',
         rootScreenFactory: (tabIndex, ref) => SettingsScreen(tabIndex)),
-    TabInfo(Icons.person, title: 'User',
+    TabScreenSlot(Icons.person, title: 'User',
         rootScreenFactory: (tabIndex, ref) => UserProfileScreen(tabIndex)),
   ]
 );

@@ -64,7 +64,7 @@ abstract class NavScreen extends ConsumerWidget {
   RoutePath get routePath;
 
   /// Returns tab reference associated with this screen
-  TabInfo tab(WidgetRef ref) => navState(ref)[tabIndex];
+  TabScreenSlot tab(WidgetRef ref) => navState(ref)[tabIndex];
 
   /// Uses [Scaffold] to build navigation-aware screen UI
   @override

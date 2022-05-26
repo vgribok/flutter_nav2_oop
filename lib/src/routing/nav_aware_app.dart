@@ -26,7 +26,7 @@ class NavAwareApp extends ConsumerWidget {
     /// Initial route to be shown on application start
     required RoutePath initialPath,
     /// Application navigation tab definitions
-    required List<TabInfo> tabs,
+    required List<TabScreenSlot> tabs,
     /// Application color theme
     ThemeData? theme,
     /// Navigation type. Auto if not specified.

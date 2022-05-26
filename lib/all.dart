@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_restorable/flutter_riverpod_restorable.dart';
 
-part './src/models/tab_info.dart';
+part './src/models/root_screen_slot.dart';
+part './src/models/tab_screen_slot.dart';
 part './src/models/tab_nav_model.dart';
 
 part './src/routing/details_route_path.dart';

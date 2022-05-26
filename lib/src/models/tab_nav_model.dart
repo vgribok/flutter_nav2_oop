@@ -17,11 +17,9 @@ enum NavControlType {
 /// [Navigator] class has its own built-in state restoration that is enabled
 /// by supplying restorationId.
 class TabNavModel extends ChangeNotifier {
-  // TODO: consider splitting non-tabbed and tab-based navigation models
-
   /// State: collection of navigation tab
   /// definitions and tab state
-  final List<TabInfo> _tabs = [];
+  final List<TabScreenSlot> _tabs = [];
 
   /// State: index of the currently selected navigation tab
   int _selectedTabIndex = 0;
@@ -34,14 +32,14 @@ class TabNavModel extends ChangeNotifier {
   /// Enables back arrow navigation for switching between nav tabs.
   int? _prevSelectedTabIndex;
 
-  TabNavModel(Iterable<TabInfo> tabs, int initialTabIndex)
+  TabNavModel(Iterable<TabScreenSlot> tabs, int initialTabIndex)
     : _selectedTabIndex = initialTabIndex
   {
     addTabs(tabs);
   }
 
   /// Add tab definitions during application initialization
-  void addTabs(Iterable<TabInfo> tabs) {
+  void addTabs(Iterable<TabScreenSlot> tabs) {
     _tabs.clear();
 
     int i = 0;
@@ -52,11 +50,11 @@ class TabNavModel extends ChangeNotifier {
   }
 
   /// Returns a navigation tab definition by its index
-  TabInfo operator [](int index) => _tabs[index];
+  TabScreenSlot operator [](int index) => _tabs[index];
 
   /// Returns currently selected navigation tab, as defined
   /// by [selectedTabIndex] property.
-  TabInfo get selectedTab => _tabs[selectedTabIndex];
+  TabScreenSlot get selectedTab => _tabs[selectedTabIndex];
 
   /// The *`UI = f(state)`* function.
   ///
