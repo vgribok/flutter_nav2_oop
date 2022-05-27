@@ -30,7 +30,7 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
     // Call the function converting state
     // into the stack of screens.
     final List<Page> pageStack =
-      navModel._buildNavigatorScreenStack(ref)
+      navModel.buildNavigatorScreenStack(ref)
           .map((screen) => screen._page)
           .toList();
 
@@ -75,7 +75,7 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
   /// supplied here), and then ask the screen for its route.
   @override
   RoutePath get currentConfiguration =>
-      navModel._buildNavigatorScreenStack(ref).last.routePath;
+      navModel.buildNavigatorScreenStack(ref).last.routePath;
 
   /// Updates application navigation state based on
   /// user-typed URL, so that a screen corresponding

@@ -10,6 +10,7 @@ import 'package:flutter_riverpod_restorable/flutter_riverpod_restorable.dart';
 
 part './src/models/root_screen_slot.dart';
 part './src/models/tab_screen_slot.dart';
+part './src/models/nav_model.dart';
 part './src/models/tab_nav_model.dart';
 
 part './src/routing/details_route_path.dart';

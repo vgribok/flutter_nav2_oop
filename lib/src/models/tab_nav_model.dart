@@ -16,7 +16,7 @@ enum NavControlType {
 /// objects. Does not need state persistence or restorability because
 /// [Navigator] class has its own built-in state restoration that is enabled
 /// by supplying restorationId.
-class TabNavModel extends ChangeNotifier {
+class TabNavModel extends NavModel {
   /// State: collection of navigation tab
   /// definitions and tab state
   final List<TabScreenSlot> _tabs = [];
@@ -24,16 +24,14 @@ class TabNavModel extends ChangeNotifier {
   /// State: index of the currently selected navigation tab
   int _selectedTabIndex = 0;
 
-  /// State: not-null if user entered invalid URL
-  Uri? _notFoundUri;
-
   /// State: Index of a previously selected navigation tab.
   /// Only set when user explicitly tapped a nav tab.
   /// Enables back arrow navigation for switching between nav tabs.
   int? _prevSelectedTabIndex;
 
   TabNavModel(Iterable<TabScreenSlot> tabs, int initialTabIndex)
-    : _selectedTabIndex = initialTabIndex
+    : _selectedTabIndex = initialTabIndex,
+      super(rootScreenFactory: (ref) => tabs.first._tabRootScreenFactory(0, ref)) // TODO: find a way to replace the fake
   {
     addTabs(tabs);
   }
@@ -54,14 +52,16 @@ class TabNavModel extends ChangeNotifier {
 
   /// Returns currently selected navigation tab, as defined
   /// by [selectedTabIndex] property.
-  TabScreenSlot get selectedTab => _tabs[selectedTabIndex];
+  @override
+  RootScreenSlot get rootScreenSlot => _tabs[selectedTabIndex];
 
   /// The *`UI = f(state)`* function.
   ///
   /// Builds entire application screen state, taking into
   /// account selected nav tab index, "child" screens of
   /// tab "root" screens, and a 404 screen.
-  Iterable<NavScreen> _buildNavigatorScreenStack(WidgetRef ref) sync* {
+  @override
+  Iterable<NavScreen> buildNavigatorScreenStack(WidgetRef ref) sync* {
 
     if (_prevSelectedTabIndex != null &&
         _prevSelectedTabIndex != _selectedTabIndex) {
@@ -69,14 +69,7 @@ class TabNavModel extends ChangeNotifier {
       yield* _tabs[_prevSelectedTabIndex!]._screenStack(ref);
     }
 
-    // Return a screen stack for the currently selected tab
-    yield* selectedTab._screenStack(ref);
-
-    if (notFoundUri != null) {
-      // Put 404 screen on top of all others if user typed in
-      // an invalid URL into the browser address bar.
-      yield UrlNotFoundScreen.notFoundScreenFactory(selectedTabIndex, notFoundUri!);
-    }
+    yield* super.buildNavigatorScreenStack(ref);
   }
 
   /// Index of the currently selected tab
@@ -113,26 +106,17 @@ class TabNavModel extends ChangeNotifier {
     }
     
     if (beforeSelectedTabIndex != _selectedTabIndex) {
-      // Notify the UI to rebuild due to selected tab change
+      // Notify the RoutingDelegate to repaint the UI due to selected tab change
       notifyListeners();
       return;
     }
 
     if (beforeNotFoundUri != _notFoundUri ||
         beforePrevSelectedTabIndex != _prevSelectedTabIndex) {
-      // Notify the UI to rebuild due to other
+      // Notify the RoutingDelegate to repaint the UI due to other
       // navigation-related state change
       notifyListeners();
     }
-  }
-
-  /// Invalid URL typed by a user into browser's address bar
-  Uri? get notFoundUri => _notFoundUri;
-  set notFoundUri(Uri? uri) {
-    if (_notFoundUri == uri) return;
-
-    _notFoundUri = uri;
-    notifyListeners();
   }
 
   /// Internal. Tests whether selected tab needs to be changed
@@ -155,38 +139,27 @@ class TabNavModel extends ChangeNotifier {
 
 /// Saves and restores a [ChangeNotifier] ViewModel like [TabNavModel]
 /// to/from the ephemeral state.
-class _NavStateRestorer extends RestorableListenable<TabNavModel> {
+class _TabNavStateRestorer extends _NavStateRestorer<TabNavModel> {
 
-  final TabNavModel _tabNavModel;
+  _TabNavStateRestorer(TabNavModel tabNavModel) : super(tabNavModel);
 
-  _NavStateRestorer(this._tabNavModel) {
-    _tabNavModel.addListener(notifyListeners);
+  @override
+  void deserialize(TabNavModel navModel, Map<String, dynamic> savedData) {
+    super.deserialize(navModel, savedData);
+
+    navModel._selectedTabIndex = savedData["nav_tab_index"] as int;
+    navModel._prevSelectedTabIndex = savedData["nav_prev_selected_index"] as int?;
   }
 
   @override
-  TabNavModel createDefaultValue() => _tabNavModel;
+  Map<String, dynamic> serialize(TabNavModel navModel) {
+    Map<String, dynamic> map = super.serialize(navModel);
 
-  @override
-  TabNavModel fromPrimitives(Object? data) {
-    final savedData = Map<String, dynamic>.from(data as Map);
+    map.addAll({
+      "nav_tab_index": navModel.selectedTabIndex,
+      "nav_prev_selected_index": navModel._prevSelectedTabIndex,
+    });
 
-    final int? prevSelectedTabIndex = savedData["nav_prev_selected_index"] as int?;
-    final Uri? notFoundUri = savedData["nav_not_found_uri"] as Uri?;
-    final int selectedTabIndex = savedData["nav_tab_index"] as int;
-
-    final navState = createDefaultValue();
-
-    navState._selectedTabIndex = selectedTabIndex;
-    navState._prevSelectedTabIndex = prevSelectedTabIndex;
-    navState._notFoundUri = notFoundUri;
-
-    return navState;
+    return map;
   }
-
-  @override
-  Object? toPrimitives() => <String, dynamic>{
-    "nav_tab_index": value.selectedTabIndex,
-    "nav_prev_selected_index": value._prevSelectedTabIndex,
-    "nav_not_found_uri": value.notFoundUri
-  };
 }

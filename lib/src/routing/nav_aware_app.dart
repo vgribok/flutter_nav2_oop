@@ -10,7 +10,7 @@ class NavAwareApp extends ConsumerWidget {
   final List<RestorableProvider<RestorableProperty?>>? globalRestorableProviders;
 
   /// A singleton of [TabNavModel] accessible via [Provider]
-  static late RestorableProvider<_NavStateRestorer> navModelProvider;
+  static late RestorableProvider<_TabNavStateRestorer> navModelProvider;
 
   /// A singleton of the [NavControlType] accessible via [RestorableProvider]
   static late RestorableProvider<RestorableEnumN<NavControlType?>> navControlTypeProvider;
@@ -44,7 +44,7 @@ class NavAwareApp extends ConsumerWidget {
     ]
   {
     navModelProvider = RestorableProvider(
-      (_) => _NavStateRestorer(TabNavModel(tabs, initialPath.tabIndex)),
+      (_) => _TabNavStateRestorer(TabNavModel(tabs, initialPath.tabIndex)),
       restorationId: "nav-state-restorer"
     );
 
