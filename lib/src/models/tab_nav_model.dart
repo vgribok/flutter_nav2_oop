@@ -16,7 +16,7 @@ enum NavControlType {
 /// objects. Does not need state persistence or restorability because
 /// [Navigator] class has its own built-in state restoration that is enabled
 /// by supplying restorationId.
-class TabNavModel extends NavModel {
+class TabNavModel extends _NavModelBase {
   /// State: collection of navigation tab
   /// definitions and tab state
   final List<TabScreenSlot> _tabs = [];
@@ -30,8 +30,7 @@ class TabNavModel extends NavModel {
   int? _prevSelectedTabIndex;
 
   TabNavModel(Iterable<TabScreenSlot> tabs, int initialTabIndex)
-    : _selectedTabIndex = initialTabIndex,
-      super(rootScreenFactory: (ref) => tabs.first._tabRootScreenFactory(0, ref)) // TODO: find a way to replace the fake
+    : _selectedTabIndex = initialTabIndex
   {
     addTabs(tabs);
   }

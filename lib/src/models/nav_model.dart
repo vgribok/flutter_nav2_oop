@@ -2,6 +2,17 @@
 
 part of flutter_nav2_oop;
 
+class NavModel extends _NavModelBase {
+
+  final RootScreenSlot _rootScreenSlot;
+
+  NavModel({required RootScreenFactory rootScreenFactory})
+      : _rootScreenSlot = RootScreenSlot(rootScreenFactory: rootScreenFactory);
+
+  @override
+  RootScreenSlot get rootScreenSlot => _rootScreenSlot;
+}
+
 /// Implements tab navigation and tab screen stack builder,
 /// adhering to declarative/functional UI concept.
 ///
@@ -10,17 +21,13 @@ part of flutter_nav2_oop;
 /// objects. Does not need state persistence or restorability because
 /// [Navigator] class has its own built-in state restoration that is enabled
 /// by supplying restorationId.
-class NavModel extends ChangeNotifier {
+abstract class _NavModelBase extends ChangeNotifier {
 
   /// State: not-null if user entered invalid URL
   Uri? _notFoundUri;
 
-  final RootScreenSlot _rootScreenSlot;
-
-  NavModel({required RootScreenFactory rootScreenFactory})
-    : _rootScreenSlot = RootScreenSlot(rootScreenFactory: rootScreenFactory);
-
-  RootScreenSlot get rootScreenSlot => _rootScreenSlot;
+  /// Must be implemented in subclasses
+  RootScreenSlot get rootScreenSlot;
 
   /// The *`UI = f(state)`* function.
   ///
@@ -53,7 +60,7 @@ class NavModel extends ChangeNotifier {
 
 /// Saves and restores a [ChangeNotifier] ViewModel like [NavModel]
 /// to/from the ephemeral state.
-class _NavStateRestorer<T extends NavModel> extends RestorableListenable<T> {
+class _NavStateRestorer<T extends _NavModelBase> extends RestorableListenable<T> {
 
   final T _navModel;
 
