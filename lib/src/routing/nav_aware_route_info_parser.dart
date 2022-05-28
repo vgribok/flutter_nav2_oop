@@ -31,15 +31,17 @@ class NavAwareRouteInfoParser extends RouteInformationParser<RoutePath> {
       .map((parser) => parser(uri))
       .firstSafe((path) => path != null);
 
-    if(path == null) {
-      // None of URL parsers have recognized the URL.
-      // Return the 404 route object.
-      final int currentTabIndex = ref.read(NavAwareApp.navModelProvider).value.selectedTabIndex;
-      path = NotFoundRoutePath(notFoundUri: uri, tabIndex: currentTabIndex);
-    }
+    // None of URL parsers have recognized the URL.
+    // Return the 404 route object.
+    path ??= getNotFoundRoute(uri);
 
     return Future.value(path);
   }
+
+  // final int currentTabIndex = ref.read(NavAwareApp.navModelProvider).value.selectedTabIndex;
+  // path = NotFoundRoutePath(notFoundUri: uri, tabIndex: currentTabIndex);
+  @protected
+  RoutePath getNotFoundRoute(Uri uri) => throw UnimplementedError();
 
   @override
   RouteInformation? restoreRouteInformation(RoutePath path) =>

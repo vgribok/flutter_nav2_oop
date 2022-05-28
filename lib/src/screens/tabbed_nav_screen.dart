@@ -36,7 +36,7 @@ abstract class NavScreen extends ConsumerWidget {
   final int tabIndex;
 
   @protected
-  static TabNavModel navState(WidgetRef ref, {bool watch=false}) =>
+  static NavModel navState(WidgetRef ref, {bool watch=false}) =>
       watch ? ref.watch(NavAwareApp.navModelProvider).value :
               ref.read(NavAwareApp.navModelProvider).value;
 
@@ -61,7 +61,7 @@ abstract class NavScreen extends ConsumerWidget {
   /// [RoutePath] instance corresponding to
   /// this screen
   @protected
-  RoutePath get routePath;
+  _RoutePathBase get routePath;
 
   /// Returns tab reference associated with this screen
   TabScreenSlot tab(WidgetRef ref) => navState(ref)[tabIndex];
@@ -72,7 +72,7 @@ abstract class NavScreen extends ConsumerWidget {
     OrientationBuilder(builder: (context, orientation)
     {
       final NavControlType navControlType = effectiveNavType(context, ref,
-          ref.watch(NavAwareApp.navControlTypeProvider).enumValue
+          ref.watch(_NavAwareAppBase.navControlTypeProvider).enumValue
       );
 
       var navBar = _buildNavTabBarInternal(context, navControlType, ref);
@@ -99,7 +99,7 @@ abstract class NavScreen extends ConsumerWidget {
   /// vertical rail is used.
   static NavControlType effectiveNavType(BuildContext context, WidgetRef ref, NavControlType? navControlType) =>
       navControlType
-          ?? ref.read(NavAwareApp.navControlTypeProvider).enumValue
+          ?? ref.read(_NavAwareAppBase.navControlTypeProvider).enumValue
           ?? (context.isPortrait ? NavControlType.BottomTabBar : NavControlType.VerticalRail);
 
   /// Invoked by the framework when navigation item,

@@ -1,6 +1,44 @@
 part of flutter_nav2_oop;
 
-class NavAwareApp extends ConsumerWidget {
+class NavAwareApp extends _NavAwareAppBase {
+  /// A singleton of [TabNavModel] accessible via [Provider]
+  static late RestorableProvider<_NavStateRestorer> _privateNavModelProvider;
+
+  NavAwareApp({
+    /// Used for state restoration
+    required super.applicationId,
+    /// Application name
+    required super.appTitle,
+    /// Collection of factory methods test-converting
+    /// user-typed (Web) URLs into [RoutePath] subclass instances
+    required super.routeParsers,
+    /// Initial route to be shown on application start
+    required super.initialPath,
+    /// Application color theme
+    super.theme,
+    /// Navigation type. Auto if not specified.
+    super.navType,
+    /// Restorable state providers with global scope
+    super.globalRestorableProviders,
+    required RootScreenFactory rootScreenFactory,
+    super.key
+  }) {
+    _privateNavModelProvider = RestorableProvider(
+        (_) => _NavStateRestorer(NavModel(rootScreenFactory)),
+        restorationId: "nav-state-restorer"
+      );
+  }
+
+  @override
+  @protected
+  RestorableProvider get navModelProvider => _privateNavModelProvider;
+
+  @override
+  @protected
+  _NavModelBase navModel(WidgetRef ref) => ref.read(_privateNavModelProvider).value;
+}
+
+abstract class _NavAwareAppBase extends ConsumerWidget {
 
   /// Application name
   final String _appTitle;
@@ -9,13 +47,18 @@ class NavAwareApp extends ConsumerWidget {
   final List<RoutePathFactory> _routeParsers;
   final List<RestorableProvider<RestorableProperty?>>? globalRestorableProviders;
 
-  /// A singleton of [TabNavModel] accessible via [Provider]
-  static late RestorableProvider<_TabNavStateRestorer> navModelProvider;
+  static late _NavModelBase Function(WidgetRef) navModelFactory;
+
+  @protected
+  RestorableProvider get navModelProvider;
+
+  @protected
+  _NavModelBase navModel(WidgetRef ref);
 
   /// A singleton of the [NavControlType] accessible via [RestorableProvider]
   static late RestorableProvider<RestorableEnumN<NavControlType?>> navControlTypeProvider;
 
-  NavAwareApp({
+  _NavAwareAppBase({
     /// Used for state restoration
     required this.applicationId,
     /// Application name
@@ -25,15 +68,12 @@ class NavAwareApp extends ConsumerWidget {
     required List<RoutePathFactory> routeParsers,
     /// Initial route to be shown on application start
     required RoutePath initialPath,
-    /// Application navigation tab definitions
-    required List<TabScreenSlot> tabs,
     /// Application color theme
     ThemeData? theme,
     /// Navigation type. Auto if not specified.
     NavControlType? navType,
     /// Restorable state providers with global scope
     this.globalRestorableProviders,
-
     super.key
   }) :
     _appTitle = appTitle,
@@ -43,10 +83,7 @@ class NavAwareApp extends ConsumerWidget {
       (uri) => _parseHome(uri, initialPath)
     ]
   {
-    navModelProvider = RestorableProvider(
-      (_) => _TabNavStateRestorer(TabNavModel(tabs, initialPath.tabIndex)),
-      restorationId: "nav-state-restorer"
-    );
+    navModelFactory = (ref) => navModel(ref);
 
     navControlTypeProvider = RestorableProvider(
       (_) => RestorableEnumN(NavControlType.values, navType),

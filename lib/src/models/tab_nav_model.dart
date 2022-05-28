@@ -126,7 +126,7 @@ class TabNavModel extends _NavModelBase {
     /// If not, no change to make.
     if (_prevSelectedTabIndex == null) return;
 
-    assert(topScreen.tabIndex == _selectedTabIndex);
+    //assert(topScreen.tabIndex == _selectedTabIndex);
 
     if (topScreen.tab(ref).hasOnlyOneScreenInStack(ref)) {
       // Tab screen stack has only one (current) screen,
@@ -138,7 +138,7 @@ class TabNavModel extends _NavModelBase {
 
 /// Saves and restores a [ChangeNotifier] ViewModel like [TabNavModel]
 /// to/from the ephemeral state.
-class _TabNavStateRestorer extends _NavStateRestorer<TabNavModel> {
+class _TabNavStateRestorer extends _NavStateRestorerBase<TabNavModel> {
 
   _TabNavStateRestorer(TabNavModel tabNavModel) : super(tabNavModel);
 

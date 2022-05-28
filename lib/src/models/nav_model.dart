@@ -6,7 +6,7 @@ class NavModel extends _NavModelBase {
 
   final RootScreenSlot _rootScreenSlot;
 
-  NavModel({required RootScreenFactory rootScreenFactory})
+  NavModel(RootScreenFactory rootScreenFactory)
       : _rootScreenSlot = RootScreenSlot(rootScreenFactory: rootScreenFactory);
 
   @override
@@ -44,7 +44,7 @@ abstract class _NavModelBase extends ChangeNotifier {
     if (notFoundUri != null) {
       // Put 404 screen on top of all others if user typed in
       // an invalid URL into the browser address bar.
-      yield UrlNotFoundScreen.notFoundScreenFactory(0, notFoundUri!);
+      yield UrlNotFoundScreen.notFoundScreenFactory(notFoundUri!);
     }
   }
 
@@ -60,11 +60,11 @@ abstract class _NavModelBase extends ChangeNotifier {
 
 /// Saves and restores a [ChangeNotifier] ViewModel like [NavModel]
 /// to/from the ephemeral state.
-class _NavStateRestorer<T extends _NavModelBase> extends RestorableListenable<T> {
+class _NavStateRestorerBase<T extends _NavModelBase> extends RestorableListenable<T> {
 
   final T _navModel;
 
-  _NavStateRestorer(this._navModel) {
+  _NavStateRestorerBase(this._navModel) {
     _navModel.addListener(notifyListeners);
   }
 
@@ -94,4 +94,10 @@ class _NavStateRestorer<T extends _NavModelBase> extends RestorableListenable<T>
   Map<String, dynamic> serialize(T navModel) => <String, dynamic>{
     "nav_not_found_uri": navModel.notFoundUri
   };
+}
+
+class _NavStateRestorer extends _NavStateRestorerBase<NavModel> {
+
+  _NavStateRestorer(super.navModel);
+
 }

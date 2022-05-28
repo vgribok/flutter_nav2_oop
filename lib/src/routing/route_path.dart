@@ -15,16 +15,12 @@ class RoutePath {
   /// It's usually a plural noun.
   final String resource;
 
-  /// Index of the tab associated with this route.
-  final int tabIndex;
-
   const RoutePath({
-    required this.tabIndex,
     required this.resource
   });
 
   @protected
-  static TabNavModel navState(WidgetRef ref) => ref.read(NavAwareApp.navModelProvider).value;
+  _NavModelBase navState(WidgetRef ref) => _NavAwareAppBase.navModelFactory(ref);
 
   Future<void> _configureStateFromUriFuture(WidgetRef ref) {
     navState(ref).notFoundUri = null; // cleans up 404 url before another attempt at paring user-typed URL
@@ -59,4 +55,7 @@ class RoutePath {
 
   /// Maps current route object to Flutter-required [RouteInformation] object
   RouteInformation? get _routeInformation => RouteInformation(location: location);
+
+  TabRoutePathAdapter tabbed({required int tabIndex}) =>
+      TabRoutePathAdapter(tabIndex: tabIndex, routePath: this);
 }

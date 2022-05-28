@@ -2,13 +2,22 @@
 
 part of flutter_nav2_oop;
 
+class NavAwareRouterDelegate extends _NavAwareRouterDelegateBase<NavModel> {
+
+  NavAwareRouterDelegate(super.ref);
+
+  @override
+  NavModel get navModel => _NavAwareAppBase.navModelFactory(ref) as NavModel;
+}
+
 /// Abstracts away boilerplate implementation of the
 /// [RouterDelegate] and supplies tab-aware navigation logic.
 ///
 /// Its [build] method returns [Navigator] Widget, with
 /// [Page] stack back navigation arrow handler supplied by
 /// the framework.
-class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
+abstract class _NavAwareRouterDelegateBase<T extends _NavModelBase>
+    extends RouterDelegate<RoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<RoutePath> {
 
   static final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
@@ -17,11 +26,12 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
   final WidgetRef ref;
 
   /// Application state reference holder
-  TabNavModel get navModel => ref.read(NavAwareApp.navModelProvider).value;
+  //TabNavModel get navModel => ref.read(NavAwareApp.navModelProvider).value;
+  T get navModel;
 
   late bool _attachedListenerToNavState = false;
 
-  NavAwareRouterDelegate(this.ref);
+  _NavAwareRouterDelegateBase(this.ref);
 
   @override
   Widget build(BuildContext context) {
@@ -83,8 +93,7 @@ class NavAwareRouterDelegate extends RouterDelegate<RoutePath>
   /// navigation stack.
   @override
   Future<void> setNewRoutePath(RoutePath path) {
-    navModel.selectedTabIndex = path.tabIndex;
-    return path._configureStateFromUriFuture(ref);
+     return path._configureStateFromUriFuture(ref);
   }
 
   /// Called when routing delegate's ephemeral state gets restored

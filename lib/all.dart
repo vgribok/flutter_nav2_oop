@@ -15,13 +15,18 @@ part './src/models/tab_nav_model.dart';
 
 part './src/routing/details_route_path.dart';
 part './src/routing/nav_aware_app.dart';
+part './src/routing/tab_nav_aware_app.dart';
 part './src/routing/nav_aware_route_info_parser.dart';
+part './src/routing/tab_nav_aware_route_info_parser.dart';
 part './src/routing/nav_aware_routing_delegate.dart';
+part './src/routing/tab_nav_aware_routing_delegate.dart';
 part './src/routing/no_animation_transition_delegate.dart';
 part './src/routing/not_found_route_path.dart';
 part './src/routing/route_path.dart';
+part './src/routing/tab_route_path.dart';
 
 part './src/screens/404_nav_screen.dart';
+part './src/screens/nav_screen.dart';
 part './src/screens/tabbed_nav_screen.dart';
 part './src/screens/full_screen_modal_dialog.dart';
 

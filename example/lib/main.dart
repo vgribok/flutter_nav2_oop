@@ -17,11 +17,11 @@ void main() {
   runApp(theApp.riverpodApp);
 }
 
-NavAwareApp get theApp => NavAwareApp (
+TabNavAwareApp get theApp => TabNavAwareApp(
   applicationId: "nav-aware-books-sample",
   appTitle: 'Books With Navigation',
   theme: myTheme,
-  initialPath: CounterPath(tabIndex: CounterPath.defaultTabIndex),
+  initialPath: CounterPath(),
   key: const ValueKey("books-sample-app"),
 
   routeParsers: const [

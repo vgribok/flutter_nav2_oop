@@ -15,7 +15,6 @@ abstract class DetailsRoutePath<T> extends RoutePath {
   final T id;
 
   const DetailsRoutePath({
-    required super.tabIndex,
     required this.id,
     required super.resource
   });

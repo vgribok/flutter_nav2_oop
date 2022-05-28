@@ -8,10 +8,10 @@ class NotFoundRoutePath extends RoutePath {
   /// into the web browser address bar
   final Uri notFoundUri;
 
-  const NotFoundRoutePath({required this.notFoundUri, required super.tabIndex}) :
+  const NotFoundRoutePath({required this.notFoundUri}) :
     super(resource: '404-page-not-found');
 
   @override
   void configureStateFromUri(WidgetRef ref) =>
-    RoutePath.navState(ref).notFoundUri = notFoundUri;
+    navState(ref).notFoundUri = notFoundUri;
 }
