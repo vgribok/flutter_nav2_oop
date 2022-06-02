@@ -25,6 +25,7 @@ TabNavAwareApp get theApp => TabNavAwareApp(
   key: const ValueKey("books-sample-app"),
 
   routeParsers: const [
+    // TODO: Move to the tabs to get tabIndex access for route parsers
     BookListPath.fromUri,
     BookDetailsPath.fromUri,
     UserProfilePath.fromUri,

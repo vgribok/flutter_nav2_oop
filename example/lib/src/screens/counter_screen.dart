@@ -20,11 +20,20 @@ class CounterScreen extends TabNavScreen { // Subclass NavScreen to enable non-t
   RoutePath get routePath => CounterPath();
 
   @override
+  @protected
+  Widget? buildFloatingActionButton(BuildContext context, WidgetRef ref) =>
+      FloatingActionButton(
+          onPressed: () => ref.read(counterProvider).value++,
+          tooltip: 'Increment',
+          backgroundColor: Theme.of(context).primaryColor,
+          child: const Icon(Icons.add)
+      );
+
+  @override
   Widget buildBody(BuildContext context, WidgetRef ref) =>
     Consumer(
         builder: (context, ref, child) =>
-         Scaffold(
-           body: Center(
+           Center(
              child: Column(
                mainAxisAlignment: MainAxisAlignment.center,
                children: <Widget>[
@@ -35,13 +44,6 @@ class CounterScreen extends TabNavScreen { // Subclass NavScreen to enable non-t
                  ),
                ],
              ),
-           ),
-           floatingActionButton: FloatingActionButton(
-             onPressed: () => ref.read(counterProvider).value++,
-             tooltip: 'Increment',
-             backgroundColor: Theme.of(context).primaryColor,
-             child: const Icon(Icons.add),
            )
-         )
     );
 }
