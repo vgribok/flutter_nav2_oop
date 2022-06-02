@@ -47,12 +47,16 @@ abstract class TabNavScreen extends NavScreen {
 
   @protected
   @override
-  Scaffold buildScaffold(BuildContext context, WidgetRef ref, NavControlType navControlType,
+  Scaffold buildScaffold(BuildContext context, WidgetRef ref,
   {
     PreferredSizeWidget? appBar,
     required Widget body,
     Widget? actionButton
   }) {
+
+    final NavControlType navControlType = effectiveNavType(context, ref,
+        ref.watch(TabNavAwareApp.navControlTypeProvider).enumValue
+    );
 
     var biggerBody = _buildBodyInternal(context, navControlType, ref, body);
     var navBar = _buildNavTabBarInternal(context, navControlType, ref);
@@ -66,6 +70,18 @@ abstract class TabNavScreen extends NavScreen {
       floatingActionButton: actionButton,
     );
   }
+
+  /// Returns concrete navigation mode.
+  ///
+  /// When non-null navigation mode is set via [navControlType],
+  /// then that is the returned value. If [navControlType] is null,
+  /// device orientation determines navigation mode: in portrait
+  /// orientation bottom tab bar is used, and in landscape mode the
+  /// vertical rail is used.
+  static NavControlType effectiveNavType(BuildContext context, WidgetRef ref, NavControlType? navControlType) =>
+      navControlType
+          ?? ref.read(TabNavAwareApp.navControlTypeProvider).enumValue
+          ?? (context.isPortrait ? NavControlType.BottomTabBar : NavControlType.VerticalRail);
 
   Widget _buildBodyInternal(
       BuildContext context, NavControlType? navControlType, WidgetRef ref, Widget body
@@ -85,7 +101,7 @@ abstract class TabNavScreen extends NavScreen {
   /// like tab or drawer list item, is tapped
   @protected
   void onTabTap(BuildContext context, WidgetRef ref, int newTabIndex) {
-    if(NavScreen.effectiveNavType(context, ref, null) == NavControlType.Drawer) {
+    if(effectiveNavType(context, ref, null) == NavControlType.Drawer) {
       // Hide the Drawer
       Navigator.pop(context);
     }

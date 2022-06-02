@@ -5,6 +5,9 @@ class TabNavAwareApp extends _NavAwareAppBase<TabNavModel> {
   /// A singleton of [TabNavModel] accessible via [Provider]
   static late RestorableProvider<_TabNavStateRestorer> _privateNavModelProvider;
 
+  /// A singleton of the [NavControlType] accessible via [RestorableProvider]
+  static late RestorableProvider<RestorableEnumN<NavControlType?>> navControlTypeProvider;
+
   TabNavAwareApp({
     /// Application navigation tab definitions
     required List<TabScreenSlot> tabs,
@@ -20,7 +23,7 @@ class TabNavAwareApp extends _NavAwareAppBase<TabNavModel> {
     /// Application color theme
     super.theme,
     /// Navigation type. Auto if not specified.
-    super.navType,
+    NavControlType? navType,
     /// Restorable state providers with global scope
     super.globalRestorableProviders,
     super.key
@@ -31,11 +34,25 @@ class TabNavAwareApp extends _NavAwareAppBase<TabNavModel> {
       (_) => _TabNavStateRestorer(TabNavModel(tabs, initialPath.tabIndex)),
       restorationId: "nav-state-restorer"
     );
+
+    navControlTypeProvider = RestorableProvider(
+            (_) => RestorableEnumN(NavControlType.values, navType),
+        restorationId: "nav-control-type"
+    );
   }
 
   @override
   @protected
   RestorableProvider get navModelProvider => _privateNavModelProvider;
+
+  @override
+  @protected
+  @mustCallSuper
+  List<RestorableProvider<RestorableProperty?>> get restorableProviders =>
+    [
+      navControlTypeProvider,
+      ...super.restorableProviders
+    ];
 
   static TabNavModel navModelFactory(WidgetRef ref) =>
       ref.read(_privateNavModelProvider).value;

@@ -16,7 +16,7 @@ class SettingsScreen extends TabNavScreen { // Subclass NavScreen to enable non-
   Widget buildBody(BuildContext context, WidgetRef ref) {
 
     final RestorableEnumN<NavControlType?> restorableNavControlType =
-        ref.watch(navControlTypeProvider);
+        ref.watch(TabNavAwareApp.navControlTypeProvider);
     final NavControlType? navControlType = restorableNavControlType.enumValue;
 
     return Center(

@@ -16,8 +16,6 @@ class NavAwareApp extends _NavAwareAppBase<NavModel> {
     required super.initialPath,
     /// Application color theme
     super.theme,
-    /// Navigation type. Auto if not specified.
-    super.navType,
     /// Restorable state providers with global scope
     super.globalRestorableProviders,
     required RootScreenFactory rootScreenFactory,
@@ -53,9 +51,6 @@ class NavAwareApp extends _NavAwareAppBase<NavModel> {
       NavAwareRouterDelegate(ref);
 }
 
-/// A singleton of the [NavControlType] accessible via [RestorableProvider]
-late RestorableProvider<RestorableEnumN<NavControlType?>> navControlTypeProvider;
-
 abstract class _NavAwareAppBase<T extends _NavModelBase> extends ConsumerWidget {
 
   /// Application name
@@ -88,8 +83,6 @@ abstract class _NavAwareAppBase<T extends _NavModelBase> extends ConsumerWidget 
     required RoutePath initialPath,
     /// Application color theme
     ThemeData? theme,
-    /// Navigation type. Auto if not specified.
-    NavControlType? navType,
     /// Restorable state providers with global scope
     this.globalRestorableProviders,
     super.key
@@ -102,11 +95,6 @@ abstract class _NavAwareAppBase<T extends _NavModelBase> extends ConsumerWidget 
     ]
   {
     navModelFactory = (ref) => navModel(ref);
-
-    navControlTypeProvider = RestorableProvider(
-      (_) => RestorableEnumN(NavControlType.values, navType),
-      restorationId: "nav-control-type"
-    );
   }
 
   /// Returns [MaterialApp] instance returned by
@@ -133,14 +121,18 @@ abstract class _NavAwareAppBase<T extends _NavModelBase> extends ConsumerWidget 
         builder: (context, router) =>
             RestorableProviderRegister(
                 restorationId: 'application-ephemeral-state',
-                providers: [
-                  navControlTypeProvider,
-                  navModelProvider,
-                  ... globalRestorableProviders ?? []
-                ],
+                providers: restorableProviders,
                 child: router! // ?? const SizedBox.shrink(),
             )
     );
+
+  @protected
+  @mustCallSuper
+  List<RestorableProvider<RestorableProperty?>> get restorableProviders =>
+    [
+      navModelProvider,
+      ... globalRestorableProviders ?? []
+    ];
 
   /// Returns the name of the application
   String get appTitle => _appTitle;
