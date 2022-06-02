@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_nav2_oop/all.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class UserProfileScreen extends NavScreen {
+class UserProfileScreen extends TabNavScreen { // Subclass NavScreen to enable non-tab navigation
 
-  const UserProfileScreen(//super.tabIndex,
+  const UserProfileScreen(super.tabIndex, // Comment super.tabIndex to enable non-tab navigation
         {super.key}) :
         super(screenTitle: 'User Profile');
 

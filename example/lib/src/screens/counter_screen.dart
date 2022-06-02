@@ -4,7 +4,7 @@ import 'package:flutter_nav2_oop/all.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_restorable/flutter_riverpod_restorable.dart';
 
-class CounterScreen extends NavScreen {
+class CounterScreen extends TabNavScreen { // Subclass NavScreen to enable non-tab navigation
 
   static final counterProvider = RestorableProvider<RestorableInt>(
       (ref) => RestorableInt(0),
@@ -12,7 +12,7 @@ class CounterScreen extends NavScreen {
   );
 
 
-  const CounterScreen(//super.tabIndex,
+  const CounterScreen(super.tabIndex, // Comment super.tabIndex to enable non-tab navigation
       {super.key})
       : super(screenTitle: "Counter");
 

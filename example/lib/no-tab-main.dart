@@ -21,7 +21,9 @@ NavAwareApp get theApp => NavAwareApp (
     theme: myTheme,
     initialPath: BookDetailsPath(bookId: 2),
     key: const ValueKey("books-sample-app"),
-    rootScreenFactory: (ref) => const BooksListScreen(),
+
+    // Remove throw and uncomment screen constructor to support non-tab navigation
+    rootScreenFactory: (ref) => throw UnimplementedError(), // const BooksListScreen(),
 
     routeParsers: const [
       BookListPath.fromUri,

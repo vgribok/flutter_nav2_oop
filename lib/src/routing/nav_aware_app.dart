@@ -46,6 +46,11 @@ class NavAwareApp extends _NavAwareAppBase<NavModel> {
   @override
   @protected
   NavModel watchNavModel(WidgetRef ref) => watchNavModelFactory(ref);
+
+  @override
+  @protected
+  NavAwareRouterDelegate createRouterDelegate(WidgetRef ref) =>
+      NavAwareRouterDelegate(ref);
 }
 
 /// A singleton of the [NavControlType] accessible via [RestorableProvider]
@@ -111,7 +116,7 @@ abstract class _NavAwareAppBase<T extends _NavModelBase> extends ConsumerWidget 
       MaterialApp.router(
         title: appTitle,
         theme: _theme,
-        routerDelegate: NavAwareRouterDelegate(ref),
+        routerDelegate: createRouterDelegate(ref),
         routeInformationParser: NavAwareRouteInfoParser(
             ref, routeParsers: _routeParsers),
         restorationScopeId: "app-router-restoration-scope",
@@ -147,4 +152,7 @@ abstract class _NavAwareAppBase<T extends _NavModelBase> extends ConsumerWidget 
   /// Returns [ProviderScope] - a required wrapper for an app
   /// using Riverpod state management.
   ProviderScope get riverpodApp => ProviderScope(child: this);
+
+  @protected
+  _NavAwareRouterDelegateBase createRouterDelegate(WidgetRef ref);
 }

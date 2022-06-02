@@ -53,7 +53,7 @@ abstract class NavScreen extends ConsumerWidget {
       );
 
       PreferredSizeWidget? appBar = buildAppBar(context, ref);
-      Widget body = _buildBodyInternal(context, navControlType, ref);
+      Widget body = buildBody(context, ref);
       Widget? actionButton = buildFloatingActionButton(context, ref);
 
       return buildScaffold(context, ref, navControlType,
@@ -85,9 +85,6 @@ abstract class NavScreen extends ConsumerWidget {
       navControlType
           ?? ref.read(navControlTypeProvider).enumValue
           ?? (context.isPortrait ? NavControlType.BottomTabBar : NavControlType.VerticalRail);
-
-  Widget _buildBodyInternal(BuildContext context, NavControlType? navControlType, WidgetRef ref) =>
-    buildBody(context, ref);
 
   /// Override in subclasses to supply screen body
   @protected

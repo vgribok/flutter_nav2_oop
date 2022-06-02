@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_nav2_oop/all.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class BookDetailsScreen extends NavScreen {
+class BookDetailsScreen extends TabNavScreen { // Subclass NavScreen to enable non-tab navigation
 
   final Book selectedBook;
   final int selectedBookId;
 
-  BookDetailsScreen(//super.tabIndex,
+  BookDetailsScreen(super.tabIndex, // Comment super.tabIndex to enable non-tab navigation
   {
     required this.selectedBook,
     required this.selectedBookId,

@@ -54,17 +54,24 @@ abstract class TabNavScreen extends NavScreen {
     Widget? actionButton
   }) {
 
+    var biggerBody = _buildBodyInternal(context, navControlType, ref, body);
     var navBar = _buildNavTabBarInternal(context, navControlType, ref);
     var drawer = _buildDrawerInternal(context, navControlType, ref);
 
     return Scaffold(
       appBar: appBar,
-      body: body,
+      body: biggerBody,
       bottomNavigationBar: navBar,
       drawer: drawer,
       floatingActionButton: actionButton,
     );
   }
+
+  Widget _buildBodyInternal(
+      BuildContext context, NavControlType? navControlType, WidgetRef ref, Widget body
+  ) =>
+      navControlType == NavControlType.VerticalRail ?
+              buildVerticalRailAndBody(context, ref, body) : body;
 
   @override
   @protected

@@ -39,13 +39,14 @@ TabNavAwareApp get theApp => TabNavAwareApp(
   ],
 
   tabs: [
-    // TabScreenSlot(Icons.home, title: 'Books',
-    //     rootScreenFactory: (tabIndex, ref) => BooksListScreen(tabIndex)),
-    // TabScreenSlot(Icons.plus_one, title: 'Counter',
-    //     rootScreenFactory: (tabIndex, ref) => CounterScreen(tabIndex)),
-    // TabScreenSlot(Icons.settings, title: 'Settings',
-    //     rootScreenFactory: (tabIndex, ref) => SettingsScreen(tabIndex)),
-    // TabScreenSlot(Icons.person, title: 'User',
-    //     rootScreenFactory: (tabIndex, ref) => UserProfileScreen(tabIndex)),
+    // Comment out this section to enable non-tab navigation demo
+    TabScreenSlot(Icons.home, title: 'Books',
+        rootScreenFactory: (tabIndex, ref) => BooksListScreen(tabIndex)),
+    TabScreenSlot(Icons.plus_one, title: 'Counter',
+        rootScreenFactory: (tabIndex, ref) => CounterScreen(tabIndex)),
+    TabScreenSlot(Icons.settings, title: 'Settings',
+        rootScreenFactory: (tabIndex, ref) => SettingsScreen(tabIndex)),
+    TabScreenSlot(Icons.person, title: 'User',
+        rootScreenFactory: (tabIndex, ref) => UserProfileScreen(tabIndex)),
   ]
 );

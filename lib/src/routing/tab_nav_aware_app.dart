@@ -50,4 +50,9 @@ class TabNavAwareApp extends _NavAwareAppBase<TabNavModel> {
   @override
   @protected
   TabNavModel watchNavModel(WidgetRef ref) => watchNavModelFactory(ref);
+
+  @override
+  @protected
+  TabNavAwareRouterDelegate createRouterDelegate(WidgetRef ref) =>
+      TabNavAwareRouterDelegate(ref);
 }
