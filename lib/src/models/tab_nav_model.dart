@@ -120,13 +120,13 @@ class TabNavModel extends _NavModelBase {
 
   /// Internal. Tests whether selected tab needs to be changed
   /// on route pop, when user hits navigation back button.
-  void changeTabOnBackArrowTapIfNecessary(NavScreen topScreen, WidgetRef ref) {
+  void changeTabOnBackArrowTapIfNecessary(TabNavScreen topScreen, WidgetRef ref) {
 
     /// Check whether there is info about previously selected tab.
     /// If not, no change to make.
     if (_prevSelectedTabIndex == null) return;
 
-    //assert(topScreen.tabIndex == _selectedTabIndex);
+    assert(topScreen.tabIndex == _selectedTabIndex);
 
     if (topScreen.tab(ref).hasOnlyOneScreenInStack(ref)) {
       // Tab screen stack has only one (current) screen,

@@ -8,13 +8,15 @@ class SettingsScreen extends NavScreen {
 
   static final showSettingsDialogProvider = StateProvider<bool>((ref) => false);
 
-  const SettingsScreen(super.tabIndex, {super.key}) :
-    super(screenTitle: 'Settings');
+  const SettingsScreen(//super.tabIndex,
+      {super.key}) :
+      super(screenTitle: 'Settings');
 
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) {
 
-    final RestorableEnumN<NavControlType?> restorableNavControlType = ref.watch(NavAwareApp.navControlTypeProvider);
+    final RestorableEnumN<NavControlType?> restorableNavControlType =
+        ref.watch(navControlTypeProvider);
     final NavControlType? navControlType = restorableNavControlType.enumValue;
 
     return Center(
@@ -66,9 +68,9 @@ class SettingsScreen extends NavScreen {
   }
 
   @override
-  RoutePath get routePath => SettingsPath(tabIndex: tabIndex);
+  RoutePath get routePath => SettingsPath();
 
   @override
   NavScreen? topScreen(WidgetRef ref) => ref.watch(showSettingsDialogProvider) ?
-      SettingsChildModalDialog(tabIndex) : null;
+      const SettingsChildModalDialog() : null;
 }

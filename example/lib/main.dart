@@ -21,7 +21,7 @@ TabNavAwareApp get theApp => TabNavAwareApp(
   applicationId: "nav-aware-books-sample",
   appTitle: 'Books With Navigation',
   theme: myTheme,
-  initialPath: CounterPath(),
+  initialPath: CounterPath().tabbed(tabIndex: 1),
   key: const ValueKey("books-sample-app"),
 
   routeParsers: const [
@@ -39,13 +39,13 @@ TabNavAwareApp get theApp => TabNavAwareApp(
   ],
 
   tabs: [
-    TabScreenSlot(Icons.home, title: 'Books',
-        rootScreenFactory: (tabIndex, ref) => BooksListScreen(tabIndex)),
-    TabScreenSlot(Icons.plus_one, title: 'Counter',
-        rootScreenFactory: (tabIndex, ref) => CounterScreen(tabIndex)),
-    TabScreenSlot(Icons.settings, title: 'Settings',
-        rootScreenFactory: (tabIndex, ref) => SettingsScreen(tabIndex)),
-    TabScreenSlot(Icons.person, title: 'User',
-        rootScreenFactory: (tabIndex, ref) => UserProfileScreen(tabIndex)),
+    // TabScreenSlot(Icons.home, title: 'Books',
+    //     rootScreenFactory: (tabIndex, ref) => BooksListScreen(tabIndex)),
+    // TabScreenSlot(Icons.plus_one, title: 'Counter',
+    //     rootScreenFactory: (tabIndex, ref) => CounterScreen(tabIndex)),
+    // TabScreenSlot(Icons.settings, title: 'Settings',
+    //     rootScreenFactory: (tabIndex, ref) => SettingsScreen(tabIndex)),
+    // TabScreenSlot(Icons.person, title: 'User',
+    //     rootScreenFactory: (tabIndex, ref) => UserProfileScreen(tabIndex)),
   ]
 );

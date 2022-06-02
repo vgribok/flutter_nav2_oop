@@ -9,7 +9,7 @@ class BookDetailsScreen extends NavScreen {
   final Book selectedBook;
   final int selectedBookId;
 
-  BookDetailsScreen(super.tabIndex,
+  BookDetailsScreen(//super.tabIndex,
   {
     required this.selectedBook,
     required this.selectedBookId,
@@ -40,5 +40,5 @@ class BookDetailsScreen extends NavScreen {
   }
 
   @override
-  RoutePath get routePath => BookDetailsPath(bookId: selectedBookId, tabIndex: tabIndex);
+  RoutePath get routePath => BookDetailsPath(bookId: selectedBookId);
 }

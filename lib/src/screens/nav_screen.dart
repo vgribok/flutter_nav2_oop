@@ -49,19 +49,30 @@ abstract class NavScreen extends ConsumerWidget {
     OrientationBuilder(builder: (context, orientation)
     {
       final NavControlType navControlType = effectiveNavType(context, ref,
-          ref.watch(_NavAwareAppBase.navControlTypeProvider).enumValue
+          ref.watch(navControlTypeProvider).enumValue
       );
 
-      var appBar = buildAppBar(context, ref);
-      var body = _buildBodyInternal(context, navControlType, ref);
-      var actionButton = buildFloatingActionButton(context, ref);
+      PreferredSizeWidget? appBar = buildAppBar(context, ref);
+      Widget body = _buildBodyInternal(context, navControlType, ref);
+      Widget? actionButton = buildFloatingActionButton(context, ref);
 
-      return Scaffold(
+      return buildScaffold(context, ref, navControlType,
+          appBar: appBar, body: body, actionButton: actionButton
+      );
+    });
+
+  @protected
+  Scaffold buildScaffold(BuildContext context, WidgetRef ref, NavControlType navControlType,
+  {
+    PreferredSizeWidget? appBar,
+    required Widget body,
+    Widget? actionButton
+  }) =>
+      Scaffold(
         appBar: appBar,
         body: body,
         floatingActionButton: actionButton,
       );
-    });
 
   /// Returns concrete navigation mode.
   ///
@@ -72,7 +83,7 @@ abstract class NavScreen extends ConsumerWidget {
   /// vertical rail is used.
   static NavControlType effectiveNavType(BuildContext context, WidgetRef ref, NavControlType? navControlType) =>
       navControlType
-          ?? ref.read(_NavAwareAppBase.navControlTypeProvider).enumValue
+          ?? ref.read(navControlTypeProvider).enumValue
           ?? (context.isPortrait ? NavControlType.BottomTabBar : NavControlType.VerticalRail);
 
   Widget _buildBodyInternal(BuildContext context, NavControlType? navControlType, WidgetRef ref) =>

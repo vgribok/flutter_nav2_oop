@@ -5,7 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class UserProfileScreen extends NavScreen {
 
-  const UserProfileScreen(super.tabIndex, {super.key}) :
+  const UserProfileScreen(//super.tabIndex,
+        {super.key}) :
         super(screenTitle: 'User Profile');
 
   @override
@@ -15,5 +16,5 @@ class UserProfileScreen extends NavScreen {
       );
 
   @override
-  RoutePath get routePath => UserProfilePath(tabIndex: tabIndex);
+  RoutePath get routePath => UserProfilePath();
 }

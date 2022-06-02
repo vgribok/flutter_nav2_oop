@@ -7,17 +7,15 @@ class BookDetailsPath extends DetailsRoutePath {
 
   static const String resourceName = BookListPath.resourceName; // 'books'
 
-  BookDetailsPath({required int bookId, required super.tabIndex}) : super(
+  BookDetailsPath({required int bookId}) : super(
     resource: resourceName,
     id: bookId
-  ) {
-    assert(tabIndex == BookListPath.defaultTabIndex);
-  }
+  );
 
   static RoutePath? fromUri(Uri uri) =>
     DetailsRoutePath.fromUri(resourceName, uri, (stringId) {
       int? bookId = int.tryParse(stringId);
-      return Books.isValidBookId(bookId) ? BookDetailsPath(bookId: bookId!, tabIndex: BookListPath.defaultTabIndex) : null;
+      return Books.isValidBookId(bookId) ? BookDetailsPath(bookId: bookId!) : null;
     });
 
   @override

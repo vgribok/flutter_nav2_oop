@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SettingsChildModalDialog extends FullScreenModalDialog {
 
-  const SettingsChildModalDialog(super.tabIndex, {super.key})
+  const SettingsChildModalDialog({super.key})
     : super(screenTitle: 'Modal Demo');
 
   @override
@@ -27,7 +27,7 @@ class SettingsChildModalDialog extends FullScreenModalDialog {
     );
 
   @override
-  RoutePath get routePath => SettingsModalChildPath(tabIndex: tabIndex);
+  RoutePath get routePath => SettingsModalChildPath();
 
   @override
   // ignore: must_call_super

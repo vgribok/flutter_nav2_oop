@@ -8,14 +8,10 @@ class BookListPath extends RoutePath {
   /// Tab index for when the the route is typed by a user in the browser URL bar
   static const int defaultTabIndex = 0;
 
-  BookListPath({required super.tabIndex}) :
-      super(resource: resourceName)
-  {
-    assert(tabIndex == defaultTabIndex);
-  }
+  BookListPath() : super(resource: resourceName);
 
   static RoutePath? fromUri(Uri uri) =>
-      uri.isSingleSegmentPath(resourceName) ? BookListPath(tabIndex: defaultTabIndex) : null;
+      uri.isSingleSegmentPath(resourceName) ? BookListPath() : null;
 
   @override
   void configureStateFromUri(WidgetRef ref) =>

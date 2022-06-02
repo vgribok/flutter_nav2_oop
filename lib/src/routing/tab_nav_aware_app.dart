@@ -1,6 +1,6 @@
 part of flutter_nav2_oop;
 
-class TabNavAwareApp extends _NavAwareAppBase {
+class TabNavAwareApp extends _NavAwareAppBase<TabNavModel> {
 
   /// A singleton of [TabNavModel] accessible via [Provider]
   static late RestorableProvider<_TabNavStateRestorer> _privateNavModelProvider;
@@ -34,9 +34,20 @@ class TabNavAwareApp extends _NavAwareAppBase {
   }
 
   @override
+  @protected
   RestorableProvider get navModelProvider => _privateNavModelProvider;
+
+  static TabNavModel navModelFactory(WidgetRef ref) =>
+      ref.read(_privateNavModelProvider).value;
+
+  static TabNavModel watchNavModelFactory(WidgetRef ref) =>
+      ref.watch(_privateNavModelProvider).value;
 
   @override
   @protected
-  _NavModelBase navModel(WidgetRef ref) => ref.read(_privateNavModelProvider).value;
+  TabNavModel navModel(WidgetRef ref) => navModelFactory(ref);
+
+  @override
+  @protected
+  TabNavModel watchNavModel(WidgetRef ref) => watchNavModelFactory(ref);
 }

@@ -12,11 +12,12 @@ class CounterScreen extends NavScreen {
   );
 
 
-  const CounterScreen(super.tabIndex, {super.key})
+  const CounterScreen(//super.tabIndex,
+      {super.key})
       : super(screenTitle: "Counter");
 
   @override
-  RoutePath get routePath => CounterPath(tabIndex: tabIndex);
+  RoutePath get routePath => CounterPath();
 
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) =>

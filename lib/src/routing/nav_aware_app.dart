@@ -1,6 +1,6 @@
 part of flutter_nav2_oop;
 
-class NavAwareApp extends _NavAwareAppBase {
+class NavAwareApp extends _NavAwareAppBase<NavModel> {
   /// A singleton of [TabNavModel] accessible via [Provider]
   static late RestorableProvider<_NavStateRestorer> _privateNavModelProvider;
 
@@ -33,12 +33,25 @@ class NavAwareApp extends _NavAwareAppBase {
   @protected
   RestorableProvider get navModelProvider => _privateNavModelProvider;
 
+  static NavModel navModelFactory(WidgetRef ref) =>
+      ref.read(_privateNavModelProvider).value;
+
+  static NavModel watchNavModelFactory(WidgetRef ref) =>
+      ref.watch(_privateNavModelProvider).value;
+
   @override
   @protected
-  _NavModelBase navModel(WidgetRef ref) => ref.read(_privateNavModelProvider).value;
+  NavModel navModel(WidgetRef ref) => navModelFactory(ref);
+
+  @override
+  @protected
+  NavModel watchNavModel(WidgetRef ref) => watchNavModelFactory(ref);
 }
 
-abstract class _NavAwareAppBase extends ConsumerWidget {
+/// A singleton of the [NavControlType] accessible via [RestorableProvider]
+late RestorableProvider<RestorableEnumN<NavControlType?>> navControlTypeProvider;
+
+abstract class _NavAwareAppBase<T extends _NavModelBase> extends ConsumerWidget {
 
   /// Application name
   final String _appTitle;
@@ -53,10 +66,10 @@ abstract class _NavAwareAppBase extends ConsumerWidget {
   RestorableProvider get navModelProvider;
 
   @protected
-  _NavModelBase navModel(WidgetRef ref);
+  T navModel(WidgetRef ref);
 
-  /// A singleton of the [NavControlType] accessible via [RestorableProvider]
-  static late RestorableProvider<RestorableEnumN<NavControlType?>> navControlTypeProvider;
+  @protected
+  T watchNavModel(WidgetRef ref);
 
   _NavAwareAppBase({
     /// Used for state restoration
