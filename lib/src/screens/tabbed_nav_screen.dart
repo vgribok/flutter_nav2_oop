@@ -26,7 +26,7 @@ abstract class TabNavScreen extends NavScreen {
   final int tabIndex;
 
   @protected
-  static TabNavModel navState(WidgetRef ref, {bool watch=false}) =>
+  static TabNavModel navModel(WidgetRef ref, {bool watch=false}) =>
       watch ? TabNavAwareApp.watchNavModelFactory(ref) :
               TabNavAwareApp.navModelFactory(ref);
 
@@ -43,7 +43,7 @@ abstract class TabNavScreen extends NavScreen {
   TabRoutePathAdapter get tabRoutePath => routePath.tabbed(tabIndex: tabIndex);
 
   /// Returns tab reference associated with this screen
-  TabScreenSlot tab(WidgetRef ref) => navState(ref)[tabIndex];
+  TabScreenSlot tab(WidgetRef ref) => navModel(ref)[tabIndex];
 
   @protected
   @override
@@ -94,7 +94,7 @@ abstract class TabNavScreen extends NavScreen {
   @mustCallSuper
   void updateStateOnScreenRemovalFromNavStackTop(WidgetRef ref) {
     super.updateStateOnScreenRemovalFromNavStackTop(ref);
-    navState(ref).changeTabOnBackArrowTapIfNecessary(this, ref);
+    navModel(ref).changeTabOnBackArrowTapIfNecessary(this, ref);
   }
 
   /// Invoked by the framework when navigation item,
@@ -113,7 +113,7 @@ abstract class TabNavScreen extends NavScreen {
       // Remove top screen from the stack
       Navigator.pop(context);
     }else {
-      navState(ref)._setSelectedTabIndex(newTabIndex, byUser: true);
+      navModel(ref)._setSelectedTabIndex(newTabIndex, byUser: true);
     }
   }
 
@@ -146,15 +146,16 @@ abstract class TabNavScreen extends NavScreen {
   /// Default implementation of the [tabBarBuilder] factory
   static Widget buildDefaultBottomTabBar(NavScreen screen,
       BuildContext context, WidgetRef ref, ValueChanged<int> tapHandler) {
-    final TabNavModel navModel = navState(ref, watch: true);
+
+    final TabNavModel tabNavModel = navModel(ref, watch: true);
 
     return BottomNavigationBar(
-      items: navModel._tabs.map(
+      items: tabNavModel._tabs.map(
               (tabInfo) =>
               BottomNavigationBarItem(
                   icon: Icon(tabInfo.icon), label: tabInfo.title)
       ).toList(),
-      currentIndex: navModel.selectedTabIndex,
+      currentIndex: tabNavModel.selectedTabIndex,
       onTap: tapHandler,
       type: BottomNavigationBarType.fixed,
     );
@@ -164,7 +165,7 @@ abstract class TabNavScreen extends NavScreen {
   static Widget buildDefaultDrawer(TabNavScreen screen,
       BuildContext context, WidgetRef ref, ValueChanged<int> tapHandler) {
 
-    final TabNavModel navModel = navState(ref, watch: true);
+    final TabNavModel tabNavModel = navModel(ref, watch: true);
     final Widget? drawerHeader = screen.buildDrawerHeader(context, ref);
 
     return Drawer(
@@ -179,11 +180,11 @@ abstract class TabNavScreen extends NavScreen {
             drawerHeader
           ,
           ...[
-            for(int i = 0; i < navModel._tabs.length; i++)
+            for(int i = 0; i < tabNavModel._tabs.length; i++)
               ListTile(
-                title: Text(navModel._tabs[i].title!),
-                leading: Icon(navModel._tabs[i].icon),
-                selected: i == navModel.selectedTabIndex,
+                title: Text(tabNavModel._tabs[i].title!),
+                leading: Icon(tabNavModel._tabs[i].icon),
+                selected: i == tabNavModel.selectedTabIndex,
                 onTap: () => tapHandler(i),
               )
           ]
@@ -223,14 +224,14 @@ abstract class TabNavScreen extends NavScreen {
   static Widget buildDefaultVerticalNavRail(Widget body, NavScreen screen,
     WidgetRef ref, ValueChanged<int> tapHandler) {
 
-    final TabNavModel navModel = navState(ref, watch: true);
+    final TabNavModel tabNavModel = navModel(ref, watch: true);
 
     return Row(children: [
       NavigationRail(
-          selectedIndex: navModel.selectedTabIndex,
+          selectedIndex: tabNavModel.selectedTabIndex,
           onDestinationSelected: (index) => tapHandler(index),
           labelType: NavigationRailLabelType.all,
-          destinations: navModel._tabs.map((tab) =>
+          destinations: tabNavModel._tabs.map((tab) =>
               NavigationRailDestination(
                   icon: Icon(tab.icon),
                   label: Text(tab.title ?? '')

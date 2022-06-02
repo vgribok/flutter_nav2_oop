@@ -22,7 +22,7 @@ class UrlNotFoundScreen extends NavScreen {
   /// address bar by the user
   final Uri notFoundUri;
 
-  _NavModelBase navState(WidgetRef ref) => _NavAwareAppBase.navModelFactory(ref);
+  _NavModelBase navModel(WidgetRef ref) => _NavAwareAppBase.navModelFactory(ref);
 
   /// Do not instantiate directly! Use [notFoundScreenFactory]
   /// instead.
@@ -38,7 +38,7 @@ class UrlNotFoundScreen extends NavScreen {
         children: [
           Text(defaultMessage),
           Text(
-              '"${navState(ref)._notFoundUri}"',
+              '"${navModel(ref)._notFoundUri}"',
               style: const TextStyle(fontWeight: FontWeight.bold)
           ),
           const Divider(thickness: 1, indent: 50, endIndent: 50),
@@ -62,7 +62,7 @@ class UrlNotFoundScreen extends NavScreen {
   @override @protected
   // ignore: must_call_super
   void updateStateOnScreenRemovalFromNavStackTop(WidgetRef ref) =>
-      navState(ref).notFoundUri = null;
+      navModel(ref).notFoundUri = null;
 
   @override @protected
   RoutePath get routePath => NotFoundRoutePath(notFoundUri: notFoundUri);

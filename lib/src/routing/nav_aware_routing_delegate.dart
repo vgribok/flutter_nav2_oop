@@ -11,7 +11,7 @@ class NavAwareRouterDelegate extends _NavAwareRouterDelegateBase<NavModel> {
 }
 
 /// Abstracts away boilerplate implementation of the
-/// [RouterDelegate] and supplies tab-aware navigation logic.
+/// [RouterDelegate] and supplies navigation logic.
 ///
 /// Its [build] method returns [Navigator] Widget, with
 /// [Page] stack back navigation arrow handler supplied by
@@ -25,8 +25,6 @@ abstract class _NavAwareRouterDelegateBase<T extends _NavModelBase>
   /// Riverpod state accessor
   final WidgetRef ref;
 
-  /// Application state reference holder
-  //TabNavModel get navModel => ref.read(NavAwareApp.navModelProvider).value;
   T get navModel;
 
   late bool _attachedListenerToNavState = false;
@@ -70,7 +68,7 @@ abstract class _NavAwareRouterDelegateBase<T extends _NavModelBase>
 
   static NavScreen _screenFromRoute(Route route) {
     dynamic page = route.settings; // Cast settings to Page
-    // Cast page.child to TabbedNavScreen
+    // Cast page.child to NavScreen
     NavScreen navScreen = page.child as NavScreen;
     return navScreen;
   }
@@ -107,13 +105,13 @@ abstract class _NavAwareRouterDelegateBase<T extends _NavModelBase>
   @override
   GlobalKey<NavigatorState>? get navigatorKey => _navigatorKey;
 
-  /// Need to attach [RouterDelegate] listener to [TabNavModel]
+  /// Need to attach [RouterDelegate] listener to [NavModel]
   /// notifier to repaint the screen when tabs are clicked.
   /// Attaching can be done only after the [RestorableProvider]
-  /// was registered and navState is accessible.
+  /// was registered and navModel is accessible.
   void _attachDelegateListenerToNavStateNotifier() {
     if(!_attachedListenerToNavState) {
-      // Have to do it here because access to [TabNavModel]
+      // Have to do it here because access to [NavModel]
       // is absent in the constructor due to restorable
       // not getting registered by then. Had to have this hack here
       // as it's unclear what would be a better place to attach.

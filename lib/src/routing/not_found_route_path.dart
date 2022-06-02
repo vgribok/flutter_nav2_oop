@@ -13,5 +13,5 @@ class NotFoundRoutePath extends RoutePath {
 
   @override
   void configureStateFromUri(WidgetRef ref) =>
-    navState(ref).notFoundUri = notFoundUri;
+    navModel(ref).notFoundUri = notFoundUri;
 }

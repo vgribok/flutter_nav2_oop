@@ -74,11 +74,11 @@ class _NavStateRestorerBase<T extends _NavModelBase> extends RestorableListenabl
   @override
   T fromPrimitives(Object? data) {
     final savedData = Map<String, dynamic>.from(data as Map);
-    final navState = createDefaultValue();
+    final navModel = createDefaultValue();
 
-    deserialize(navState, savedData);
+    deserialize(navModel, savedData);
 
-    return navState;
+    return navModel;
   }
 
   @protected
