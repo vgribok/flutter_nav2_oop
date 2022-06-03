@@ -6,8 +6,14 @@ class RootScreenSlot {
 
   final RootScreenFactory _rootScreenFactory;
 
-  RootScreenSlot({required RootScreenFactory rootScreenFactory})
-    : _rootScreenFactory = rootScreenFactory;
+  /// Collection of factory methods test-converting
+  /// user-typed (Web) URLs into [RoutePath] subclass instances
+  final List<RoutePathFactory> routeParsers;
+
+  RootScreenSlot({
+    required RootScreenFactory rootScreenFactory,
+    required this.routeParsers
+  }) : _rootScreenFactory = rootScreenFactory;
 
   @protected
   NavScreen getRootScreen(WidgetRef ref) =>

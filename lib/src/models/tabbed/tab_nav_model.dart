@@ -28,11 +28,12 @@ class TabNavModel extends _NavModelBase {
   /// Only set when user explicitly tapped a nav tab.
   /// Enables back arrow navigation for switching between nav tabs.
   int? _prevSelectedTabIndex;
+  late int _homeRouteTabIndex;
 
-  TabNavModel(Iterable<TabScreenSlot> tabs, int initialTabIndex)
-    : _selectedTabIndex = initialTabIndex
+  TabNavModel(Iterable<TabScreenSlot> tabs, super.homeRoute)
   {
     addTabs(tabs);
+    _selectedTabIndex = _homeRouteTabIndex = _tabFromPath(homeRoute)!;
   }
 
   /// Add tab definitions during application initialization
@@ -134,6 +135,37 @@ class TabNavModel extends _NavModelBase {
       selectedTabIndex = _prevSelectedTabIndex!;
     }
   }
+
+
+  Iterable<RoutePathFactory> _getRouteParsers() sync* {
+
+    yield (uri) => homeRouteParser(uri)?.tabbed(tabIndex: _homeRouteTabIndex);
+
+    for (int i = 0; i < _tabs.length; i++) {
+      for (var urlParser in _tabs[i].routeParsers) {
+        yield (uri) => urlParser(uri)?.tabbed(tabIndex: i);
+      }
+    }
+  }
+
+  int? _tabFromPath(RoutePath routePath) {
+    final Uri uri = Uri.parse("http://host${routePath.location}");
+
+    for (int i = 0; i < _tabs.length; i++) {
+      for (var urlParser in _tabs[i].routeParsers) {
+        if(urlParser(uri) != null) {
+          return i;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  @override
+  @protected
+  List<RoutePathFactory> get routeParsers =>
+      _getRouteParsers().toList();
 }
 
 /// Saves and restores a [ChangeNotifier] ViewModel like [TabNavModel]

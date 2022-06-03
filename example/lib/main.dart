@@ -21,18 +21,8 @@ TabNavAwareApp get theApp => TabNavAwareApp(
   applicationId: "nav-aware-books-sample",
   appTitle: 'Books With Navigation',
   theme: myTheme,
-  initialPath: CounterPath().tabbed(tabIndex: 1),
+  initialPath: CounterPath(),
   key: const ValueKey("books-sample-app"),
-
-  routeParsers: const [
-    // TODO: Move to the tabs to get tabIndex access for route parsers
-    BookListPath.fromUri,
-    BookDetailsPath.fromUri,
-    UserProfilePath.fromUri,
-    SettingsPath.fromUri,
-    SettingsModalChildPath.fromUri,
-    CounterPath.fromUri
-  ],
 
   globalRestorableProviders: [
     Books.selectedBookProvider,
@@ -42,12 +32,20 @@ TabNavAwareApp get theApp => TabNavAwareApp(
   tabs: [
     // Comment out this section to enable non-tab navigation demo
     TabScreenSlot(Icons.home, title: 'Books',
-        rootScreenFactory: (tabIndex, ref) => BooksListScreen(tabIndex)),
+        rootScreenFactory: (tabIndex, ref) => BooksListScreen(tabIndex),
+        routeParsers: [ BookListPath.fromUri, BookDetailsPath.fromUri ]
+    ),
     TabScreenSlot(Icons.plus_one, title: 'Counter',
-        rootScreenFactory: (tabIndex, ref) => CounterScreen(tabIndex)),
+        rootScreenFactory: (tabIndex, ref) => CounterScreen(tabIndex),
+        routeParsers: [ CounterPath.fromUri ]
+    ),
     TabScreenSlot(Icons.settings, title: 'Settings',
-        rootScreenFactory: (tabIndex, ref) => SettingsScreen(tabIndex)),
+        rootScreenFactory: (tabIndex, ref) => SettingsScreen(tabIndex),
+        routeParsers: [ SettingsPath.fromUri, SettingsModalChildPath.fromUri ]
+    ),
     TabScreenSlot(Icons.person, title: 'User',
-        rootScreenFactory: (tabIndex, ref) => UserProfileScreen(tabIndex)),
+        rootScreenFactory: (tabIndex, ref) => UserProfileScreen(tabIndex),
+        routeParsers: [ UserProfilePath.fromUri ]
+    ),
   ]
 );

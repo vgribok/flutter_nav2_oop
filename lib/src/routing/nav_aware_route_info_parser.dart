@@ -11,23 +11,25 @@ typedef RoutePathFactory = RoutePath? Function(Uri);
 /// or a 404 screen, if entered address was invalid.
 class NavAwareRouteInfoParser extends RouteInformationParser<RoutePath> {
 
-  /// Collection of parsers each serving as a factory
-  /// for instantiating [RoutePath] subclass corresponding
-  /// to entered URL
-  final List<RoutePathFactory> _routeParsers;
-
   /// Riverpod context reference
   final WidgetRef ref;
 
-  const NavAwareRouteInfoParser(this.ref, {required List<RoutePathFactory> routeParsers})
-    : _routeParsers = routeParsers;
+  @protected
+  _NavModelBase get navModel => _NavAwareAppBase.navModelFactory(ref);
+
+  /// Collection of parsers each serving as a factory
+  /// for instantiating [RoutePath] subclass corresponding
+  /// to entered URL
+  List<RoutePathFactory> get routeParsers => navModel.routeParsers;
+
+  const NavAwareRouteInfoParser(this.ref);
 
   @override
   Future<RoutePath> parseRouteInformation(RouteInformation routeInformation) {
     final uri = Uri.parse(routeInformation.location!);
 
     /// Let each route factory test-parse the URL.
-    RoutePath? path = _routeParsers
+    RoutePath? path = routeParsers
       .map((parser) => parser(uri))
       .firstSafe((path) => path != null);
 

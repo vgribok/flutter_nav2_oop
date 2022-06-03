@@ -32,6 +32,8 @@ class TabScreenSlot extends RootScreenSlot {
       this.title,
       /// Function instantiating the root screen of the tab.
       required TabRootScreenFactory rootScreenFactory,
+
+      required super.routeParsers,
     }
   ) : _tabRootScreenFactory = rootScreenFactory,
         super(rootScreenFactory: (ref) => rootScreenFactory(0, ref)); // Stubbing out with fake screen factory

@@ -7,7 +7,7 @@ part of flutter_nav2_oop;
 /// or a 404 screen, if entered address was invalid.
 class TabNavAwareRouteInfoParser extends NavAwareRouteInfoParser {
 
-  const TabNavAwareRouteInfoParser(super.ref, {required super.routeParsers});
+  const TabNavAwareRouteInfoParser(super.ref);
 
   @override
   RoutePath getNotFoundRoute(Uri uri) =>

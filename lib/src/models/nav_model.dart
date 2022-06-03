@@ -6,8 +6,15 @@ class NavModel extends _NavModelBase {
 
   final RootScreenSlot _rootScreenSlot;
 
-  NavModel(RootScreenFactory rootScreenFactory)
-      : _rootScreenSlot = RootScreenSlot(rootScreenFactory: rootScreenFactory);
+  NavModel(
+      RootScreenFactory rootScreenFactory,
+      List<RoutePathFactory> routeParsers,
+      super.homeRoute
+  )
+      : _rootScreenSlot = RootScreenSlot(
+          rootScreenFactory: rootScreenFactory,
+          routeParsers: routeParsers
+      );
 
   @override
   RootScreenSlot get rootScreenSlot => _rootScreenSlot;
@@ -28,6 +35,11 @@ abstract class _NavModelBase extends ChangeNotifier {
 
   /// Must be implemented in subclasses
   RootScreenSlot get rootScreenSlot;
+
+  @protected
+  final RoutePath homeRoute;
+
+  _NavModelBase(this.homeRoute);
 
   /// The *`UI = f(state)`* function.
   ///
@@ -56,6 +68,16 @@ abstract class _NavModelBase extends ChangeNotifier {
     _notFoundUri = uri;
     notifyListeners();
   }
+
+  @protected
+  List<RoutePathFactory> get routeParsers => [
+    ...rootScreenSlot.routeParsers,
+    homeRouteParser
+  ];
+
+  @protected
+  RoutePath? homeRouteParser(Uri uri) =>
+      uri.path == '/' ? homeRoute : null;
 }
 
 /// Saves and restores a [ChangeNotifier] ViewModel like [NavModel]

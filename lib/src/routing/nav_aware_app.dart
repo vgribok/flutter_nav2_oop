@@ -11,9 +11,9 @@ class NavAwareApp extends _NavAwareAppBase<NavModel> {
     required super.appTitle,
     /// Collection of factory methods test-converting
     /// user-typed (Web) URLs into [RoutePath] subclass instances
-    required super.routeParsers,
+    required List<RoutePathFactory> routeParsers,
     /// Initial route to be shown on application start
-    required super.initialPath,
+    required RoutePath initialPath,
     /// Application color theme
     super.theme,
     /// Restorable state providers with global scope
@@ -22,7 +22,7 @@ class NavAwareApp extends _NavAwareAppBase<NavModel> {
     super.key
   }) {
     _privateNavModelProvider = RestorableProvider(
-        (_) => _NavStateRestorer(NavModel(rootScreenFactory)),
+        (_) => _NavStateRestorer(NavModel(rootScreenFactory, routeParsers, initialPath)),
         restorationId: "nav-state-restorer"
       );
   }
@@ -57,7 +57,6 @@ abstract class _NavAwareAppBase<T extends _NavModelBase> extends ConsumerWidget 
   final String _appTitle;
   final String applicationId;
   final ThemeData? _theme;
-  final List<RoutePathFactory> _routeParsers;
   final List<RestorableProvider<RestorableProperty?>>? globalRestorableProviders;
 
   static late _NavModelBase Function(WidgetRef) navModelFactory;
@@ -76,11 +75,6 @@ abstract class _NavAwareAppBase<T extends _NavModelBase> extends ConsumerWidget 
     required this.applicationId,
     /// Application name
     required String appTitle,
-    /// Collection of factory methods test-converting
-    /// user-typed (Web) URLs into [RoutePath] subclass instances
-    required List<RoutePathFactory> routeParsers,
-    /// Initial route to be shown on application start
-    required RoutePath initialPath,
     /// Application color theme
     ThemeData? theme,
     /// Restorable state providers with global scope
@@ -88,11 +82,7 @@ abstract class _NavAwareAppBase<T extends _NavModelBase> extends ConsumerWidget 
     super.key
   }) :
     _appTitle = appTitle,
-    _theme = theme,
-    _routeParsers = [
-      ...routeParsers,
-      (uri) => _parseHome(uri, initialPath)
-    ]
+    _theme = theme
   {
     navModelFactory = (ref) => navModel(ref);
   }
@@ -105,8 +95,7 @@ abstract class _NavAwareAppBase<T extends _NavModelBase> extends ConsumerWidget 
         title: appTitle,
         theme: _theme,
         routerDelegate: createRouterDelegate(ref),
-        routeInformationParser: NavAwareRouteInfoParser(
-            ref, routeParsers: _routeParsers),
+        routeInformationParser: NavAwareRouteInfoParser(ref),
         restorationScopeId: "app-router-restoration-scope",
         debugShowCheckedModeBanner: false,
         // Hide 'Debug' ribbon on the AppBar,
@@ -136,10 +125,6 @@ abstract class _NavAwareAppBase<T extends _NavModelBase> extends ConsumerWidget 
 
   /// Returns the name of the application
   String get appTitle => _appTitle;
-
-  /// Returns path object for the "/" (home) route
-  static RoutePath? _parseHome(Uri uri, RoutePath initPath) =>
-      uri.path == '/' ? initPath : null;
 
   /// Returns [ProviderScope] - a required wrapper for an app
   /// using Riverpod state management.

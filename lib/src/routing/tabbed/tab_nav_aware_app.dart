@@ -15,11 +15,8 @@ class TabNavAwareApp extends _NavAwareAppBase<TabNavModel> {
     required super.applicationId,
     /// Application name
     required super.appTitle,
-    /// Collection of factory methods test-converting
-    /// user-typed (Web) URLs into [RoutePath] subclass instances
-    required super.routeParsers,
     /// Initial route to be shown on application start
-    required TabRoutePathAdapter initialPath,
+    required RoutePath initialPath,
     /// Application color theme
     super.theme,
     /// Navigation type. Auto if not specified.
@@ -28,10 +25,9 @@ class TabNavAwareApp extends _NavAwareAppBase<TabNavModel> {
     super.globalRestorableProviders,
     super.key
   })
-      : super(initialPath: initialPath)
   {
     _privateNavModelProvider = RestorableProvider(
-      (_) => _TabNavStateRestorer(TabNavModel(tabs, initialPath.tabIndex)),
+      (_) => _TabNavStateRestorer(TabNavModel(tabs, initialPath)),
       restorationId: "nav-state-restorer"
     );
 
