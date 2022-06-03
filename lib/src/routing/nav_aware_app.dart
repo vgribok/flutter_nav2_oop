@@ -95,7 +95,7 @@ abstract class _NavAwareAppBase<T extends _NavModelBase> extends ConsumerWidget 
         title: appTitle,
         theme: _theme,
         routerDelegate: createRouterDelegate(ref),
-        routeInformationParser: NavAwareRouteInfoParser(ref),
+        routeInformationParser: getRouteParser(ref),
         restorationScopeId: "app-router-restoration-scope",
         debugShowCheckedModeBanner: false,
         // Hide 'Debug' ribbon on the AppBar,
@@ -132,4 +132,8 @@ abstract class _NavAwareAppBase<T extends _NavModelBase> extends ConsumerWidget 
 
   @protected
   _NavAwareRouterDelegateBase createRouterDelegate(WidgetRef ref);
+
+  @protected
+  NavAwareRouteInfoParser getRouteParser(WidgetRef ref) =>
+      NavAwareRouteInfoParser(ref);
 }

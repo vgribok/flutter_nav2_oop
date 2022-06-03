@@ -21,10 +21,8 @@ class TabRoutePathAdapter extends RoutePath {
       routePath.configureStateFromUriFuture(ref);
 
   @override
-  void configureStateFromUri(WidgetRef ref) {
+  void configureStateFromUri(WidgetRef ref) =>
     routePath.configureStateFromUri(ref);
-    tabNavState(ref)._setSelectedTabIndex(tabIndex, byUser: true);
-  }
 
   @override
   String get location => routePath.location;

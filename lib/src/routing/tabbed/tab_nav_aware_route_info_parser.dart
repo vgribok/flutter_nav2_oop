@@ -10,9 +10,13 @@ class TabNavAwareRouteInfoParser extends NavAwareRouteInfoParser {
   const TabNavAwareRouteInfoParser(super.ref);
 
   @override
-  RoutePath getNotFoundRoute(Uri uri) =>
-    NotFoundRoutePath(notFoundUri: uri)
-        .tabbed(tabIndex: _tabNavModel.selectedTabIndex);
+  RoutePath getNotFoundRoute(Uri uri)   {
+    final int tabIndex = _tabNavModel.selectedTabIndex;
+    final notFoundPath = NotFoundRoutePath(notFoundUri: uri);
+    final notFoundPathTabbed = notFoundPath.tabbed(tabIndex: tabIndex);
+    return notFoundPathTabbed;
+  }
+
 
   TabNavModel get _tabNavModel => _NavAwareAppBase.navModelFactory(ref) as TabNavModel;
 }

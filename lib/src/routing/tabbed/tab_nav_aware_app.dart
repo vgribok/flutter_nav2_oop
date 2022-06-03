@@ -68,4 +68,9 @@ class TabNavAwareApp extends _NavAwareAppBase<TabNavModel> {
   @protected
   TabNavAwareRouterDelegate createRouterDelegate(WidgetRef ref) =>
       TabNavAwareRouterDelegate(ref);
+
+  @override
+  @protected
+  NavAwareRouteInfoParser getRouteParser(WidgetRef ref) =>
+      TabNavAwareRouteInfoParser(ref);
 }

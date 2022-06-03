@@ -40,10 +40,8 @@ class NavAwareRouteInfoParser extends RouteInformationParser<RoutePath> {
     return Future.value(path);
   }
 
-  // final int currentTabIndex = ref.read(NavAwareApp.navModelProvider).value.selectedTabIndex;
-  // path = NotFoundRoutePath(notFoundUri: uri, tabIndex: currentTabIndex);
   @protected
-  RoutePath getNotFoundRoute(Uri uri) => throw UnimplementedError();
+  RoutePath getNotFoundRoute(Uri uri) => NotFoundRoutePath(notFoundUri: uri);
 
   @override
   RouteInformation? restoreRouteInformation(RoutePath path) =>

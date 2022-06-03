@@ -23,15 +23,15 @@ NavAwareApp get theApp => NavAwareApp (
     key: const ValueKey("books-sample-app"),
 
     // Remove throw and uncomment screen constructor to support non-tab navigation
-    rootScreenFactory: (ref) => throw UnimplementedError(), // const BooksListScreen(),
+    rootScreenFactory: (ref) => throw UnimplementedError(), //const BooksListScreen(),
 
     routeParsers: const [
       BookListPath.fromUri,
       BookDetailsPath.fromUri,
-      UserProfilePath.fromUri,
-      SettingsPath.fromUri,
-      SettingsModalChildPath.fromUri,
-      CounterPath.fromUri
+      // UserProfilePath.fromUri,
+      // SettingsPath.fromUri,
+      // SettingsModalChildPath.fromUri,
+      // CounterPath.fromUri
     ],
 
     globalRestorableProviders: [

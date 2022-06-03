@@ -11,7 +11,9 @@ class TabNavAwareRouterDelegate extends _NavAwareRouterDelegateBase<TabNavModel>
 
   @override
   Future<void> setNewRoutePath(RoutePath path) {
-    navModel.selectedTabIndex = (path as TabRoutePathAdapter).tabIndex;
+    final int tabIndex = (path as TabRoutePathAdapter).tabIndex;
+    // navModel._setSelectedTabIndex(tabIndex, byUser: true);
+    navModel.selectedTabIndex = tabIndex;
     return super.setNewRoutePath(path);
   }
 }
