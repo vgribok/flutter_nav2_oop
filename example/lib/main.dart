@@ -1,6 +1,10 @@
+import 'package:example/src/dal/stories_data.access.dart';
 import 'package:example/src/models/book.dart';
 import 'package:example/src/routing/counter_path.dart';
+import 'package:example/src/routing/story/stories_path.dart';
+import 'package:example/src/routing/story/story_path.dart';
 import 'package:example/src/screens/counter_screen.dart';
+import 'package:example/src/screens/story/stories_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:example/src/routing/book_details_path.dart';
 import 'package:example/src/routing/book_list_path.dart';
@@ -24,9 +28,12 @@ TabNavAwareApp get theApp => TabNavAwareApp(
   initialPath: CounterPath(),
   key: const ValueKey("books-sample-app"),
 
+  // TODO: let DAL classes register restorable providers with a singleton list
   globalRestorableProviders: [
     Books.selectedBookProvider,
-    CounterScreen.counterProvider
+    CounterScreen.counterProvider,
+    StoryDal.currentStoryIdProvider,
+    StoryDal.currentPageIdProvider
   ],
 
   tabs: [
@@ -47,5 +54,10 @@ TabNavAwareApp get theApp => TabNavAwareApp(
         rootScreenFactory: (tabIndex, ref) => UserProfileScreen(tabIndex),
         routeParsers: [ UserProfilePath.fromUri ]
     ),
+    TabScreenSlot(
+        Icons.interests, title: "Stories",
+        rootScreenFactory: (tabIndex, ref) => StoriesListScreen(tabIndex),
+        routeParsers: [ StoriesPath.fromUri, StoryPath.fromUri ]
+    )
   ]
 );

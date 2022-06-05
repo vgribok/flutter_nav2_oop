@@ -49,8 +49,7 @@ abstract class _NavAwareRouterDelegateBase<T extends _NavModelBase>
       transitionDelegate: NoAnimationTransitionDelegate(),
       pages: pageStack,
       onPopPage: _onBackButtonPress,
-      restorationScopeId: "main-navigator",
-      // initialRoute: "/counter",
+      restorationScopeId: "main-navigator"
     );
   }
 
@@ -90,9 +89,8 @@ abstract class _NavAwareRouterDelegateBase<T extends _NavModelBase>
   /// to the entered route would be on top of the
   /// navigation stack.
   @override
-  Future<void> setNewRoutePath(RoutePath path) {
-     return path._configureStateFromUriFuture(ref);
-  }
+  Future<void> setNewRoutePath(RoutePath path) =>
+     path._configureStateFromUriFuture(ref);
 
   /// Called when routing delegate's ephemeral state gets restored
   @override

@@ -149,7 +149,7 @@ class TabNavModel extends _NavModelBase {
   }
 
   int? _tabFromPath(RoutePath routePath) {
-    final Uri uri = Uri.parse("http://host${routePath.location}");
+    final Uri uri = Uri.parse(routePath.location);
 
     for (int i = 0; i < _tabs.length; i++) {
       for (var urlParser in _tabs[i].routeParsers) {

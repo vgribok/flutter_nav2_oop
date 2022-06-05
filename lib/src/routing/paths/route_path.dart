@@ -22,27 +22,37 @@ class RoutePath {
   @protected
   _NavModelBase navModel(WidgetRef ref) => _NavAwareAppBase.navModelFactory(ref);
 
-  Future<void> _configureStateFromUriFuture(WidgetRef ref) {
+  Future<void> _configureStateFromUriFuture(WidgetRef ref) async {
     navModel(ref).notFoundUri = null; // cleans up 404 url before another attempt at paring user-typed URL
-    configureStateFromUri(ref);
-    return configureStateFromUriFuture(ref);
+    if(configureStateFromUri(ref)) {
+      if(await configureStateFromUriFuture(ref)) {
+        return;
+      }
+    }
+    navModel(ref).notFoundUri = uri;
   }
 
   /// Framework calls this method to let subclasses construct valid
   /// state from a URL typed by a user into browser's address bar.
   /// User if need async, and for sync cases override [configureStateFromUri].
+  /// Returns false if URL can't be converted into a valid state,
+  /// 404 page will be rendered.
   ///
   /// Overriding this method is not required if all that needed
   /// is changing current navigation tab.
   @protected
-  Future<void> configureStateFromUriFuture(WidgetRef ref) async {}
+  Future<bool> configureStateFromUriFuture(WidgetRef ref) async =>
+    true;
 
   /// Framework calls this method to let subclasses construct valid
   /// state from a URL typed by a user into browser's address bar.
+  /// Returns false if URL can't be converted into a valid state,
+  /// 404 page will be rendered.
   ///
   /// Overriding this method is not required if all that needed
-  /// is changing current navigation tab.  @protected
-  void configureStateFromUri(WidgetRef ref) {}
+  /// is changing current navigation tab.
+  @protected
+  bool configureStateFromUri(WidgetRef ref) => true;
 
   /// Returns location URI for the given route.
   ///
@@ -58,4 +68,6 @@ class RoutePath {
 
   TabRoutePathAdapter tabbed({required int tabIndex}) =>
       TabRoutePathAdapter(tabIndex: tabIndex, routePath: this);
+
+  Uri get uri => Uri.parse("${Uri.base}$location");
 }

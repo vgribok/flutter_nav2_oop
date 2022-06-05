@@ -12,6 +12,8 @@ class NotFoundRoutePath extends RoutePath {
     super(resource: '404-page-not-found');
 
   @override
-  void configureStateFromUri(WidgetRef ref) =>
+  bool configureStateFromUri(WidgetRef ref) {
     navModel(ref).notFoundUri = notFoundUri;
+    return true;
+  }
 }

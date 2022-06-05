@@ -15,10 +15,15 @@ class BookDetailsPath extends DetailsRoutePath {
   static RoutePath? fromUri(Uri uri) =>
     DetailsRoutePath.fromUri(resourceName, uri, (stringId) {
       int? bookId = int.tryParse(stringId);
-      return Books.isValidBookId(bookId) ? BookDetailsPath(bookId: bookId!) : null;
+      return bookId == null ? null : BookDetailsPath(bookId: bookId);
     });
 
   @override
-  void configureStateFromUri(WidgetRef ref) =>
+  bool configureStateFromUri(WidgetRef ref) {
+    if(!Books.isValidBookId(id)) {
+      return false;
+    }
     Books.selectedBookProvider.writable(ref).value = id;
+    return true;
+  }
 }
