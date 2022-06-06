@@ -35,8 +35,10 @@ class Story {
     required this.pages
   });
 
-  double getPageDuration(int pageId) =>
-      pages.firstSafe((page) => page.id == pageId)?.duration ?? defaultDuration;
+  int getPageDurationMillisec(int pageId) {
+    final double durationSeconds = pages.firstSafe((page) => page.id == pageId)?.duration ?? defaultDuration;
+    return (durationSeconds * 1000).toInt();
+  }
 }
 
 /*

@@ -19,12 +19,15 @@ class StoryLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      Column(
-        children: [
-          const Padding(padding: EdgeInsets.symmetric(vertical: 15, horizontal: 5)),
-          StoryList(stories, selectedStoryId: selectedStoryId),
-          const Padding(padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5)),
-          child
-        ],
+      Column(children: [
+              const Padding(padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5)),
+              StoryList(stories, selectedStoryId: selectedStoryId),
+              const Padding(padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5)),
+              Expanded(child:
+                Padding(child: child,
+                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10)
+                )
+              )
+            ]
       );
 }

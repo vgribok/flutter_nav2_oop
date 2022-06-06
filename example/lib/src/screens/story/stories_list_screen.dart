@@ -25,6 +25,7 @@ class StoriesListScreen extends TabNavScreen {
                       Text(
                         "Tap the profile to see the story",
                         style: Theme.of(context).textTheme.headlineMedium,
+                        textAlign: TextAlign.center,
                       )
                     ]
                 )
@@ -43,6 +44,7 @@ class StoriesListScreen extends TabNavScreen {
     if(selectedStory == null) return null;
 
     final StoryPage? page = StoryDal.watchCurrentPage(ref, selectedStory.pages);
-    return StoryScreen(tabIndex, stories, selectedStory, page);
+    final int? pageIndex = StoryDal.currentPageIndex(ref, selectedStory.pages);
+    return StoryScreen(tabIndex, stories, selectedStory, page, pageIndex);
   }
 }

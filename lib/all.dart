@@ -38,3 +38,4 @@ part './src/utility/uri_extensions.dart';
 part './src/utility/riverpod_extensions.dart';
 part './src/utility/iterable_extensions.dart';
 part './src/utility/context_extensions.dart';
+part './src/utility/operation_scheduler.dart';

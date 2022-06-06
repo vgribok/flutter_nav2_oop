@@ -23,11 +23,11 @@ class StoryDal
           pages:
           [
             StoryPage(id: 111,
-                imageURL: "https://avatars.githubusercontent.com/u/757185?v=4",
+                imageURL: "https://lh3.googleusercontent.com/pw/AM-JKLXwPtGwAM_TreSNFtEl3dMQ8k1Mf2p6KMuB28ikQoEUChDceFywdumf_AoyWkfRnVUI0nhNEANV21hqxpEL1r6XjTjXoQUbofVxPfgdIF6C8qvF0ye_TulFMPrAzODlDxNyrhMnksjf_o4k4GjBcH82Bg=w3544-h1994-no",
                 duration: 5.0
             ),
             StoryPage(
-                imageURL: "https://i.pinimg.com/280x280_RS/ef/8c/bf/ef8cbf4d97e552e8e49a5b3972faabed.jpg",
+                imageURL: "https://pbs.twimg.com/media/E-YezAjXoBMYHCC.jpg",
                 id: 222
             ),
             StoryPage(
@@ -85,7 +85,7 @@ class StoryDal
       restorationId: "current-page-id"
   );
 
-  static RestorableIntN currentPageId(WidgetRef ref) =>
+  static RestorableIntN getCurrentPageId(WidgetRef ref) =>
       ref.read(currentPageIdProvider);
 
   static StoryPage? watchCurrentPage(WidgetRef ref, List<StoryPage> pages) {
@@ -96,34 +96,65 @@ class StoryDal
   }
 
   static int? currentPageIndex(WidgetRef ref, List<StoryPage> pages) {
-    final int? pageId = currentPageId(ref).value;
+    final int? pageId = getCurrentPageId(ref).value;
     if(pageId == null) return null;
     return pages.indexWhere((page) => page.id == pageId);
   }
 
-  static void moveToNextStoryPage(WidgetRef ref, List<StoryPage> pages) {
+  static void moveToNextStoryPage(WidgetRef ref, List<StoryPage> pages, pageIndex) {
 
     if(pages.isEmpty) {
-      currentPageId(ref).value = null;
+      setCurrentPageId(ref, null);
       return;
     }
-
-    int pageIndex = currentPageIndex(ref, pages) ?? -1;
-    pageIndex++;
 
     if(pageIndex >= pages.length) {
       pageIndex = 0;
     }
-    currentPageId(ref).value = pages[pageIndex].id;
+    debugPrint("Moving to the page with index $pageIndex");
+    setCurrentPageId(ref, pages[pageIndex].id);
   }
 
+  static void scheduleNextStoryPage(WidgetRef ref, Story story, int pageIndex) {
+    if(story.pages.isEmpty) return;
+    if(pageIndex >= story.pages.length) pageIndex = 0;
+    final page = story.pages[pageIndex];
+    final int delay = story.getPageDurationMillisec(page.id);
+
+    _nextPageScheduler.scheduleOperation(
+      Duration(milliseconds: delay), () => moveToNextStoryPage(ref, story.pages, pageIndex)
+    );
+  }
+
+  static void setCurrentPageId(WidgetRef ref, int? pageId) {
+    final int? oldPageId = getCurrentPageId(ref).value;
+
+    if(pageId != oldPageId) {
+      getCurrentPageId(ref).value = pageId;
+    }
+
+    if(pageId == null) {
+      cancelNextPageOperation();
+    }
+  }
+
+  static final _nextPageScheduler = CancellableDelayedOperation();
+
+  static void cancelNextPageOperation() => _nextPageScheduler.cancelOperation();
+
   static void selectStory(WidgetRef ref, Story? story) {
+
     selectedStoryId(ref).value = story?.id;
     if(story == null) {
-      currentPageId(ref).value = null;
+      setCurrentPageId(ref, null);
       return;
     }
-    moveToNextStoryPage(ref, story.pages);
+
+    // Show a story
+    if(getCurrentPageId(ref).value == null) {
+      if(story.pages.isEmpty) return;
+      setCurrentPageId(ref, story.pages[0].id);
+    }
   }
 
   static void selectStoryId(WidgetRef ref, int? storyId) {
@@ -131,8 +162,7 @@ class StoryDal
     Story? story;
 
     if(storyId != null) {
-      final stories = getStoryList(ref);
-      story = stories.firstSafe((story) => story.id == storyId);
+      story = getStory(ref, storyId);
     }
 
     selectStory(ref, story);

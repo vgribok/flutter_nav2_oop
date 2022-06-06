@@ -42,7 +42,7 @@ class StoryPath extends NestedRoutePath {
     if(!StoryDal.isValidStory(ref, storyId, pageId)) return false;
 
     StoryDal.selectStoryId(ref, storyId);
-    StoryDal.currentPageId(ref).value = pageId;
+    StoryDal.setCurrentPageId(ref, pageId);
 
     return true;
   }
