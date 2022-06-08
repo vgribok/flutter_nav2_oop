@@ -1,4 +1,5 @@
 import 'package:example/src/dal/stories_data.access.dart';
+import 'package:example/src/models/stories_models.dart';
 import 'package:example/src/routing/story/stories_path.dart';
 import 'package:flutter_nav2_oop/all.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -37,12 +38,22 @@ class StoryPath extends NestedRoutePath {
   }
 
   @override
-  bool configureStateFromUri(WidgetRef ref) {
+  Future<bool> configureStateFromUriFuture(WidgetRef ref) async {
 
-    if(!StoryDal.isValidStory(ref, storyId, pageId)) return false;
+    final Stories stories = await Stories.getUnwatchedFuture(ref);
+    final Story? story = stories.getById(storyId);
+    if(story == null) return false;
 
-    StoryDal.selectStoryId(ref, storyId);
-    StoryDal.setCurrentPageId(ref, pageId);
+    StoryPage? page = story.getPageById(pageId);
+    if(page == null) {
+      if(pageId != null) return false; // pageId was invalid for the specified story
+      if(story.pages.isNotEmpty) {
+        page = story[0];
+      }
+    }
+
+    Stories.setCurrentStory(ref, story);
+    StoryEx.setCurrentPage(ref, page);
 
     return true;
   }

@@ -14,11 +14,11 @@ class StoriesListScreen extends TabNavScreen {
 
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) =>
-      StoryDal.watchStoryList(ref).when(
+      Stories.watch(ref).when(
         error: (e, stack) => Center(child: Text("Error: $e")),
         loading: () => const Center(child: CircularProgressIndicator()),
         data: (stories) =>
-            StoryLayout(stories, selectedStoryId: null,
+            StoryLayout(stories.stories, selectedStoryId: null,
                 child: Column(
                     children: [
                       Icon(Icons.north, color: Theme.of(context).textTheme.headlineMedium?.color),
@@ -37,14 +37,13 @@ class StoriesListScreen extends TabNavScreen {
 
   @override
   NavScreen? topScreen(WidgetRef ref) {
-    final List<Story>? stories = StoryDal.watchStoryList(ref).value;
-    if(stories == null) return null;
 
-    final Story? selectedStory = StoryDal.watchSelectedStory(ref, stories: stories);
+    final Story? selectedStory = Stories.watchForCurrentStory(ref);
     if(selectedStory == null) return null;
 
-    final StoryPage? page = StoryDal.watchCurrentPage(ref, selectedStory.pages);
-    final int? pageIndex = StoryDal.currentPageIndex(ref, selectedStory.pages);
-    return StoryScreen(tabIndex, stories, selectedStory, page, pageIndex);
+    final StoryPage? page = StoryEx.watchForCurrentPage(ref);
+    final stories = Stories.watch(ref).value!;
+
+    return StoryScreen(tabIndex, stories, selectedStory, page);
   }
 }

@@ -5,23 +5,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProfileBubble extends ConsumerWidget {
   final bool selected;
-  final Bubble bubble;
-  final int storyId;
+  final Story story;
 
-  ProfileBubble(this.bubble, this.storyId, { required this.selected })
-    : super(key: ValueKey(storyId));
+  ProfileBubble(this.story, { required this.selected })
+    : super(key: ValueKey(story.id));
 
   @override
   Widget build(BuildContext context, WidgetRef ref) =>
       GestureDetector(
-        onTap: () => StoryDal.selectStoryId(ref, storyId),
+        onTap: () => Stories.setCurrentStory(ref, story),
         child: Column(
           children: [
             CircleAvatar(
                 radius: selected ? 30 : 40,
-                backgroundImage: NetworkImage(bubble.imageURL)
+                backgroundImage: NetworkImage(story.bubble.imageURL)
             ),
-            if(selected) Text(bubble.text)
+            if(selected) Text(story.bubble.text)
           ]
         )
       );

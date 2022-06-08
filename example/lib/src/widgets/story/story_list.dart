@@ -15,7 +15,7 @@ class StoryList extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           for(Story story in stories)
-            ProfileBubble(story.bubble, story.id, selected: story.id == selectedStoryId)
+            ProfileBubble(story, selected: story.id == selectedStoryId)
         ]
     );
   }

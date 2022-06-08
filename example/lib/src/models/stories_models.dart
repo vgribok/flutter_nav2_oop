@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_nav2_oop/all.dart';
 
 @immutable
 class Bubble
@@ -21,24 +20,29 @@ class StoryPage
 }
 
 @immutable
-class Story {
+class StoryHeader {
   final int id;
   final Bubble bubble;
   final double defaultDuration;
 
-  final List<StoryPage> pages;
-
-  const Story({
+  const StoryHeader({
     required this.id,
     required this.defaultDuration,
     required this.bubble,
+  });
+}
+
+@immutable
+class Story extends StoryHeader {
+
+  final List<StoryPage> pages;
+
+  const Story({
+    required super.id,
+    required super.defaultDuration,
+    required super.bubble,
     required this.pages
   });
-
-  int getPageDurationMillisec(int pageId) {
-    final double durationSeconds = pages.firstSafe((page) => page.id == pageId)?.duration ?? defaultDuration;
-    return (durationSeconds * 1000).toInt();
-  }
 }
 
 /*

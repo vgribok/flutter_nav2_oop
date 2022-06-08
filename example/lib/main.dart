@@ -32,8 +32,8 @@ TabNavAwareApp get theApp => TabNavAwareApp(
   globalRestorableProviders: [
     Books.selectedBookProvider,
     CounterScreen.counterProvider,
-    StoryDal.currentStoryIdProvider,
-    StoryDal.currentPageIdProvider
+    ...Stories.ephemerals,
+    ...StoryEx.ephemerals
   ],
 
   tabs: [
