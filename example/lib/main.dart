@@ -30,8 +30,8 @@ TabNavAwareApp get theApp => TabNavAwareApp(
 
   // TODO: let DAL classes register restorable providers with a singleton list
   globalRestorableProviders: [
-    Books.selectedBookProvider,
-    CounterScreen.counterProvider,
+    ...Books.ephemerals,
+    ...CounterScreen.epehmerals,
     ...Stories.ephemerals,
     ...StoryEx.ephemerals
   ],

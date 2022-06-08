@@ -23,7 +23,7 @@ class BookDetailsPath extends DetailsRoutePath {
     if(!Books.isValidBookId(id)) {
       return false;
     }
-    Books.selectedBookProvider.writable(ref).value = id;
+    Books.setSelectedBook(ref, id);
     return true;
   }
 }

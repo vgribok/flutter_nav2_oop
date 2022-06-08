@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod_restorable/flutter_riverpod_restorable.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Book {
   final String title;
@@ -23,12 +24,20 @@ class Books {
 
   /// We need to store selected book as a Restorable to maintain its state
   /// even when its route is not store in the Navigator history.
-  static final selectedBookProvider = RestorableProvider(
+  static final RestorableProvider<RestorableIntN> _selectedBookProvider = RestorableProvider(
     (_) => RestorableIntN(null),
     restorationId: "selected-book-id"
-  )  ;
+  );
 
-  static bool isValidBookId(int? bookId) {
+  static List<RestorableProvider> get ephemerals => [_selectedBookProvider];
+
+  static int? watchForSelectedBook(WidgetRef ref) =>
+      ref.watch(_selectedBookProvider).value;
+
+  static void setSelectedBook(WidgetRef ref, int? bookId) =>
+    ref.read(_selectedBookProvider).value = bookId;
+
+    static bool isValidBookId(int? bookId) {
     return bookId != null && bookId >= 0 && bookId < allBooks.length;
   }
 

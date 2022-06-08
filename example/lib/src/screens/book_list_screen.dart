@@ -12,24 +12,20 @@ class BooksListScreen extends TabNavScreen { // Subclass NavScreen to enable non
       : super(screenTitle: 'Books');
 
   @override
-  Widget buildBody(BuildContext context, WidgetRef ref) {
-
-    final RestorableValue<int?> selectedBookState = Books.selectedBookProvider.writable(ref);
-
-    return ListView(children: [
+  Widget buildBody(BuildContext context, WidgetRef ref) =>
+    ListView(children: [
       for (var book in Books.allBooks)
         ListTile(
           title: Text(book.title),
           subtitle: Text(book.author),
-          onTap: () => selectedBookState.value = book.id,
+          onTap: () => Books.setSelectedBook(ref, book.id),
           key: book.key,
         )
     ]);
-  }
 
   @override
   NavScreen? topScreen(WidgetRef ref) {
-    final int? selectedBookId = ref.watch(Books.selectedBookProvider).value;
+    final int? selectedBookId = Books.watchForSelectedBook(ref);
 
     return selectedBookId == null
         ? null
