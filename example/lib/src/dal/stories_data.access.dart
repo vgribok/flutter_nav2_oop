@@ -118,7 +118,6 @@ extension StoryEx on Story {
     return currentStory?.getPageById(currentPageId);
   }
 
-
   int getPageDurationMillisec(StoryPage? page) {
     final double durationSeconds = page?.duration ?? defaultDuration;
     return (durationSeconds * 1000).toInt();
@@ -153,7 +152,7 @@ extension StoryEx on Story {
   static void setCurrentPage(WidgetRef ref, StoryPage? page) =>
       _currentPageIdUnwatched(ref).value = page?.id;
 
-  static final _nextPageScheduler = CancellableDelayedOperation();
+  static final _nextPageScheduler = CancellableScheduledOperation();
 
   static void cancelNextPageOperation() => _nextPageScheduler.cancelOperation();
 
@@ -166,7 +165,7 @@ extension StoryEx on Story {
   void scheduleStoryPage(WidgetRef ref, int delayMillisec, StoryPage? pageToShow) {
     if(pages.isEmpty || pageToShow == null) return;
 
-    _nextPageScheduler.scheduleOperation(
+    _nextPageScheduler.delayOperation(
       Duration(milliseconds: delayMillisec), () => setCurrentPage(ref, pageToShow)
     );
   }
