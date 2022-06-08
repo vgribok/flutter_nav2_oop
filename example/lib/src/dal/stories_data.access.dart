@@ -43,15 +43,13 @@ class Stories {
     ];
   }
 
-  static final StateProvider<Future<Stories>> _storiesFutureProvider = StateProvider<Future<Stories>>(
-      (ref) async => Stories(await _callStoriesApi())
-  );
-
+  //  state rebuilding after  URL parsing is async.
   static final FutureProvider<Stories> _storiesProvider = FutureProvider<Stories>(
-          (ref) => ref.watch(_storiesFutureProvider)
+          (ref) async => Stories(await _callStoriesApi())
   );
 
-  static Future<Stories> getUnwatchedFuture(WidgetRef ref) => ref.read(_storiesFutureProvider);
+  static Future<Stories> getUnwatchedFuture(WidgetRef ref) =>
+      ref.read(_storiesProvider.future);
 
   static AsyncValue<Stories> watch(WidgetRef ref) =>
       ref.watch(_storiesProvider);

@@ -11,7 +11,7 @@ class CounterScreen extends TabNavScreen { // Subclass NavScreen to enable non-t
       restorationId: "counter"
   );
 
-  static final List<RestorableProvider> epehmerals = [_counterProvider];
+  static final List<RestorableProvider> ephemerals = [_counterProvider];
 
   const CounterScreen(super.tabIndex, // Comment super.tabIndex to enable non-tab navigation
       {super.key})

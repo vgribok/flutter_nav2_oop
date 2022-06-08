@@ -28,10 +28,9 @@ TabNavAwareApp get theApp => TabNavAwareApp(
   initialPath: CounterPath(),
   key: const ValueKey("books-sample-app"),
 
-  // TODO: let DAL classes register restorable providers with a singleton list
   globalRestorableProviders: [
     ...Books.ephemerals,
-    ...CounterScreen.epehmerals,
+    ...CounterScreen.ephemerals,
     ...Stories.ephemerals,
     ...StoryEx.ephemerals
   ],
