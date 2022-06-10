@@ -227,15 +227,24 @@ abstract class TabNavScreen extends NavScreen {
     final TabNavModel tabNavModel = navModel(ref, watch: true);
 
     return Row(children: [
-      NavigationRail(
-          selectedIndex: tabNavModel.selectedTabIndex,
-          onDestinationSelected: (index) => tapHandler(index),
-          labelType: NavigationRailLabelType.all,
-          destinations: tabNavModel._tabs.map((tab) =>
-              NavigationRailDestination(
-                  icon: Icon(tab.icon),
-                  label: Text(tab.title ?? '')
-              )).toList()
+      LayoutBuilder(builder: (context, constraint) =>
+        SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraint.maxHeight),
+            child: IntrinsicHeight(
+              child: NavigationRail(
+                selectedIndex: tabNavModel.selectedTabIndex,
+                onDestinationSelected: (index) => tapHandler(index),
+                labelType: NavigationRailLabelType.all,
+                destinations: tabNavModel._tabs.map((tab) =>
+                    NavigationRailDestination(
+                        icon: Icon(tab.icon),
+                        label: Text(tab.title ?? '')
+                    )).toList()
+              )
+            )
+          )
+        )
       ),
       const VerticalDivider(thickness: 1, width: 1),
       Expanded(child: body)

@@ -19,7 +19,7 @@ class Stories {
 
     return [
       const Story(id: 1,
-          defaultDuration: 3.0,
+          defaultDuration: 2.0,
           bubble: Bubble(
             imageURL: "https://pbs.twimg.com/profile_images/2699103767/1e9cec7a8399310f4902cfff9d32f14c_400x400.jpeg",
             text: "That's my life",
@@ -28,7 +28,7 @@ class Stories {
           [
             StoryPage(id: 111,
                 imageURL: "https://lh3.googleusercontent.com/pw/AM-JKLXwPtGwAM_TreSNFtEl3dMQ8k1Mf2p6KMuB28ikQoEUChDceFywdumf_AoyWkfRnVUI0nhNEANV21hqxpEL1r6XjTjXoQUbofVxPfgdIF6C8qvF0ye_TulFMPrAzODlDxNyrhMnksjf_o4k4GjBcH82Bg=w3544-h1994-no",
-                duration: 7.0
+                duration: 5.0
             ),
             StoryPage(
                 imageURL: "https://pbs.twimg.com/media/E-YezAjXoBMYHCC.jpg",

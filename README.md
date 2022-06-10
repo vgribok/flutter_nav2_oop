@@ -1,4 +1,8 @@
-# Flutter 2 Navigator abstracted with OOP
+# Flutter Application Starter
+
+This repo is a Flutter application starter. You can clone it, run it and start customizing it to make it yours.
+
+It holds a small [library](./lib) and a [sample application](./sample)
 
 > **TL;DR** If you have tried Flutter Navigator 2.0 (FN2) and  were stymied by its complexity and opacity, fear not: this little (necessarily opinionated) library + tabbed app sample combo will ensure that you will not have to spend cycles writing navigation/routing-related boilerplate code, instead of focusing on your application "meat" code, supplying *[screens](example/lib/src/screens)*, *[routes](example/lib/src/routing)* that are mapped to those screens, and the *[app initialization code](example/lib/main.dart)* wiring together navigation tabs and their "root" screens, to have web & native UI and navigation working out-of-the box:<br/>
 
@@ -18,9 +22,13 @@ Your application `main.dart` will look like this:
     <summary>Click to show imports...</summary>
     
 ```dart
+import 'package:example/src/dal/stories_data.access.dart';
 import 'package:example/src/models/book.dart';
 import 'package:example/src/routing/counter_path.dart';
+import 'package:example/src/routing/story/stories_path.dart';
+import 'package:example/src/routing/story/story_path.dart';
 import 'package:example/src/screens/counter_screen.dart';
+import 'package:example/src/screens/story/stories_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:example/src/routing/book_details_path.dart';
 import 'package:example/src/routing/book_list_path.dart';
@@ -40,36 +48,43 @@ void main() {
   runApp(theApp.riverpodApp);
 }
 
-NavAwareApp get theApp => NavAwareApp (
+TabNavAwareApp get theApp => TabNavAwareApp(
     applicationId: "nav-aware-books-sample",
     appTitle: 'Books With Navigation',
     theme: myTheme,
-    initialPath: CounterPath(tabIndex: CounterPath.defaultTabIndex),
+    initialPath: CounterPath(),
     key: const ValueKey("books-sample-app"),
 
-    routeParsers: const [
-      BookListPath.fromUri,
-      BookDetailsPath.fromUri,
-      UserProfilePath.fromUri,
-      SettingsPath.fromUri,
-      SettingsModalChildPath.fromUri,
-      CounterPath.fromUri
-    ],
-
     globalRestorableProviders: [
-      Books.selectedBookProvider,
-      CounterScreen.counterProvider
+      ...Books.ephemerals,
+      ...CounterScreen.ephemerals,
+      ...Stories.ephemerals,
+      ...StoryEx.ephemerals
     ],
 
     tabs: [
-      TabInfo(Icons.home, title: 'Books',
-          rootScreenFactory: (tabIndex, ref) => BooksListScreen(tabIndex)),
-      TabInfo(Icons.plus_one, title: 'Counter',
-          rootScreenFactory: (tabIndex, ref) => CounterScreen(tabIndex)),
-      TabInfo(Icons.settings, title: 'Settings',
-          rootScreenFactory: (tabIndex, ref) => SettingsScreen(tabIndex)),
-      TabInfo(Icons.person, title: 'User',
-          rootScreenFactory: (tabIndex, ref) => UserProfileScreen(tabIndex)),
+      // Comment out this section to enable non-tab navigation demo
+      TabScreenSlot(Icons.home, title: 'Books',
+          rootScreenFactory: (tabIndex, ref) => BooksListScreen(tabIndex),
+          routeParsers: [ BookListPath.fromUri, BookDetailsPath.fromUri ]
+      ),
+      TabScreenSlot(Icons.plus_one, title: 'Counter',
+          rootScreenFactory: (tabIndex, ref) => CounterScreen(tabIndex),
+          routeParsers: [ CounterPath.fromUri ]
+      ),
+      TabScreenSlot(Icons.settings, title: 'Settings',
+          rootScreenFactory: (tabIndex, ref) => SettingsScreen(tabIndex),
+          routeParsers: [ SettingsPath.fromUri, SettingsModalChildPath.fromUri ]
+      ),
+      TabScreenSlot(Icons.person, title: 'User',
+          rootScreenFactory: (tabIndex, ref) => UserProfileScreen(tabIndex),
+          routeParsers: [ UserProfilePath.fromUri ]
+      ),
+      TabScreenSlot(
+          Icons.interests, title: "Stories",
+          rootScreenFactory: (tabIndex, ref) => StoriesListScreen(tabIndex),
+          routeParsers: [ StoriesPath.fromUri, StoryPath.fromUri ]
+      )
     ]
 );
 ```
@@ -99,7 +114,8 @@ The tasks one would have to solve, with no framework to help, are:
 - Compute which route to display in web browser's address bar based on the current app state.
 - Determine which part of the app state to alter when a screen is removed from the nav stack by user hitting the back navigation arrow.
 - Compute the state from the URL entered in the web browser address bar, including support of the 404 route and screen.
-- Assuming bottom navigation tab app UI layout, we need to separate tab navigation state management from the screens' child/overlay screens.
+- With bottom navigation tab app UI layout, we need to separate tab navigation state management 
+  from the screens' child/overlay screens.
 
 ## Solution Outline
 
