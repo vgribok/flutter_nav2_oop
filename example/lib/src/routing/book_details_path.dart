@@ -1,4 +1,4 @@
-import 'package:example/src/models/book.dart';
+import 'package:example/src/dal/books_data_access.dart';
 import 'package:flutter_nav2_oop/all.dart';
 import 'book_list_path.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,11 +19,6 @@ class BookDetailsPath extends DetailsRoutePath {
     });
 
   @override
-  bool configureStateFromUri(WidgetRef ref) {
-    if(!Books.isValidBookId(id)) {
-      return false;
-    }
-    Books.setSelectedBook(ref, id);
-    return true;
-  }
+  Future<bool> configureStateFromUriFuture(WidgetRef ref) =>
+      BookData.validateAndSetSelectedBookId(ref, id);
 }

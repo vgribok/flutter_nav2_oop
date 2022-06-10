@@ -1,4 +1,4 @@
-import 'package:example/src/dal/stories_data.access.dart';
+import 'package:example/src/dal/stories_data_access.dart';
 import 'package:example/src/models/stories_models.dart';
 import 'package:example/src/routing/story/story_path.dart';
 import 'package:example/src/widgets/story/story.dart';

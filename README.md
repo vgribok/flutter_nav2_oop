@@ -2,7 +2,7 @@
 
 This repo is a Flutter application starter. You can clone it, run it and start customizing it to make it yours.
 
-It holds a small [library](./lib) and a [sample application](./sample)
+It holds a small [library](./lib) and a [sample application](./example/)
 
 > **TL;DR** If you have tried Flutter Navigator 2.0 (FN2) and  were stymied by its complexity and opacity, fear not: this little (necessarily opinionated) library + tabbed app sample combo will ensure that you will not have to spend cycles writing navigation/routing-related boilerplate code, instead of focusing on your application "meat" code, supplying *[screens](example/lib/src/screens)*, *[routes](example/lib/src/routing)* that are mapped to those screens, and the *[app initialization code](example/lib/main.dart)* wiring together navigation tabs and their "root" screens, to have web & native UI and navigation working out-of-the box:<br/>
 
@@ -22,8 +22,8 @@ Your application `main.dart` will look like this:
     <summary>Click to show imports...</summary>
     
 ```dart
-import 'package:example/src/dal/stories_data.access.dart';
-import 'package:example/src/models/book.dart';
+import 'package:example/src/dal/books_data_access.dart';
+import 'package:example/src/dal/stories_data_access.dart';
 import 'package:example/src/routing/counter_path.dart';
 import 'package:example/src/routing/story/stories_path.dart';
 import 'package:example/src/routing/story/story_path.dart';
@@ -44,48 +44,49 @@ import 'package:flutter_nav2_oop/all.dart';
 </details>
 
 ```dart
+/// Run this file to see tab-based navigation demo
 void main() {
   runApp(theApp.riverpodApp);
 }
 
 TabNavAwareApp get theApp => TabNavAwareApp(
-    applicationId: "nav-aware-books-sample",
-    appTitle: 'Books With Navigation',
-    theme: myTheme,
-    initialPath: CounterPath(),
-    key: const ValueKey("books-sample-app"),
+        applicationId: "nav-aware-books-sample",
+        appTitle: 'Books With Navigation',
+        theme: myTheme,
+        initialPath: CounterPath(),
+        key: const ValueKey("books-sample-app"),
 
-    globalRestorableProviders: [
-      ...Books.ephemerals,
-      ...CounterScreen.ephemerals,
-      ...Stories.ephemerals,
-      ...StoryEx.ephemerals
-    ],
+        globalRestorableProviders: [
+          ...BookData.ephemerals,
+          ...CounterScreen.ephemerals,
+          ...Stories.ephemerals,
+          ...StoryEx.ephemerals
+        ],
 
-    tabs: [
-      // Comment out this section to enable non-tab navigation demo
-      TabScreenSlot(Icons.home, title: 'Books',
-          rootScreenFactory: (tabIndex, ref) => BooksListScreen(tabIndex),
-          routeParsers: [ BookListPath.fromUri, BookDetailsPath.fromUri ]
-      ),
-      TabScreenSlot(Icons.plus_one, title: 'Counter',
-          rootScreenFactory: (tabIndex, ref) => CounterScreen(tabIndex),
-          routeParsers: [ CounterPath.fromUri ]
-      ),
-      TabScreenSlot(Icons.settings, title: 'Settings',
-          rootScreenFactory: (tabIndex, ref) => SettingsScreen(tabIndex),
-          routeParsers: [ SettingsPath.fromUri, SettingsModalChildPath.fromUri ]
-      ),
-      TabScreenSlot(Icons.person, title: 'User',
-          rootScreenFactory: (tabIndex, ref) => UserProfileScreen(tabIndex),
-          routeParsers: [ UserProfilePath.fromUri ]
-      ),
-      TabScreenSlot(
-          Icons.interests, title: "Stories",
-          rootScreenFactory: (tabIndex, ref) => StoriesListScreen(tabIndex),
-          routeParsers: [ StoriesPath.fromUri, StoryPath.fromUri ]
-      )
-    ]
+        tabs: [
+          // Comment out this section to enable non-tab navigation demo
+          TabScreenSlot(Icons.home, title: 'Books',
+                  rootScreenFactory: (tabIndex, ref) => BooksListScreen(tabIndex),
+                  routeParsers: [ BookListPath.fromUri, BookDetailsPath.fromUri ]
+          ),
+          TabScreenSlot(Icons.plus_one, title: 'Counter',
+                  rootScreenFactory: (tabIndex, ref) => CounterScreen(tabIndex),
+                  routeParsers: [ CounterPath.fromUri ]
+          ),
+          TabScreenSlot(Icons.settings, title: 'Settings',
+                  rootScreenFactory: (tabIndex, ref) => SettingsScreen(tabIndex),
+                  routeParsers: [ SettingsPath.fromUri, SettingsModalChildPath.fromUri ]
+          ),
+          TabScreenSlot(Icons.person, title: 'User',
+                  rootScreenFactory: (tabIndex, ref) => UserProfileScreen(tabIndex),
+                  routeParsers: [ UserProfilePath.fromUri ]
+          ),
+          TabScreenSlot(
+                  Icons.interests, title: "Stories",
+                  rootScreenFactory: (tabIndex, ref) => StoriesListScreen(tabIndex),
+                  routeParsers: [ StoriesPath.fromUri, StoryPath.fromUri ]
+          )
+        ]
 );
 ```
 

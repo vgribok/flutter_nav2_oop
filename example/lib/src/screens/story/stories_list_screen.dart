@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_nav2_oop/all.dart';
 import 'package:example/src/routing/story/stories_path.dart';
-import 'package:example/src/dal/stories_data.access.dart';
+import 'package:example/src/dal/stories_data_access.dart';
 
 class StoriesListScreen extends TabNavScreen {
   const StoriesListScreen(super.tabIndex,

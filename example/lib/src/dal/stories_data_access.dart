@@ -49,13 +49,13 @@ class Stories {
   );
 
   static Future<Stories> getUnwatchedFuture(WidgetRef ref) =>
-      ref.read(_storiesProvider.future);
+    _storiesProvider.getUnwatchedFuture(ref);
 
   static AsyncValue<Stories> watch(WidgetRef ref) =>
-      ref.watch(_storiesProvider);
+      _storiesProvider.watch(ref);
 
   static AsyncValue<Stories> getUnwatched(WidgetRef ref) =>
-      ref.read(_storiesProvider);
+      _storiesProvider.getUnwatched(ref);
 
   static final RestorableProvider<RestorableIntN> _currentStoryIdProvider = RestorableProvider(
           (ref) => RestorableIntN(null),
@@ -67,7 +67,7 @@ class Stories {
   static Story? watchForCurrentStory(WidgetRef ref) {
     final int? currentStoryId = ref.watch(_currentStoryIdProvider).value;
     if(currentStoryId == null) return null;
-    final stories = watch(ref).value;
+    final Stories? stories = watch(ref).value;
     return stories?.getById(currentStoryId);
   }
 
@@ -166,5 +166,25 @@ extension StoryEx on Story {
     _nextPageScheduler.delayOperation(
       Duration(milliseconds: delayMillisec), () => setCurrentPage(ref, pageToShow)
     );
+  }
+
+  static Future<bool> validateAndSetCurrentStoryAndPage(WidgetRef ref, int storyId, int? pageId) async {
+
+    final Stories stories = await Stories.getUnwatchedFuture(ref);
+    final Story? story = stories.getById(storyId);
+    if(story == null) return false;
+
+    StoryPage? page = story.getPageById(pageId);
+    if(page == null) {
+      if(pageId != null) return false; // pageId was invalid for the specified story
+      if(story.pages.isNotEmpty) {
+        page = story[0];
+      }
+    }
+
+    Stories.setCurrentStory(ref, story);
+    StoryEx.setCurrentPage(ref, page);
+
+    return true;
   }
 }

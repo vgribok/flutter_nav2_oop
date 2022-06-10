@@ -1,5 +1,5 @@
-import 'package:example/src/dal/stories_data.access.dart';
-import 'package:example/src/models/book.dart';
+import 'package:example/src/dal/books_data_access.dart';
+import 'package:example/src/dal/stories_data_access.dart';
 import 'package:example/src/routing/counter_path.dart';
 import 'package:example/src/routing/story/stories_path.dart';
 import 'package:example/src/routing/story/story_path.dart';
@@ -30,7 +30,7 @@ TabNavAwareApp get theApp => TabNavAwareApp(
   key: const ValueKey("books-sample-app"),
 
   globalRestorableProviders: [
-    ...Books.ephemerals,
+    ...BookData.ephemerals,
     ...CounterScreen.ephemerals,
     ...Stories.ephemerals,
     ...StoryEx.ephemerals

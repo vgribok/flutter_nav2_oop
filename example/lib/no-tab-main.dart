@@ -1,4 +1,4 @@
-import 'package:example/src/models/book.dart';
+import 'package:example/src/dal/books_data_access.dart';
 import 'package:example/src/routing/counter_path.dart';
 import 'package:example/src/screens/counter_screen.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +36,7 @@ NavAwareApp get theApp => NavAwareApp (
     ],
 
     globalRestorableProviders: [
-      ...Books.ephemerals,
+      ...BookData.ephemerals,
       ...CounterScreen.ephemerals
     ]
 );

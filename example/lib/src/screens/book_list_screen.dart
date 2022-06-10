@@ -1,3 +1,4 @@
+import 'package:example/src/dal/books_data_access.dart';
 import 'package:example/src/models/book.dart';
 import 'package:example/src/routing/book_list_path.dart';
 import 'package:flutter/material.dart';
@@ -13,25 +14,29 @@ class BooksListScreen extends TabNavScreen { // Subclass NavScreen to enable non
 
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) =>
-    ListView(children: [
-      for (var book in Books.allBooks)
-        ListTile(
-          title: Text(book.title),
-          subtitle: Text(book.author),
-          onTap: () => Books.setSelectedBook(ref, book.id),
-          key: book.key,
-        )
-    ]);
+    BookData.watchForBooks(ref).when(
+      error: (e, stack) => Center(child: Text("Error: $e")),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      data: (books) =>
+        ListView(children: [
+          for (Book book in books)
+            ListTile(
+              title: Text(book.title),
+              subtitle: Text(book.author),
+              onTap: () => BookData.setSelectedBook(ref, book),
+              key: book.key,
+            )
+        ])
+    );
 
   @override
   NavScreen? topScreen(WidgetRef ref) {
-    final int? selectedBookId = Books.watchForSelectedBook(ref);
+    final Book? selectedBook = BookData.watchForSelectedBook(ref);
 
-    return selectedBookId == null
+    return selectedBook == null
         ? null
         : BookDetailsScreen(tabIndex, // Comment this line to enable non-tab navigation
-            selectedBook: Book.fromId(selectedBookId),
-            selectedBookId: selectedBookId,
+            selectedBook: selectedBook
         );
     }
 

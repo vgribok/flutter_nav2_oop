@@ -21,7 +21,7 @@ class StoryLayout extends StatelessWidget {
   Widget build(BuildContext context) =>
       Column(children: [
               const Padding(padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5)),
-              StoryList(stories, selectedStoryId: selectedStoryId),
+              ProfileBubbleList(stories, selectedStoryId: selectedStoryId),
               const Padding(padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5)),
               Expanded(child:
                 Padding(child: child,

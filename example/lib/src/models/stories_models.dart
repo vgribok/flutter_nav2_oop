@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-
-@immutable
 class Bubble
 {
   final String imageURL;
@@ -9,7 +6,6 @@ class Bubble
   const Bubble({required this.imageURL, required this.text});
 }
 
-@immutable
 class StoryPage
 {
   final int id;
@@ -19,7 +15,6 @@ class StoryPage
   const StoryPage({required this.imageURL, required this.id, this.duration});
 }
 
-@immutable
 class StoryHeader {
   final int id;
   final Bubble bubble;
@@ -32,7 +27,6 @@ class StoryHeader {
   });
 }
 
-@immutable
 class Story extends StoryHeader {
 
   final List<StoryPage> pages;

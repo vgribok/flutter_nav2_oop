@@ -1,5 +1,4 @@
-import 'package:example/src/dal/stories_data.access.dart';
-import 'package:example/src/models/stories_models.dart';
+import 'package:example/src/dal/stories_data_access.dart';
 import 'package:example/src/routing/story/stories_path.dart';
 import 'package:flutter_nav2_oop/all.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,37 +23,18 @@ class StoryPath extends NestedRoutePath {
   }
 
   static RoutePath? fromUri(Uri uri) {
-    Map<String, String>? map = uri.segmentsFromUri([ StoriesPath.resourceName, resourceName ]);
-    int? pageId;
-    if(map == null) {
-      map = uri.segmentsFromUri([ StoriesPath.resourceName]);
-      if(map == null) return null;
-    }else {
-      pageId = int.tryParse(map[resourceName] ?? "");
-      if(pageId == null) return null;
-    }
+    Map<String, String>? map = uri.segmentsFromUri([ StoriesPath.resourceName, resourceName ])
+                                ?? uri.segmentsFromUri([ StoriesPath.resourceName ]);
+    if(map == null) return null;
+
+    int? pageId = int.tryParse(map[resourceName] ?? "");
+    if(pageId == null) return null;
+
     int? storyId = int.tryParse(map[StoriesPath.resourceName] ?? "");
     return storyId == null ? null : StoryPath(storyId: storyId, pageId: pageId);
   }
 
   @override
-  Future<bool> configureStateFromUriFuture(WidgetRef ref) async {
-
-    final Stories stories = await Stories.getUnwatchedFuture(ref);
-    final Story? story = stories.getById(storyId);
-    if(story == null) return false;
-
-    StoryPage? page = story.getPageById(pageId);
-    if(page == null) {
-      if(pageId != null) return false; // pageId was invalid for the specified story
-      if(story.pages.isNotEmpty) {
-        page = story[0];
-      }
-    }
-
-    Stories.setCurrentStory(ref, story);
-    StoryEx.setCurrentPage(ref, page);
-
-    return true;
-  }
+  Future<bool> configureStateFromUriFuture(WidgetRef ref) =>
+      StoryEx.validateAndSetCurrentStoryAndPage(ref, storyId, pageId);
 }
