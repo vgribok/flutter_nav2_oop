@@ -24,7 +24,7 @@ class CounterScreen extends TabNavScreen { // Subclass NavScreen to enable non-t
   @protected
   Widget? buildFloatingActionButton(BuildContext context, WidgetRef ref) =>
       FloatingActionButton(
-          onPressed: () => _counterProvider.writable(ref).value++,
+          onPressed: () => ref.read(_counterProvider).value++,
           tooltip: 'Increment',
           backgroundColor: Theme.of(context).primaryColor,
           child: const Icon(Icons.add)

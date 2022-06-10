@@ -32,7 +32,7 @@ class NavAwareApp extends _NavAwareAppBase<NavModel> {
   RestorableProvider get navModelProvider => _privateNavModelProvider;
 
   static NavModel navModelFactory(WidgetRef ref) =>
-      _privateNavModelProvider.writable(ref).value;
+      ref.read(_privateNavModelProvider).value;
 
   static NavModel watchNavModelFactory(WidgetRef ref) =>
       ref.watch(_privateNavModelProvider).value;

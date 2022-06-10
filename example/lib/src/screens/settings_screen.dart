@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SettingsScreen extends TabNavScreen { // Subclass NavScreen to enable non-tab navigation
 
-  static final showSettingsDialogProvider = StateProvider<bool>((ref) => false);
+  static final StateProvider<bool> showSettingsDialogProvider = StateProvider<bool>((ref) => false);
 
   const SettingsScreen(super.tabIndex, // Comment super.tabIndex to enable non-tab navigation
       {super.key}) :

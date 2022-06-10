@@ -11,6 +11,7 @@ import 'package:example/src/screens/book_list_screen.dart';
 import 'package:example/theme.dart';
 import 'package:flutter_nav2_oop/all.dart';
 
+/// Run this file to see NON-tab-based navigation demo
 void main() {
   runApp(theApp.riverpodApp);
 }

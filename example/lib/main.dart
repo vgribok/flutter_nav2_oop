@@ -17,6 +17,7 @@ import 'package:example/src/screens/user_profile_screen.dart';
 import 'package:example/theme.dart';
 import 'package:flutter_nav2_oop/all.dart';
 
+/// Run this file to see tab-based navigation demo
 void main() {
   runApp(theApp.riverpodApp);
 }
