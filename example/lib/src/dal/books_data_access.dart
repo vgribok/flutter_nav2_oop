@@ -21,35 +21,43 @@ class BookData {
     ];
   });
 
-  static Future<List<Book>> getUnwatchedBooksFuture(WidgetRef ref) =>
-    _booksProvider.getUnwatchedFuture(ref);
   static AsyncValue<List<Book>> watchForBooks(WidgetRef ref) =>
     _booksProvider.watch(ref);
 
   /// We need to store selected book as a Restorable to maintain its state
   /// even when its route is not store in the Navigator history.
-  static final RestorableProvider<RestorableIntN> _selectedBookProvider = RestorableProvider(
+  static final RestorableProvider<RestorableIntN> _selectedBookIdProvider =
+      RestorableProvider(
           (_) => RestorableIntN(null),
-      restorationId: "selected-book-id"
-  );
+          restorationId: "selected-book-id"
+      );
 
-  static List<RestorableProvider> get ephemerals => [_selectedBookProvider];
+  static List<RestorableProvider> get ephemerals => [_selectedBookIdProvider];
 
-  static Book? watchForSelectedBook(WidgetRef ref) {
-    final int? selectedBookId = ref.watch(_selectedBookProvider).value;
-    if(selectedBookId == null) return null;
-    final List<Book>? books = watchForBooks(ref).value;
-    return books?.firstSafe((book) => book.id == selectedBookId);
-  }
+  static final StateProvider<Book?> _selectedBookProvider =
+    StateProvider<Book?>(
+      (ref) {
+        final int? selectedBookId = ref.watch(_selectedBookIdProvider).value;
+        if(selectedBookId == null) return null;
+        final List<Book>? books = ref.watch(_booksProvider).value;
+        return bookById(books, selectedBookId);
+      }
+    );
+
+  static Book? bookById(List<Book>? books, int? bookId) =>
+    bookId == null ? null : books?.firstSafe((book) => book.id == bookId);
+
+  static Book? watchForSelectedBook(WidgetRef ref) =>
+      _selectedBookProvider.watch(ref);
 
   static void setSelectedBook(WidgetRef ref, Book? book) =>
-      ref.read(_selectedBookProvider).value = book?.id;
+      ref.read(_selectedBookIdProvider).value = book?.id;
 
   static Future<bool> validateAndSetSelectedBookId(WidgetRef ref, int bookId) async {
-    final List<Book> books = await BookData.getUnwatchedBooksFuture(ref);
-    final Book? selectedBook = books.firstSafe((book) => book.id == bookId);
+    final List<Book> books = await _booksProvider.getUnwatchedFuture(ref);
+    final Book? selectedBook = bookById(books, bookId);
     if(selectedBook == null) return false;
-    BookData.setSelectedBook(ref, selectedBook);
+    setSelectedBook(ref, selectedBook);
     return true;
   }
 }

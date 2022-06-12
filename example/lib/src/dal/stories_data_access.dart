@@ -108,9 +108,7 @@ extension StoryEx on Story {
   static List<RestorableProvider> get ephemerals => [_currentPageIdProvider];
 
   static StoryPage? watchForCurrentPage(WidgetRef ref) {
-    final int? currentPageId = ref
-        .watch(_currentPageIdProvider)
-        .value;
+    final int? currentPageId = ref.watch(_currentPageIdProvider).value;
     if (currentPageId == null) return null;
     final Story? currentStory = Stories.watchForCurrentStory(ref);
     return currentStory?.getPageById(currentPageId);
@@ -127,7 +125,7 @@ extension StoryEx on Story {
 
   int? indexOf(StoryPage? page) {
     if (page == null) return null;
-    int index = pages.indexOf(page);
+    final int index = pages.indexOf(page);
     return index < 0 ? null : index;
   }
 
@@ -137,8 +135,7 @@ extension StoryEx on Story {
     if(nextPageIndex >= pages.length && loop) {
       nextPageIndex = 0;
     }
-    if(nextPageIndex >= pages.length) return null;
-    return pages[nextPageIndex];
+    return this[nextPageIndex];
   }
 
   StoryPage? operator [](int? index) =>
