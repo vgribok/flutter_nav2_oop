@@ -1,0 +1,39 @@
+# If `amplify mock api` seems to be using old GQL schema and wot working properly as a result,
+# use ./ddb-amp-local.ps1 script to access DDB local and clean it up.
+# Bug:
+# Admin UI, DataStore page fails to load with blank page rendered.
+
+enum ActivityType 
+{
+  Other,
+  Active_Land_Hiking,
+  Active_Water_Diving,
+  Active_Water_Snorkeling
+}
+
+# A log entry for a hike, a dive, a wine-tasting excursion, cruise ship landing, etc.
+type Activity @model
+  @key(name: "UserExcursions", fields: ["personId", "type", "date", "orderOrTime"])
+  #@key(name: "byId", fields: ["id"], queryField:"byId")
+  @auth(
+    rules: [
+      { allow: owner, ownerField: "personId" }
+      { allow: groups, groups: ["GsAdmins","GsModerators"] }
+      #{ allow: groups, groups: ["Managers"], queries: null, mutations: [create, update, delete] }
+      #{ allow: groups, groups: ["Employees"], queries: [get, list], mutations: null }
+    ]
+  ) 
+{
+  id: ID!
+  personId: String
+  date: AWSDate!
+  orderOrTime: Int! # activity order within the day, or time in seconds since midnight
+  type: ActivityType!
+  userLogEntryNumber: Int # user-supplied log entry number
+  notes: String
+  guidePersonId: String # null, if not guided
+  providerId: String # null, if either self-guided, or guided by a non-affiliated private guide
+  locationLatitude: Float
+  locationLongitude: Float
+  trip: String
+}
