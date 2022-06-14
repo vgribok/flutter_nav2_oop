@@ -23,6 +23,7 @@ class TabNavAwareApp extends _NavAwareAppBase<TabNavModel> {
     NavControlType? navType,
     /// Restorable state providers with global scope
     super.globalRestorableProviders,
+    super.appGlobalStateInitProvider,
     super.key
   })
   {
