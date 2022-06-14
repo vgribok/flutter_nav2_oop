@@ -32,26 +32,34 @@ abstract class _NavAwareRouterDelegateBase<T extends _NavModelBase>
   _NavAwareRouterDelegateBase(this.ref);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) =>
+    _NavAwareAppBase.appInitProvider.watch(ref).when(
+        loading: () =>
+            _navigatorWidget(context, [const AppInitWaitScreen()]),
+        error: (err, stack) =>
+            _navigatorWidget(context, [AppInitErrorScreen(err, stack)]),
+        data: (_) =>
+            // Call the function converting state into the stack of screens.
+            _navigatorWidget(context, navModel.buildNavigatorScreenStack(ref))
+    );
+
+  Widget _navigatorWidget(BuildContext context, Iterable<NavScreen> screens) {
+
     _attachDelegateListenerToNavStateNotifier();
 
-    // Call the function converting state
-    // into the stack of screens.
-    final List<Page> pageStack =
-      navModel.buildNavigatorScreenStack(ref)
-          .map((screen) => screen._page)
-          .toList();
+    final pageStack = screens.map((screen) => screen._page).toList();
 
     // Feed page stack and standard back arrow
     // handler to the Navigator object
     return Navigator(
-      key: navigatorKey,
-      transitionDelegate: NoAnimationTransitionDelegate(),
-      pages: pageStack,
-      onPopPage: _onBackButtonPress,
-      restorationScopeId: "main-navigator"
+        key: navigatorKey,
+        transitionDelegate: NoAnimationTransitionDelegate(),
+        pages: pageStack,
+        onPopPage: _onBackButtonPress,
+        restorationScopeId: "main-navigator"
     );
   }
+
 
   /// Standard handler of the back arrow navigation button
   bool _onBackButtonPress(Route route, dynamic result) {

@@ -5,6 +5,8 @@ library flutter_nav2_oop;
 // TODO: publish the library on pub.dev
 
 import 'package:flutter/material.dart';
+import 'package:flutter_nav2_oop/src/screens/app_init_error_screen.dart';
+import 'package:flutter_nav2_oop/src/screens/app_init_wait_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_restorable/flutter_riverpod_restorable.dart';
 
