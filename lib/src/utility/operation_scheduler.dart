@@ -1,5 +1,13 @@
 part of flutter_nav2_oop;
 
+/// Prints only in debug mode and not in release mode. Prevents leaking of
+/// sensitive information.
+void safePrint(Object? arg) {
+  if (kDebugMode && arg != null) {
+    debugPrint(arg.toString());
+  }
+}
+
 /// Scheduled a delayed operation.
 /// Cancels previous operation if one was scheduled and has not run yet.
 class CancellableScheduledOperation {
@@ -8,18 +16,18 @@ class CancellableScheduledOperation {
   Function(CancellableScheduledOperation, bool)? _onFinish;
 
   void onTimerTick(Future myFuture) {
-    debugPrint("Tick arrived for operation ${myFuture.hashCode}");
+    safePrint("Tick arrived for operation ${myFuture.hashCode}");
     if(myFuture != _timerFuture) {
-      debugPrint("Ignoring cancelled future ${myFuture.hashCode}");
+      safePrint("Ignoring cancelled future ${myFuture.hashCode}");
       return;
     }
     bool success = false;
     if(_operation != null) {
-      debugPrint("Attempting scheduled operation ${myFuture.hashCode}");
+      safePrint("Attempting scheduled operation ${myFuture.hashCode}");
       try {
         _operation!();
       }catch(e) {
-        debugPrint("Scheduled operation ${myFuture.hashCode} has thrown an exception \"$e\"");
+        safePrint("Scheduled operation ${myFuture.hashCode} has thrown an exception \"$e\"");
       }
       success = true;
     }
@@ -45,7 +53,7 @@ class CancellableScheduledOperation {
       {void Function(CancellableScheduledOperation, bool)? onFinish}
   ) {
     final future = Future.delayed(delay);
-    debugPrint("Delaying operation ${future.hashCode} by $delay");
+    safePrint("Delaying operation ${future.hashCode} by $delay");
     scheduleOperation(future, operation, onFinish: onFinish);
   }
 
@@ -57,7 +65,7 @@ class CancellableScheduledOperation {
     cancelOperation();
 
     if(onFinish != null && operationAfterFuture == null) {
-      debugPrint("Can't use onFinish() if operation is empty");
+      safePrint("Can't use onFinish() if operation is empty");
       return;
     }
 
@@ -65,7 +73,7 @@ class CancellableScheduledOperation {
     _operation = operationAfterFuture;
     _onFinish = onFinish;
     _timerFuture = future;
-    debugPrint("Scheduling operation ${_timerFuture.hashCode}");
+    safePrint("Scheduling operation ${_timerFuture.hashCode}");
     _timerFuture!.then((value) => onTimerTick(future!));
   }
 }

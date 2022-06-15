@@ -98,7 +98,7 @@ class TabNavModel extends _NavModelBase {
 
     if (selectedTabIndex < 0 || selectedTabIndex >= _tabs.length) {
       // If `selectedTabIndex` is out of range, set it to 0
-      debugPrint(
+      safePrint(
           'Selected tab index $selectedTabIndex is outside the [0..${_tabs.length - 1}] range. Setting index to 0.');
       _selectedTabIndex = 0;
     } else {

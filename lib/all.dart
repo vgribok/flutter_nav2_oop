@@ -9,6 +9,7 @@ import 'package:flutter_nav2_oop/src/screens/app_init_error_screen.dart';
 import 'package:flutter_nav2_oop/src/screens/app_init_wait_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_restorable/flutter_riverpod_restorable.dart';
+import 'package:flutter/foundation.dart';
 
 part './src/models/root_screen_slot.dart';
 part './src/models/nav_model.dart';

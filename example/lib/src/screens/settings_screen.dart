@@ -1,10 +1,11 @@
 import 'package:example/src/routing/settings_path.dart';
+import 'package:example/src/screens/authentication_screen.dart';
 import 'package:example/src/screens/settings_child_modal_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nav2_oop/all.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SettingsScreen extends TabNavScreen { // Subclass NavScreen to enable non-tab navigation
+class SettingsScreen extends AuthenticatedScreen { // Subclass NavScreen to enable non-tab navigation
 
   static final StateProvider<bool> showSettingsDialogProvider = StateProvider<bool>((ref) => false);
 
@@ -13,7 +14,7 @@ class SettingsScreen extends TabNavScreen { // Subclass NavScreen to enable non-
       super(screenTitle: 'Settings');
 
   @override
-  Widget buildBody(BuildContext context, WidgetRef ref) {
+  Widget buildAuthenticatedBody(BuildContext context, WidgetRef ref) {
 
     final RestorableEnumN<NavControlType?> restorableNavControlType =
         ref.watch(TabNavAwareApp.navControlTypeProvider);

@@ -1,3 +1,4 @@
+import 'package:example/src/dal/amplify_dal.dart';
 import 'package:example/src/dal/books_data_access.dart';
 import 'package:example/src/dal/stories_data_access.dart';
 import 'package:example/src/routing/counter_path.dart';
@@ -36,7 +37,7 @@ TabNavAwareApp get theApp => TabNavAwareApp(
   appTitle: 'Books With Navigation',
   theme: myTheme,
   initialPath: CounterPath(),
-  appGlobalStateInitProvider: FutureProvider(_appInitSimulator),
+  appGlobalStateInitProvider: appInitFutureProvider,
   key: const ValueKey("books-sample-app"),
 
   globalRestorableProviders: [

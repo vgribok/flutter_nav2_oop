@@ -33,6 +33,7 @@ dependencies:
   flutter_nav2_oop:
     path: ../
   flutter_riverpod_restorable: ^1.0.1
+  amplify_authenticator: ^0.1.2
 
 dev_dependencies:
   flutter_lints: ^1.0.4
