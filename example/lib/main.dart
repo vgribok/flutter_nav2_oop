@@ -16,10 +16,19 @@ import 'package:example/src/screens/settings_screen.dart';
 import 'package:example/src/screens/user_profile_screen.dart';
 import 'package:example/theme.dart';
 import 'package:flutter_nav2_oop/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Run this file to see tab-based navigation demo
 void main() {
   runApp(theApp.riverpodApp);
+}
+
+/// Simulating some long-ish async app initialization
+/// logic, possibly with exceptions thrown
+Future<void> _appInitSimulator(Ref ref) async {
+  // Simulating an error in the initialization routine
+  await Future.delayed(const Duration(milliseconds: 3000));
+  //throw UnimplementedError("Something bad has happened..");
 }
 
 TabNavAwareApp get theApp => TabNavAwareApp(
@@ -27,6 +36,7 @@ TabNavAwareApp get theApp => TabNavAwareApp(
   appTitle: 'Books With Navigation',
   theme: myTheme,
   initialPath: CounterPath(),
+  appGlobalStateInitProvider: FutureProvider(_appInitSimulator),
   key: const ValueKey("books-sample-app"),
 
   globalRestorableProviders: [

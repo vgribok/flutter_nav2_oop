@@ -19,6 +19,7 @@ class NavAwareApp extends _NavAwareAppBase<NavModel> {
     /// Restorable state providers with global scope
     super.globalRestorableProviders,
     required RootScreenFactory rootScreenFactory,
+    super.appGlobalStateInitProvider,
     super.key
   }) {
     _privateNavModelProvider = RestorableProvider(
@@ -58,6 +59,7 @@ abstract class _NavAwareAppBase<T extends _NavModelBase> extends ConsumerWidget 
   final String applicationId;
   final ThemeData? _theme;
   final List<RestorableProvider<RestorableProperty?>>? globalRestorableProviders;
+  static late FutureProvider<void> appInitProvider;
 
   static late _NavModelBase Function(WidgetRef) navModelFactory;
 
@@ -79,11 +81,15 @@ abstract class _NavAwareAppBase<T extends _NavModelBase> extends ConsumerWidget 
     ThemeData? theme,
     /// Restorable state providers with global scope
     this.globalRestorableProviders,
+    /// FutureProvider combining all global application state
+    /// async initializers
+    FutureProvider<void>? appGlobalStateInitProvider,
     super.key
   }) :
     _appTitle = appTitle,
     _theme = theme
   {
+    appInitProvider = appGlobalStateInitProvider ?? FutureProvider((_) async {});
     navModelFactory = (ref) => navModel(ref);
   }
 
@@ -111,7 +117,7 @@ abstract class _NavAwareAppBase<T extends _NavModelBase> extends ConsumerWidget 
             RestorableProviderRegister(
                 restorationId: 'application-ephemeral-state',
                 providers: restorableProviders,
-                child: router! // ?? const SizedBox.shrink(),
+                child: router!
             )
     );
 
