@@ -46,13 +46,13 @@ app.*.map.json
 /android/app/release
 
 #amplify-do-not-edit-begin
-amplify/\#current-cloud-backend
-amplify/.config/local-*
-amplify/logs
-amplify/mock-data
-amplify/backend/amplify-meta.json
-amplify/backend/awscloudformation
-amplify/backend/.temp
+example/amplify/\#current-cloud-backend
+example/amplify/.config/local-*
+example/amplify/logs
+example/amplify/mock-data
+example/amplify/backend/amplify-meta.json
+example/amplify/backend/awscloudformation
+example/amplify/backend/.temp
 build/
 dist/
 node_modules/
@@ -66,3 +66,4 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
+team-provider-info.json
