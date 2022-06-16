@@ -22,7 +22,7 @@ abstract class FullScreenModalDialog extends NavScreen {
   /// Builds dialog-specific [AbbBar] with the
   /// Cancel icon instead of the back arrow.
   @override
-  PreferredSizeWidget? buildAppBar(BuildContext context, WidgetRef ref) =>
+  AppBar? buildAppBar(BuildContext context, WidgetRef ref) =>
       AppBar(
         title: Text(screenTitle),
         leading: IconButton(icon: const Icon(Icons.cancel), onPressed: () => close(context)),

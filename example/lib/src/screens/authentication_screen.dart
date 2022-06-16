@@ -1,3 +1,4 @@
+import 'package:example/src/dal/amplify_dal.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_nav2_oop/all.dart';
 import 'package:flutter_riverpod/src/consumer.dart';
@@ -18,10 +19,21 @@ abstract class AuthenticatedScreen extends TabNavScreen {
 
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) =>
-      Authenticator(child: AuthenticatedView(child:
-        buildAuthenticatedBody(context, ref)
-      ));
+        AuthenticatedView(key: ValueKey("auth-view-$screenTitle"),
+            child: buildAuthenticatedBody(context, ref)
+        );
 
   @protected
   Widget buildAuthenticatedBody(BuildContext context, WidgetRef ref);
+
+  @override
+  List<Widget>? buildAppBarActions(BuildContext context, WidgetRef ref) =>
+      [
+        if(AmplifyDal.watchForUserSignedInStatus(ref))
+          IconButton(
+              icon: const Icon(Icons.logout),
+              tooltip: "Sign out ${AmplifyDal.watchForAuthenticatedUser(ref)?.username}",
+              onPressed: () => AmplifyDal.signOut()
+          )
+      ];
 }

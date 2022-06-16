@@ -1,3 +1,4 @@
+import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:example/src/dal/amplify_dal.dart';
 import 'package:example/src/dal/books_data_access.dart';
 import 'package:example/src/dal/stories_data_access.dart';
@@ -21,7 +22,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Run this file to see tab-based navigation demo
 void main() {
-  runApp(theApp.riverpodApp);
+  runApp(Authenticator(child: theApp.riverpodApp));
 }
 
 /// Simulating some long-ish async app initialization

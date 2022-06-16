@@ -14,6 +14,9 @@ extension FutureProviderEx<T> on FutureProvider<T> {
   Future<T> getUnwatchedFuture(WidgetRef ref) =>
       ref.read(future);
 
+  Future<T> watchFuture(WidgetRef ref) =>
+      ref.watch(future);
+
   AsyncValue<T> watch(WidgetRef ref) =>
       ref.watch(this);
 

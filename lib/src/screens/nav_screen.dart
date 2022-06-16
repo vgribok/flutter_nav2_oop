@@ -123,7 +123,7 @@ abstract class NavScreen extends ConsumerWidget {
   /// Default implementation calls application-wide [appBarBuilder]
   /// factory method building same app bar for every screen.
   @protected
-  PreferredSizeWidget? buildAppBar(BuildContext context, WidgetRef ref) =>
+  AppBar? buildAppBar(BuildContext context, WidgetRef ref) =>
       appBarBuilder(this, context, ref);
 
   /// Provides ability to set screen-specific actions
