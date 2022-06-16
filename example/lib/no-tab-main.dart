@@ -1,4 +1,3 @@
-import 'package:example/src/dal/amplify_dal.dart';
 import 'package:example/src/dal/books_data_access.dart';
 import 'package:example/src/routing/counter_path.dart';
 import 'package:example/src/screens/counter_screen.dart';
@@ -30,7 +29,7 @@ NavAwareApp get theApp => NavAwareApp (
     appTitle: 'Books With Navigation',
     theme: myTheme,
     initialPath: BookDetailsPath(bookId: 2),
-    appGlobalStateInitProvider: appInitFutureProvider,
+    appGlobalStateInitProvider: FutureProvider(_appInitSimulator),
     key: const ValueKey("books-sample-app"),
 
     // Remove throw and uncomment screen constructor to support non-tab navigation
