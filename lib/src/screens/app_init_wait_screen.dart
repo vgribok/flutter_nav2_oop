@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_nav2_oop/all.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+part of flutter_nav2_oop;
 
 class AppInitWaitScreen extends NavScreen {
   const AppInitWaitScreen({super.key})
@@ -8,15 +6,7 @@ class AppInitWaitScreen extends NavScreen {
 
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) =>
-    Center(child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: const [
-        CircularProgressIndicator(),
-        Divider(thickness: 1, indent: 50, endIndent: 50),
-        Text("Initializing the app...")
-      ]
-    ));
+    const WaitIndicator(waitText: "Initializing the app...");
 
   @override
   RoutePath get routePath => const RoutePath(resource: "/");

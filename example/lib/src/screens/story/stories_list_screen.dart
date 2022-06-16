@@ -14,10 +14,10 @@ class StoriesListScreen extends TabNavScreen {
 
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) =>
-      Stories.watch(ref).when(
-        error: (e, stack) => Center(child: Text("Error: $e")),
-        loading: () => const Center(child: CircularProgressIndicator()),
-        data: (stories) =>
+      AsyncValueAwaiter<Stories>(
+          asyncData: Stories.watch(ref),
+          waitText: "Loading stories...",
+          builder: (stories) =>
             StoryLayout(stories.stories, selectedStoryId: null,
                 child: Column(
                     children: [

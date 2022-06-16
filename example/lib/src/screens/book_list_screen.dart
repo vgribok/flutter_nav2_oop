@@ -14,20 +14,20 @@ class BooksListScreen extends TabNavScreen { // Subclass NavScreen to enable non
 
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) =>
-    BookData.watchForBooks(ref).when(
-      error: (e, stack) => Center(child: Text("Error: $e")),
-      loading: () => const Center(child: CircularProgressIndicator()),
-      data: (books) =>
-        ListView(children: [
-          for (Book book in books)
-            ListTile(
-              title: Text(book.title),
-              subtitle: Text(book.author),
-              onTap: () => BookData.setSelectedBook(ref, book),
-              key: book.key,
-            )
-        ])
-    );
+      AsyncValueAwaiter<List<Book>>(
+        asyncData: BookData.watchForBooks(ref),
+        waitText: "Loading books...",
+        builder: (books) =>
+            ListView(children: [
+              for (Book book in books)
+                ListTile(
+                  title: Text(book.title),
+                  subtitle: Text(book.author),
+                  onTap: () => BookData.setSelectedBook(ref, book),
+                  key: book.key,
+                )
+            ])
+      );
 
   @override
   NavScreen? topScreen(WidgetRef ref) {

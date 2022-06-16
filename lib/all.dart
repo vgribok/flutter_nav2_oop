@@ -5,11 +5,10 @@ library flutter_nav2_oop;
 // TODO: publish the library on pub.dev
 
 import 'package:flutter/material.dart';
-import 'package:flutter_nav2_oop/src/screens/app_init_error_screen.dart';
-import 'package:flutter_nav2_oop/src/screens/app_init_wait_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_restorable/flutter_riverpod_restorable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 part './src/models/root_screen_slot.dart';
 part './src/models/nav_model.dart';
@@ -34,11 +33,16 @@ part './src/screens/404_nav_screen.dart';
 part './src/screens/nav_screen.dart';
 part 'src/screens/tabbed/tabbed_nav_screen.dart';
 part './src/screens/full_screen_modal_dialog.dart';
+part './src/screens/app_init_error_screen.dart';
+part './src/screens/app_init_wait_screen.dart';
 
 part './src/utility/restorable_enum.dart';
-
 part './src/utility/uri_extensions.dart';
 part './src/utility/riverpod_extensions.dart';
 part './src/utility/iterable_extensions.dart';
 part './src/utility/context_extensions.dart';
 part './src/utility/operation_scheduler.dart';
+
+part './src/widgets/async_value_widget.dart';
+part './src/widgets/error_widget.dart';
+part './src/widgets/wait_widget.dart';
