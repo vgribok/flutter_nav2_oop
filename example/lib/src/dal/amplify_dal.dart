@@ -33,7 +33,7 @@ class AmplifyUserSignedInStatusProvider extends FutureProviderFacade<bool> {
     super((ref) async => (await Amplify.Auth.fetchAuthSession()).isSignedIn);
 
   bool watchForSignedInStatus(WidgetRef ref) =>
-      watch(ref).value ?? false;
+      watchAsyncValue(ref).value ?? false;
 
   void attachAuthEventSink(Ref ref) =>
       ref.watch(_authEventProvider);

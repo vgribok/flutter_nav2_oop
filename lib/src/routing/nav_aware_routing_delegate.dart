@@ -33,7 +33,7 @@ abstract class _NavAwareRouterDelegateBase<T extends _NavModelBase>
 
   @override
   Widget build(BuildContext context) =>
-    _NavAwareAppBase.appInitProvider.watch(ref).when(
+    _NavAwareAppBase.appInitProvider.watchAsyncValue(ref).when(
         loading: () =>
             _navigatorWidget(context, [const AppInitWaitScreen()]),
         error: (err, stack) =>

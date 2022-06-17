@@ -27,20 +27,20 @@ abstract class FutureProviderFacade<T> {
   Future<T> watchFuture(WidgetRef ref) =>
       ref.watch(provider.future);
 
-  AsyncValue<T> watch(WidgetRef ref) =>
+  AsyncValue<T> watchAsyncValue(WidgetRef ref) =>
       ref.watch(provider);
 
-  AsyncValue<T> getUnwatched(WidgetRef ref) =>
+  AsyncValue<T> getUnwatchedAsyncValue(WidgetRef ref) =>
       ref.read(provider);
 
   AsyncValue<T> refresh(WidgetRef ref) =>
       ref.refresh(provider);
 
   T? watchForValue(WidgetRef ref) =>
-      watch(ref).value;
+      watchAsyncValue(ref).value;
 
   T? getUnwatchedValue(WidgetRef ref) =>
-      getUnwatched(ref).value;
+      getUnwatchedAsyncValue(ref).value;
 
 
   Future<T> getUnwatchedFuture2(Ref ref) =>
@@ -49,20 +49,20 @@ abstract class FutureProviderFacade<T> {
   Future<T> watchFuture2(Ref ref) =>
       ref.watch(provider.future);
 
-  AsyncValue<T> watch2(Ref ref) =>
+  AsyncValue<T> watchAsyncValue2(Ref ref) =>
       ref.watch(provider);
 
-  AsyncValue<T> getUnwatched2(Ref ref) =>
+  AsyncValue<T> getUnwatchedAsyncValue2(Ref ref) =>
       ref.read(provider);
 
   AsyncValue<T> refresh2(Ref ref) =>
       ref.refresh(provider);
 
   T? watchForValue2(Ref ref) =>
-      watch2(ref).value;
+      watchAsyncValue2(ref).value;
 
   T? getUnwatchedValue2(Ref ref) =>
-      getUnwatched2(ref).value;
+      getUnwatchedAsyncValue2(ref).value;
 }
 
 extension FutureProviderEx<T> on FutureProvider<T> {
@@ -73,11 +73,20 @@ extension FutureProviderEx<T> on FutureProvider<T> {
   Future<T> watchFuture(WidgetRef ref) =>
       ref.watch(future);
 
-  AsyncValue<T> watch(WidgetRef ref) =>
+  AsyncValue<T> watchAsyncValue(WidgetRef ref) =>
       ref.watch(this);
 
-  AsyncValue<T> getUnwatched(WidgetRef ref) =>
+  AsyncValue<T> getUnwatchedAsyncValue(WidgetRef ref) =>
       ref.read(this);
+
+  AsyncValue<T> refresh(WidgetRef ref) =>
+      ref.refresh(this);
+
+  T? watchForValue(WidgetRef ref) =>
+      watchAsyncValue(ref).value;
+
+  T? getUnwatchedValue(WidgetRef ref) =>
+      getUnwatchedAsyncValue(ref).value;
 
 
   Future<T> getUnwatchedFuture2(Ref ref) =>
@@ -86,9 +95,18 @@ extension FutureProviderEx<T> on FutureProvider<T> {
   Future<T> watchFuture2(Ref ref) =>
       ref.watch(future);
 
-  AsyncValue<T> watch2(Ref ref) =>
+  AsyncValue<T> watchAsyncValue2(Ref ref) =>
       ref.watch(this);
 
-  AsyncValue<T> getUnwatched2(Ref ref) =>
+  AsyncValue<T> getUnwatchedAsyncValue2(Ref ref) =>
       ref.read(this);
+
+  AsyncValue<T> refresh2(Ref ref) =>
+      ref.refresh(this);
+
+  T? watchForValue2(Ref ref) =>
+      watchAsyncValue2(ref).value;
+
+  T? getUnwatchedValue2(Ref ref) =>
+      getUnwatchedAsyncValue2(ref).value;
 }

@@ -15,7 +15,7 @@ class BooksListScreen extends TabNavScreen { // Subclass NavScreen to enable non
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) =>
       AsyncValueAwaiter<List<Book>>(
-        asyncData: booksProvider.watch(ref),
+        asyncData: booksProvider.watchAsyncValue(ref),
         waitText: "Loading books...",
         builder: (books) =>
             ListView(children: [
