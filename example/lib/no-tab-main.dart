@@ -30,7 +30,7 @@ NavAwareApp get theApp => NavAwareApp (
     appTitle: 'Books With Navigation',
     theme: myTheme,
     initialPath: BookDetailsPath(bookId: 2),
-    appGlobalStateInitProvider: appInitFutureProvider,
+    appGlobalStateInitProvider: appInitFutureProvider.provider,
     key: const ValueKey("books-sample-app"),
 
     // Remove throw and uncomment screen constructor to support non-tab navigation
@@ -46,7 +46,7 @@ NavAwareApp get theApp => NavAwareApp (
     ],
 
     globalRestorableProviders: [
-      ...BookData.ephemerals,
+      ...booksProvider.ephemerals,
       ...CounterScreen.ephemerals
     ]
 );

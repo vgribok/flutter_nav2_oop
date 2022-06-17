@@ -20,5 +20,5 @@ class BookDetailsPath extends DetailsRoutePath {
 
   @override
   Future<bool> configureStateFromUriFuture(WidgetRef ref) =>
-      BookData.validateAndSetSelectedBookId(ref, id);
+      booksProvider.validateAndSetSelectedBookId(ref, id);
 }

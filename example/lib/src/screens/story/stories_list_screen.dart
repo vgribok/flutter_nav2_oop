@@ -14,11 +14,11 @@ class StoriesListScreen extends TabNavScreen {
 
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) =>
-      AsyncValueAwaiter<Stories>(
-          asyncData: Stories.watch(ref),
+      AsyncValueAwaiter<List<Story>>(
+          asyncData: storiesProvider.watch(ref),
           waitText: "Loading stories...",
           builder: (stories) =>
-            StoryLayout(stories.stories, selectedStoryId: null,
+            StoryLayout(stories, selectedStoryId: null,
                 child: Column(
                     children: [
                       Icon(Icons.north, color: Theme.of(context).textTheme.headlineMedium?.color),
@@ -38,11 +38,11 @@ class StoriesListScreen extends TabNavScreen {
   @override
   NavScreen? topScreen(WidgetRef ref) {
 
-    final Story? selectedStory = Stories.watchForCurrentStory(ref);
+    final Story? selectedStory = storiesProvider.watchForCurrentStory(ref);
     if(selectedStory == null) return null;
 
     final StoryPage? page = StoryEx.watchForCurrentPage(ref);
-    final stories = Stories.watch(ref).value!;
+    final List<Story> stories = storiesProvider.watchForValue(ref)!;
 
     return StoryScreen(tabIndex, stories, selectedStory, page);
   }

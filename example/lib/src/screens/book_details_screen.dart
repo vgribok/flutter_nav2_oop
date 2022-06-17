@@ -35,7 +35,7 @@ class BookDetailsScreen extends TabNavScreen { // Subclass NavScreen to enable n
   @override
   void updateStateOnScreenRemovalFromNavStackTop(WidgetRef ref) {
     super.updateStateOnScreenRemovalFromNavStackTop(ref);
-    BookData.setSelectedBook(ref, null);
+    booksProvider.setSelectedBook(ref, null);
   }
 
   @override

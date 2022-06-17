@@ -13,4 +13,8 @@ extension IterableExtensions<E> on Iterable<E> {
 
     return null;
   }
+
+  /// Converts [Iterable] to a [Map]
+  Map<K,V> toMap<K,V>(K Function(E element) keyGetter, V Function(E element) valueGetter) =>
+      { for (E e in this) keyGetter(e) : valueGetter(e) };
 }

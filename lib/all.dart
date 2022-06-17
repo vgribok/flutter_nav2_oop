@@ -4,6 +4,8 @@ library flutter_nav2_oop;
 // TODO: rename the package as nav2_with_tabs
 // TODO: publish the library on pub.dev
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_restorable/flutter_riverpod_restorable.dart';
@@ -42,6 +44,7 @@ part './src/utility/riverpod_extensions.dart';
 part './src/utility/iterable_extensions.dart';
 part './src/utility/context_extensions.dart';
 part './src/utility/operation_scheduler.dart';
+part './src/utility/object_extensions.dart';
 
 part './src/widgets/async_value_widget.dart';
 part './src/widgets/error_widget.dart';

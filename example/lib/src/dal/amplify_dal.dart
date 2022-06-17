@@ -1,72 +1,90 @@
 import 'dart:async';
-
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:example/amplifyconfiguration.dart';
+import 'package:flutter_nav2_oop/all.dart';
 
-FutureProvider<void> get appInitFutureProvider => FutureProvider((ref) async {
-  await ref.read(AmplifyDal._amplifyInitFutureProvider.future);
-  ref.watch(AmplifyDal._authEventProvider);
-});
+final userSignedInStatusProvider = AmplifyUserSignedInStatusProvider();
+final _amplifyInitFutureProvider = AmplifyInitFutureProvider(userSignedInStatusProvider);
+final appInitFutureProvider = AppInitFutureProvider(_amplifyInitFutureProvider);
+final userProvider = AmplifyUserProvider(userSignedInStatusProvider);
+final userAttributesProvider = AmplifyUserAttributesProvider(userProvider);
 
-class AmplifyDal {
+class AppInitFutureProvider extends FutureProviderFacade<void> {
+  AppInitFutureProvider(AmplifyInitFutureProvider amplifyInitFutureProvider) :
+    super((ref) async {
+      await amplifyInitFutureProvider.getUnwatchedFuture2(ref);
+      // Other initialization calls could be added here
+    });
+}
 
-  static final Provider<StreamSubscription<HubEvent>> _authEventProvider = Provider(
-      (ref) =>
-        Amplify.Hub.listen([HubChannel.Auth], (hubEvent) {
-          ref.refresh(_amplifyUserProvider);
-          ref.refresh(_amplifyUserSignedInProvider);
-          ref.refresh(_amplifyAuthUserAttributesProvider);
+class AmplifyUserSignedInStatusProvider extends FutureProviderFacade<bool> {
 
-          safePrint("Starter app auth event: ${hubEvent.eventName}");
-        }
-      )
-  );
+  late final Provider<StreamSubscription<HubEvent>> _authEventProvider =
+    Provider((ref) =>
+      Amplify.Hub.listen([HubChannel.Auth], (hubEvent) {
+        "Starter app auth event: ${hubEvent.eventName}".debugPrint();
+        refresh2(ref);
+      })
+    );
 
-  static final FutureProvider<void> _amplifyInitFutureProvider = FutureProvider<void>(
+  AmplifyUserSignedInStatusProvider() :
+    super((ref) async => (await Amplify.Auth.fetchAuthSession()).isSignedIn);
+
+  bool watchForSignedInStatus(WidgetRef ref) =>
+      watch(ref).value ?? false;
+
+  void attachAuthEventSink(Ref ref) =>
+      ref.watch(_authEventProvider);
+}
+
+class AmplifyInitFutureProvider extends FutureProviderFacade<void> {
+  AmplifyInitFutureProvider(AmplifyUserSignedInStatusProvider userSignInProvider) :
+    super (
       (ref) async {
         await Amplify.addPlugin(AmplifyAuthCognito());
         await Amplify.configure(amplifyconfig);
-        await ref.watch(_amplifyUserSignedInProvider.future);
+        userSignInProvider.attachAuthEventSink(ref);
+        await userSignInProvider.watchFuture2(ref);
       }
-  );
+    );
+}
 
-  static final FutureProvider<bool> _amplifyUserSignedInProvider = FutureProvider(
-      (ref) async => (await Amplify.Auth.fetchAuthSession()).isSignedIn
-  );
+class AmplifyUserProvider extends FutureProviderFacade<AuthUser?> {
 
-  static bool watchForUserSignedInStatus(WidgetRef ref) =>
-      ref.watch(_amplifyUserSignedInProvider).value ?? false;
-
-  static Future<SignOutResult> signOut() => Amplify.Auth.signOut();
-
-  static final FutureProvider<Iterable<MapEntry<String, String>>?> _amplifyAuthUserAttributesProvider = FutureProvider(
+  AmplifyUserProvider(AmplifyUserSignedInStatusProvider userSignInProvider) :
+    super (
       (ref) async {
-        final bool isUserSignedIn = await ref.watch(_amplifyUserSignedInProvider.future);
-        if(!isUserSignedIn) return null;
-        final userAttributes = await Amplify.Auth.fetchUserAttributes();
-        return userAttributes.map((userAttribute) =>
-            MapEntry(userAttribute.userAttributeKey.key, userAttribute.value));
-      }
-  );
-
-  static Iterable<MapEntry<String, String>>? watchForUserAttributes(WidgetRef ref) =>
-      ref.watch(_amplifyAuthUserAttributesProvider).value;
-
-  static final FutureProvider<AuthUser?> _amplifyUserProvider = FutureProvider(
-      (ref) async {
-        final bool isUserSignedIn = await ref.watch(_amplifyUserSignedInProvider.future);
+        final bool isUserSignedIn = await userSignInProvider.watchFuture2(ref);
         if(!isUserSignedIn) return null;
         return await Amplify.Auth.getCurrentUser();
       }
-  );
+    );
 
-  static AuthUser? watchForAuthenticatedUser(WidgetRef ref) =>
-      ref.watch(_amplifyUserProvider).value;
+  Future<SignOutResult> signOut() => Amplify.Auth.signOut();
 }
 
-extension IterableEx on Iterable {
-  Map<K,V> toMap<K,V>(K Function(dynamic element)? keyGetter, V Function(dynamic element)? valueGetter) =>
-      Map.fromIterable(this, key: keyGetter, value: valueGetter);
+class AmplifyUserAttributesProvider extends FutureProviderFacade<List<MapEntry<String, String>>?> {
+
+  AmplifyUserAttributesProvider(AmplifyUserProvider amplifyUserProvider)
+    : super(
+        (ref) async {
+          final AuthUser? user = await amplifyUserProvider.watchFuture2(ref);
+          if(user == null) return null;
+
+          final List<AuthUserAttribute> userAttributes = await Amplify.Auth.fetchUserAttributes();
+          final List<MapEntry<String, String>> attributes =
+              userAttributes.map((AuthUserAttribute e) => MapEntry(e.userAttributeKey.key, e.value)).toList();
+
+          attributes.insertAll(0,
+            [
+              MapEntry("username", user.username),
+              MapEntry("user_id", user.userId),
+            ]
+          );
+
+          return attributes;
+        }
+  );
 }

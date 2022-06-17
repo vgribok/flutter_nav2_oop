@@ -1,7 +1,6 @@
 import 'package:example/src/dal/amplify_dal.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_nav2_oop/all.dart';
-import 'package:flutter_riverpod/src/consumer.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 
@@ -29,11 +28,11 @@ abstract class AuthenticatedScreen extends TabNavScreen {
   @override
   List<Widget>? buildAppBarActions(BuildContext context, WidgetRef ref) =>
       [
-        if(AmplifyDal.watchForUserSignedInStatus(ref))
+        if(userSignedInStatusProvider.watchForSignedInStatus(ref))
           IconButton(
               icon: const Icon(Icons.logout),
-              tooltip: "Sign out ${AmplifyDal.watchForAuthenticatedUser(ref)?.username}",
-              onPressed: () => AmplifyDal.signOut()
+              tooltip: "Sign out ${userProvider.watchForValue(ref)?.username}",
+              onPressed: () => userProvider.signOut()
           )
       ];
 }

@@ -38,13 +38,13 @@ TabNavAwareApp get theApp => TabNavAwareApp(
   appTitle: 'Books With Navigation',
   theme: myTheme,
   initialPath: CounterPath(),
-  appGlobalStateInitProvider: appInitFutureProvider,
+  appGlobalStateInitProvider: appInitFutureProvider.provider,
   key: const ValueKey("books-sample-app"),
 
   globalRestorableProviders: [
-    ...BookData.ephemerals,
+    ...booksProvider.ephemerals,
     ...CounterScreen.ephemerals,
-    ...Stories.ephemerals,
+    ...storiesProvider.ephemerals,
     ...StoryEx.ephemerals
   ],
 

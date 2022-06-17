@@ -16,17 +16,11 @@ class UserProfileScreen extends AuthenticatedScreen { // Subclass NavScreen to e
   Widget buildAuthenticatedBody(BuildContext context, WidgetRef ref) {
     // if(!AmplifyDal.watchForUserSignedInStatus(ref)) return _noAttributesUI;
 
-    final AuthUser? user = AmplifyDal.watchForAuthenticatedUser(ref);
+    final AuthUser? user = userProvider.watchForValue(ref);
     if(user == null) return _noAttributesUI;
-    final List<MapEntry<String, String>> userAttributes =
-        AmplifyDal.watchForUserAttributes(ref)?.toList() ?? [];
-    userAttributes.insertAll(0, [
-      MapEntry("username", user.username),
-      MapEntry("user_id", user.userId)
-    ]);
 
     return ListView(children: [
-      for (MapEntry<String, String> entry in userAttributes)
+      for (MapEntry<String, String> entry in userAttributesProvider.watchForValue(ref) ?? [])
         ListTile(
           title: Text(entry.key),
           subtitle: Text(entry.value),
@@ -41,7 +35,7 @@ class UserProfileScreen extends AuthenticatedScreen { // Subclass NavScreen to e
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Text('User has no attributes'),
-            TextButton(onPressed: () => AmplifyDal.signOut(), child: const Text("Sign Out"))
+            TextButton(onPressed: () => userProvider.signOut(), child: const Text("Sign Out"))
           ]
         ));
 

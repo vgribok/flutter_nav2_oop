@@ -1,13 +1,5 @@
 part of flutter_nav2_oop;
 
-/// Prints only in debug mode and not in release mode. Prevents leaking of
-/// sensitive information.
-void safePrint(Object? arg) {
-  if (kDebugMode && arg != null) {
-    debugPrint(arg.toString());
-  }
-}
-
 /// Scheduled a delayed operation.
 /// Cancels previous operation if one was scheduled and has not run yet.
 class CancellableScheduledOperation {
