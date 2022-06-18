@@ -74,17 +74,11 @@ class AmplifyUserAttributesProvider extends FutureProviderFacade<List<MapEntry<S
           if(user == null) return null;
 
           final List<AuthUserAttribute> userAttributes = await Amplify.Auth.fetchUserAttributes();
-          final List<MapEntry<String, String>> attributes =
-              userAttributes.map((AuthUserAttribute e) => MapEntry(e.userAttributeKey.key, e.value)).toList();
-
-          attributes.insertAll(0,
-            [
-              MapEntry("username", user.username),
-              MapEntry("user_id", user.userId),
-            ]
-          );
-
-          return attributes;
+          return <MapEntry<String,String>>[
+            MapEntry("username", user.username),
+            MapEntry("user_id", user.userId),
+            ...userAttributes.map((a) => MapEntry(a.userAttributeKey.key, a.value))
+          ];
         }
   );
 }

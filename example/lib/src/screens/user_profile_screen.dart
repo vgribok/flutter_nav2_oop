@@ -13,31 +13,21 @@ class UserProfileScreen extends AuthenticatedScreen { // Subclass NavScreen to e
         super(screenTitle: 'User Profile');
 
   @override
-  Widget buildAuthenticatedBody(BuildContext context, WidgetRef ref) {
-    // if(!AmplifyDal.watchForUserSignedInStatus(ref)) return _noAttributesUI;
-
-    final AuthUser? user = userProvider.watchForValue(ref);
-    if(user == null) return _noAttributesUI;
-
-    return ListView(children: [
-      for (MapEntry<String, String> entry in userAttributesProvider.watchForValue(ref) ?? [])
-        ListTile(
-          title: Text(entry.key),
-          subtitle: Text(entry.value),
-          key: ValueKey("user-attribute-${user.userId}-${entry.key}"),
-        )
-    ]);
-  }
-
-  Widget get _noAttributesUI =>
-        Center(child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Text('User has no attributes'),
-            TextButton(onPressed: () => userProvider.signOut(), child: const Text("Sign Out"))
-          ]
-        ));
+  Widget buildAuthenticatedBody(BuildContext context, WidgetRef ref) =>
+    AsyncValueAwaiter<List<MapEntry<String, String>>?>(
+      asyncData: userAttributesProvider.watchAsyncValue(ref),
+      waitText: "Loading user information...",
+      builder: (attributes) =>
+        (attributes ?? []).isEmpty ? const WaitIndicator(waitText: "Loading user information...") :
+                ListView(children: [
+                  for (MapEntry<String, String> entry in attributes ?? [])
+                    ListTile(
+                      title: Text(entry.key),
+                      subtitle: Text(entry.value),
+                      key: ValueKey("user-attribute-${entry.key}-${entry.value}"),
+                    )
+                ])
+    );
 
   @override
   RoutePath get routePath => UserProfilePath();
