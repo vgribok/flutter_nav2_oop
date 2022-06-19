@@ -1,4 +1,3 @@
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:example/src/routing/user_profile_path.dart';
 import 'package:example/src/screens/authentication_screen.dart';
 import 'package:flutter/material.dart';
@@ -18,15 +17,16 @@ class UserProfileScreen extends AuthenticatedScreen { // Subclass NavScreen to e
       asyncData: userAttributesProvider.watchAsyncValue(ref),
       waitText: "Loading user information...",
       builder: (attributes) =>
-        (attributes ?? []).isEmpty ? const WaitIndicator(waitText: "Loading user information...") :
-                ListView(children: [
-                  for (MapEntry<String, String> entry in attributes ?? [])
-                    ListTile(
-                      title: Text(entry.key),
-                      subtitle: Text(entry.value),
-                      key: ValueKey("user-attribute-${entry.key}-${entry.value}"),
-                    )
-                ])
+        (attributes ?? []).isEmpty ?
+          const WaitIndicator(waitText: "Loading user information...")
+          : ListView(children: [
+            for (MapEntry<String, String> entry in attributes ?? [])
+              ListTile(
+                title: Text(entry.key),
+                subtitle: Text(entry.value),
+                key: ValueKey("user-attribute-${entry.key}-${entry.value}"),
+              )
+          ])
     );
 
   @override
