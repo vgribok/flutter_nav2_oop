@@ -59,7 +59,7 @@ abstract class _NavAwareAppBase<T extends _NavModelBase> extends ConsumerWidget 
   final String applicationId;
   final ThemeData? _theme;
   final List<RestorableProvider<RestorableProperty?>>? globalRestorableProviders;
-  static late FutureProvider<void> appInitProvider;
+  static late FutureProvider<bool> appInitProvider;
 
   static late _NavModelBase Function(WidgetRef) navModelFactory;
 
@@ -89,7 +89,10 @@ abstract class _NavAwareAppBase<T extends _NavModelBase> extends ConsumerWidget 
     _appTitle = appTitle,
     _theme = theme
   {
-    appInitProvider = appGlobalStateInitProvider ?? FutureProvider((_) async {});
+    appInitProvider = FutureProvider<bool>((Ref ref) async {
+      if(appGlobalStateInitProvider != null) await ref.watch(appGlobalStateInitProvider.future);
+      return true;
+    });
     navModelFactory = (ref) => navModel(ref);
   }
 
@@ -103,8 +106,7 @@ abstract class _NavAwareAppBase<T extends _NavModelBase> extends ConsumerWidget 
         routerDelegate: createRouterDelegate(ref),
         routeInformationParser: getRouteParser(ref),
         restorationScopeId: "app-router-restoration-scope",
-        debugShowCheckedModeBanner: false,
-        // Hide 'Debug' ribbon on the AppBar,
+        debugShowCheckedModeBanner: false, // Hide 'Debug' ribbon on the AppBar,
 
         // An observation critical to successfully implementing restorable state
         // with the [MaterialApp.router] is that the builder can be used to

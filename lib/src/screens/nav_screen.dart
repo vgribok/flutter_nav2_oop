@@ -88,6 +88,10 @@ abstract class NavScreen extends ConsumerWidget {
   @protected
   NavScreen? topScreen(WidgetRef ref) => null;
 
+  bool isTopScreenInSlot(WidgetRef ref) => topScreen(ref) == null;
+
+  bool isDisplayedScreen(WidgetRef ref) => isTopScreenInSlot(ref);
+
   @protected
   bool get isModal => false;
 

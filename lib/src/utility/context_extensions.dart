@@ -14,4 +14,13 @@ extension ContextEx on BuildContext {
       );
 
   void showSnackBar(String text) => showFancySnackBar(content: Text(text));
+
+  Future<void> fireAsync({ required Future Function() stateMutator, required String onErrorMessage}) async {
+    try {
+      await stateMutator();
+    } on Exception catch (e) {
+      e.debugPrint();
+      showSnackBar(onErrorMessage);
+    }
+  }
 }

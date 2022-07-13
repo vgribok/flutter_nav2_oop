@@ -52,10 +52,10 @@ class Stories {
     _storiesProvider.getUnwatchedFuture(ref);
 
   static AsyncValue<Stories> watch(WidgetRef ref) =>
-      _storiesProvider.watch(ref);
+      _storiesProvider.watchAsyncValue(ref);
 
   static AsyncValue<Stories> getUnwatched(WidgetRef ref) =>
-      _storiesProvider.getUnwatched(ref);
+      _storiesProvider.getUnwatchedAsyncValue(ref);
 
   static final RestorableProvider<RestorableIntN> _currentStoryIdProvider = RestorableProvider(
           (ref) => RestorableIntN(null),

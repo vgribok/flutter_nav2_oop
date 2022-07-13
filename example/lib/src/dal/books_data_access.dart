@@ -22,7 +22,7 @@ class BookData {
   });
 
   static AsyncValue<List<Book>> watchForBooks(WidgetRef ref) =>
-    _booksProvider.watch(ref);
+    _booksProvider.watchAsyncValue(ref);
 
   /// We need to store selected book as a Restorable to maintain its state
   /// even when its route is not store in the Navigator history.

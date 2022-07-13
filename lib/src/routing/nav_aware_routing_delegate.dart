@@ -31,9 +31,12 @@ abstract class _NavAwareRouterDelegateBase<T extends _NavModelBase>
 
   _NavAwareRouterDelegateBase(this.ref);
 
+  bool get appInitializationCompleted =>
+      _NavAwareAppBase.appInitProvider.watchAsyncValue(ref).value ?? false;
+
   @override
   Widget build(BuildContext context) =>
-    _NavAwareAppBase.appInitProvider.watch(ref).when(
+    _NavAwareAppBase.appInitProvider.watchAsyncValue(ref).when(
         loading: () =>
             _navigatorWidget(context, [const AppInitWaitScreen()]),
         error: (err, stack) =>
@@ -89,8 +92,10 @@ abstract class _NavAwareRouterDelegateBase<T extends _NavModelBase>
   /// (although current/top screen is well known to the system but not
   /// supplied here), and then ask the screen for its route.
   @override
-  RoutePath get currentConfiguration =>
-      navModel.buildNavigatorScreenStack(ref).last.routePath;
+  RoutePath get currentConfiguration => appInitializationCompleted ?
+      navModel.buildNavigatorScreenStack(ref).last.routePath :
+      const RoutePath(resource: "/");
+
 
   /// Updates application navigation state based on
   /// user-typed URL, so that a screen corresponding

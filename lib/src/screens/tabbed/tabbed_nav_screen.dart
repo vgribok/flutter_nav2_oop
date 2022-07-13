@@ -45,6 +45,12 @@ abstract class TabNavScreen extends NavScreen {
   /// Returns tab reference associated with this screen
   TabScreenSlot tab(WidgetRef ref) => navModel(ref)[tabIndex];
 
+  bool isInCurrentTab(WidgetRef ref) =>
+      navModel(ref).selectedTabIndex == tabIndex;
+
+  bool watchForInCurrentTab(WidgetRef ref) =>
+      navModel(ref, watch: true).selectedTabIndex == tabIndex;
+
   @protected
   @override
   Scaffold buildScaffold(BuildContext context, WidgetRef ref,
@@ -116,6 +122,10 @@ abstract class TabNavScreen extends NavScreen {
       navModel(ref)._setSelectedTabIndex(newTabIndex, byUser: true);
     }
   }
+
+  @override
+  bool isDisplayedScreen(WidgetRef ref) =>
+      watchForInCurrentTab(ref) && isTopScreenInSlot(ref);
 
   //#region App-wide screen customization factories
 
