@@ -4,12 +4,14 @@ class AsyncValueAwaiter<V> extends StatelessWidget {
 
   final AsyncValue<V> asyncData;
   final Widget Function(V) builder;
-  final String waitText;
+  final String? waitText;
+  final bool waitCursorCentered;
 
   const AsyncValueAwaiter({
     required this.asyncData,
     required this.builder,
     this.waitText = "Processing...",
+    this.waitCursorCentered = true,
     super.key
   });
 
@@ -18,6 +20,6 @@ class AsyncValueAwaiter<V> extends StatelessWidget {
       asyncData.when(
           data: (data) => builder(data),
           error: (err, stack) => ErrorDisplay(err, stack),
-          loading: () => WaitIndicator(waitText: waitText)
+          loading: () => WaitIndicator(waitText: waitText, centered: waitCursorCentered,)
       );
 }

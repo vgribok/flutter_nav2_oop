@@ -45,7 +45,7 @@ NavAwareApp get theApp => NavAwareApp (
     ],
 
     globalRestorableProviders: [
-      ...BookData.ephemerals,
+      ...booksProvider.ephemerals,
       ...CounterScreen.ephemerals
     ]
 );

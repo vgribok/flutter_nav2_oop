@@ -5,6 +5,7 @@ library flutter_nav2_oop;
 
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_restorable/flutter_riverpod_restorable.dart';
@@ -45,8 +46,11 @@ part './src/utility/context_extensions.dart';
 part './src/utility/operation_scheduler.dart';
 part './src/utility/object_extensions.dart';
 part './src/utility/platform_utilities.dart';
+part './src/utility/disposable.dart';
 
 part './src/widgets/async_value_widget.dart';
+part './src/widgets/better_future_builder.dart';
 part './src/widgets/error_widget.dart';
 part './src/widgets/wait_widget.dart';
 part './src/widgets/confirmation_message_box.dart';
+part './src/widgets/image_file.dart';

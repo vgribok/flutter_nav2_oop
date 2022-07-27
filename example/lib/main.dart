@@ -40,7 +40,7 @@ TabNavAwareApp get theApp => TabNavAwareApp(
   key: const ValueKey("books-sample-app"),
 
   globalRestorableProviders: [
-    ...BookData.ephemerals,
+    ...booksProvider.ephemerals,
     ...CounterScreen.ephemerals,
     ...Stories.ephemerals,
     ...StoryEx.ephemerals
