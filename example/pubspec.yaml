@@ -30,11 +30,28 @@ dependencies:
   flutter_nav2_oop:
     path: ../
   flutter_riverpod_restorable: ^1.0.1
+  image_picker: ^0.8.5+3
+  flutter_native_splash: ^2.2.3+1
+  path_provider: ^2.0.11
+  path: ^1.8.1
+  geolocator: ^9.0.1
+  native_exif: ^0.2.0
 
 dev_dependencies:
   flutter_lints: ^1.0.4
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.9.3
+
+flutter_native_splash:
+  color: "#defffa"
+  image: assets/marco-gs-mascot.png
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path_android: "assets/marco-256-gs-mascot.png"
+  image_path_ios: "assets/marco-256-gs-mascot-ios-icon.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -43,5 +43,13 @@
 	<false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>To use existing pictures</string>
+	<key>NSCameraUsageDescription</key>
+	<string>To take picture</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>To capture audio for the videos</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+    <string>To geotag photos</string>
 </dict>
 </plist>
