@@ -1,21 +1,66 @@
-# Flutter Application Starter
+**# Flutter Application Starter
 
 This repo is a Flutter application starter. You can clone it, run it and start customizing it to make it yours.
 
 It holds a small [library](./lib) and a [sample application](./example/)
 
-> **TL;DR** If you have tried Flutter Navigator 2.0 (FN2) and  were stymied by its complexity and opacity, fear not: this little (necessarily opinionated) library + tabbed app sample combo will ensure that you will not have to spend cycles writing navigation/routing-related boilerplate code, instead of focusing on your application "meat" code, supplying *[screens](example/lib/src/screens)*, *[routes](example/lib/src/routing)* that are mapped to those screens, and the *[app initialization code](example/lib/main.dart)* wiring together navigation tabs and their "root" screens, to have web & native UI and navigation working out-of-the box:<br/>
+## Summary
+
+This application starter abstracts away sources of boilerplate like 
+declarative navigation, ephemeral state and application state 
+management, parsing user-typed urls and bookmarks when running 
+in the browser, screen orientation handling, modal screens - leaving 
+you to implement [Screens](./example/lib/src/screens/), 
+[Routes](./example/lib/src/routing), [persistent state](./example/lib/src/dal/), 
+and tie everything together in a small, clean [main.dart](./example/lib/main.dart).
+
+This application starter reins in the issues
+stemming from the difficulty of making 
+[declarative navigation](https://medium.com/flutter/learning-flutters-new-navigation-and-routing-system-7c9068155ade), 
+[application state, and ephemeral state](https://docs.flutter.dev/development/data-and-backend/state-mgmt/ephemeral-vs-app)
+work together. Most intro-level samples will show you how to use
+them in isolation, but in reality it's quite challenging to get
+these concerns implemented in a way that does not bog the developer
+down in an ocean of hacks and interdependencies.
+
+Clone and evolve your own application if you don't want to fight
+the boilerplate war. For the state management it uses
+[Riverpod](https://riverpod.dev/) - the successor of the popular 
+[Provider](https://github.com/rrousselGit/provider) package, both 
+created by the same person. The [Riverpod Restorable](https://pub.dev/packages/flutter_riverpod_restorable)
+extends the Riverpod state management model to dealing with the
+ephemeral state, which is crucial to the UX for users of low-RAM, 
+older Android phones.
+
+The project goes past the typical PoC/HelloWorld and showcases more
+real-world-ish approach, where the app has its state restored after
+it gets evicted on Android when user switches between apps and back,
+where the async application initialization code has a clear place
+with the corresponding waiting UI, and where the application state
+gets rebuilt when the web browser user jumps to a bookmark. 
+
+### A Deeper Dive
 
 Features delivered by this library out-of-the-box are:
 - Near zero boilerplate code in the application (see the main.dart example below).
-- Tab-based navigation using Flutter Router instead of the Navigator. 
-- Flutter v2 declarative navigation approach that supports routing for user-typed (Web) URL parsing.
+- Tab-based and non-tabbed navigation using Flutter Router instead of the Navigator. 
+- Flutter v2 declarative navigation approach - crucial for supporting
+Web - enabling parsing and routing for user-typed (Web) URL.
 - Properly wired [Riverpod](https://pub.dev/packages/flutter_riverpod) app state management.
 - Ephemeral state restoration with [Riverpod Restorable](https://pub.dev/packages/flutter_riverpod_restorable).
-- In landscape orientation, Navigation controls going from the bottom to the left, and back when device is in the portrait orientation.
+- Responsive handling of navigation controls when device
+screen orientation changes.
 - Support of the 404 page when user types an unknown URL in the browser URL bar.
+- Easy creation of modal screens.
+- A [separate branch](https://github.com/vgribok/flutter_nav2_oop/tree/ios-and-android-only) 
+shows the (iOS and Android only) implementation of the
+camera usage with the picture review. Here the real-world approach
+is implemented by ensuring the pictures get the GPS geotagging metadata
+and that the application works correctly on low-RAM, older Android
+phones.
 
-As you can see, this is significantly more than the "Counter" or a "Hello, World!" examples could ever teach you.
+As you can see, this is significantly more than the "Counter" or a 
+"Hello, World!" examples could ever teach you.
 
 Your application `main.dart` will look like this:
 <details>
@@ -23,19 +68,22 @@ Your application `main.dart` will look like this:
     
 ```dart
 import 'package:example/src/dal/books_data_access.dart';
+import 'package:example/src/dal/file_system_dal.dart';
+import 'package:example/src/dal/geolocation_dal.dart';
+import 'package:example/src/dal/selected_picture_dal.dart';
 import 'package:example/src/dal/stories_data_access.dart';
 import 'package:example/src/routing/counter_path.dart';
+import 'package:example/src/routing/pictures/picture_list_path.dart';
+import 'package:example/src/routing/pictures/photo_preview_path.dart';
 import 'package:example/src/routing/story/stories_path.dart';
 import 'package:example/src/routing/story/story_path.dart';
 import 'package:example/src/screens/counter_screen.dart';
+import 'package:example/src/screens/pictures/picture_list_screen.dart';
 import 'package:example/src/screens/story/stories_list_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:example/src/routing/book_details_path.dart';
-import 'package:example/src/routing/book_list_path.dart';
 import 'package:example/src/routing/settings_modal_child_path.dart';
 import 'package:example/src/routing/settings_path.dart';
 import 'package:example/src/routing/user_profile_path.dart';
-import 'package:example/src/screens/book_list_screen.dart';
 import 'package:example/src/screens/settings_screen.dart';
 import 'package:example/src/screens/user_profile_screen.dart';
 import 'package:example/theme.dart';
@@ -50,34 +98,37 @@ void main() {
   runApp(theApp.riverpodApp);
 }
 
-/// Simulating some long-ish async app initialization
+final _fileSystemFutureProvider = FileSystemFutureProvider();
+
+/// Illustrates some long-ish async app initialization
 /// logic, possibly with exceptions thrown
-Future<void> _appInitSimulator(Ref ref) async {
-  // Simulating an error in the initialization routine
-  await Future.delayed(const Duration(milliseconds: 3000));
-  //throw UnimplementedError("Something bad has happened..");
-}
+Future<void> _appStateInitializer(Ref ref) =>
+        Future.wait([
+          _fileSystemFutureProvider.getUnwatchedFuture2(ref),
+          getGeolocation(), // to pop up the permissions dialog before using the camera
+          //Future.delayed(const Duration(milliseconds: 3000));
+        ]);
 
 TabNavAwareApp get theApp => TabNavAwareApp(
         applicationId: "nav-aware-books-sample",
         appTitle: 'Books With Navigation',
         theme: myTheme,
-        initialPath: CounterPath(),
-        appGlobalStateInitProvider: FutureProvider(_appInitSimulator),
+        initialPath: PictureListPath(),
+        appGlobalStateInitProvider: FutureProvider(_appStateInitializer),
         key: const ValueKey("books-sample-app"),
 
         globalRestorableProviders: [
-          ...BookData.ephemerals,
+          ...SelectedPictureDal.ephemerals,
+          ...booksProvider.ephemerals,
           ...CounterScreen.ephemerals,
           ...Stories.ephemerals,
           ...StoryEx.ephemerals
         ],
 
         tabs: [
-          // Comment out this section to enable non-tab navigation demo
-          TabScreenSlot(Icons.home, title: 'Books',
-                  rootScreenFactory: (tabIndex, ref) => BooksListScreen(tabIndex),
-                  routeParsers: [ BookListPath.fromUri, BookDetailsPath.fromUri ]
+          TabScreenSlot(Icons.camera_alt, title: 'Pictures',
+                  rootScreenFactory: (tabIndex, ref) => PictureListScreen(tabIndex),
+                  routeParsers: [ PictureListPath.fromUri, PhotoPreviewPath.fromUri ]
           ),
           TabScreenSlot(Icons.plus_one, title: 'Counter',
                   rootScreenFactory: (tabIndex, ref) => CounterScreen(tabIndex),
@@ -98,6 +149,7 @@ TabNavAwareApp get theApp => TabNavAwareApp(
           )
         ]
 );
+
 ```
 
 Once your [screen](example/lib/src/screens/book_list_screen.dart) and [route](example/lib/src/routing/book_details_path.dart) classes are implemented,
@@ -138,10 +190,12 @@ The [reusable library part](./lib/) takes care of the following application UI &
 4. No need to write [spaghetti code](https://gist.github.com/johnpryan/430c1d3ad771c43bf249c07fa3aeef14#file-main-dart-L36) parsing user-entered browser URLs to set the app state. Instead, each route class has a standard `fromUri(Uri)` [factory method](example/lib/src/routing/user_profile_path.dart) that looks at the user-entered URI and decides whether it matches.
 5. Use [`topScreen()` method](example/lib/src/screens/book_list_screen.dart) override to check relevant state and tell the framework whether another "overlay" screen needs to be shown on top of the current one. **This is the famous `UI = f(state)` part in action**.
 6. Use [`removeFromNavStackTop()` method](example/lib/src/screens/book_details_screen.dart) override to update the state so that current screen would be removed from the top of the nav stack.
-7. Get consistent and straightforward access to mutable state by using Riverpod library.
-8. Use factories to customize framework-defined UI, like AppBar colors, bottom nav tabs, and the 404 screen.
+7. Get consistent and straightforward access to mutable state by 
+using Riverpod library.
+8. Use factories to customize framework-defined UI, like AppBar 
+colors, bottom nav tabs, and the 404 screen.
 
-> All of the above enables transparent routing and navigation implemented by the framework, leaving you with having to **implement only the screens, the routes corresponding to the screens, and the wiring-it-together initialization logic**.
-
- 
-
+> All of the above enables transparent routing and navigation 
+> implemented by the framework, leaving you with having to 
+> **implement only the screens, the routes corresponding to the 
+> screens, and the wiring-it-together initialization logic**.**
