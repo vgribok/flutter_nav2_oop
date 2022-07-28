@@ -155,10 +155,8 @@ TabNavAwareApp get theApp => TabNavAwareApp(
 Once your [screen](example/lib/src/screens/book_list_screen.dart) and [route](example/lib/src/routing/book_details_path.dart) classes are implemented,
 you get your app looking like this on Android, iPhone or Web.
 
-![android UI screenshot](./doc/images/nav_2_app_android.png)
-![iphone UI screenshot](./doc/images/nav_2-oop-iphone.png) 
-![web UI screenshot](./doc/images/nav_2_app_web.png)
-Windows app has been run successfully too.
+![picture list android](./doc/images/nav_2_app_picture_list-android.png)
+![picture preview android](./doc/images/nav_2_app_picture_preview-android.jpg)
 
 ## Challenge to Overcome
 
