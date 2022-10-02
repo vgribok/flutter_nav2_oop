@@ -16,6 +16,8 @@ class NavAwareApp extends _NavAwareAppBase<NavModel> {
     required RoutePath initialPath,
     /// Application color theme
     super.theme,
+    /// Application dark color theme
+    super.darkTheme,
     /// Restorable state providers with global scope
     super.globalRestorableProviders,
     required RootScreenFactory rootScreenFactory,
@@ -58,6 +60,8 @@ abstract class _NavAwareAppBase<T extends _NavModelBase> extends ConsumerWidget 
   final String _appTitle;
   final String applicationId;
   final ThemeData? _theme;
+  final ThemeData? _darkTheme;
+
   final List<RestorableProvider<RestorableProperty?>>? globalRestorableProviders;
   static late FutureProvider<bool> appInitProvider;
 
@@ -79,6 +83,8 @@ abstract class _NavAwareAppBase<T extends _NavModelBase> extends ConsumerWidget 
     required String appTitle,
     /// Application color theme
     ThemeData? theme,
+    /// Application dark color theme
+    ThemeData? darkTheme,
     /// Restorable state providers with global scope
     this.globalRestorableProviders,
     /// FutureProvider combining all global application state
@@ -87,7 +93,8 @@ abstract class _NavAwareAppBase<T extends _NavModelBase> extends ConsumerWidget 
     super.key
   }) :
     _appTitle = appTitle,
-    _theme = theme
+    _theme = theme,
+    _darkTheme = darkTheme
   {
     appInitProvider = FutureProvider<bool>((Ref ref) async {
       if(appGlobalStateInitProvider != null) await ref.watch(appGlobalStateInitProvider.future);
@@ -103,6 +110,7 @@ abstract class _NavAwareAppBase<T extends _NavModelBase> extends ConsumerWidget 
       MaterialApp.router(
         title: appTitle,
         theme: _theme,
+        darkTheme: _darkTheme,
         routerDelegate: createRouterDelegate(ref),
         routeInformationParser: getRouteParser(ref),
         restorationScopeId: "app-router-restoration-scope",

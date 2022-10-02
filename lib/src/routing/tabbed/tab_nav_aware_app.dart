@@ -19,6 +19,8 @@ class TabNavAwareApp extends _NavAwareAppBase<TabNavModel> {
     required RoutePath initialPath,
     /// Application color theme
     super.theme,
+    /// Application dark color theme
+    super.darkTheme,
     /// Navigation type. Auto if not specified.
     NavControlType? navType,
     /// Restorable state providers with global scope

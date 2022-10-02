@@ -1,11 +1,11 @@
 
 import 'package:flutter/material.dart';
 
-class _Tuple {
+class Tuple {
   @protected
   final List<Object?> items;
 
-  _Tuple(this.items);
+  Tuple(this.items);
 
   Object? operator[](int? index) => getAt<Object?>(index);
 

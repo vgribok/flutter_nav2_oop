@@ -1,11 +1,23 @@
 part of flutter_nav2_oop;
 
+/// Message box with binary answer buttons (yes/no,
+/// stop/continue, OK/Cancel, etc).
+/// The dialog closes self when either button is pressed
+/// without disrupting navigation history stack
 class ConfirmationMessageBox extends StatelessWidget {
 
+  /// Optional children. If not specified, the
+  /// [ListTitle] widget with the question mark icon and
+  /// the "Cancel or continue?" text is shown
   final List<Widget> children;
+  /// Optional title text. If not specified, "Are you sure?"
+  /// is shown
   final String title;
+  /// Optional cancel button text. Default value is "Cancel"
   final String cancelButtonText;
+  /// Optional continue button test. Default value is "Continue"
   final String continueButtonText;
+  /// The handler of the Continue button tap
   final void Function(BuildContext) continueButtonOnPressHandler;
 
   const ConfirmationMessageBox({
@@ -21,12 +33,17 @@ class ConfirmationMessageBox extends StatelessWidget {
     super.key
   });
 
+  /// A quick way to show a confirm/cancel dialog.
   factory ConfirmationMessageBox.simple({
+    /// Window title text
     String title = "Are you sure?",
+    /// The main question
     String mainText = "Cancel or continue?",
+    /// Optional string explaining the context
     String? finePrint,
     String cancelButtonText = "Cancel",
     String continueButtonText = "Continue",
+    /// A function called when the Continue button is pressed
     required void Function(BuildContext) continueButtonOnPressHandler,
     Key? key
   }) =>

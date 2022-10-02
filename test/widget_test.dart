@@ -7,8 +7,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import '../example/lib/main.dart';
 import 'package:flutter_nav2_oop/all.dart';
+
+import '../example/lib/main.dart';
 
 void main() {
 

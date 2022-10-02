@@ -13,7 +13,7 @@ abstract class FutureProviderFacade<T> {
 
   final FutureProvider<T> provider;
 
-  FutureProviderFacade(Create<FutureOr<T>, FutureProviderRef<T>> create, {
+  FutureProviderFacade(FutureOr<T> Function(FutureProviderRef<T> ref) create, {
     String? name,
     List<Provider>? dependencies,
     Family? from,

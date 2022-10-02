@@ -1,14 +1,14 @@
 import 'package:example/src/models/stories_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nav2_oop/all.dart';
-import 'package:flutter_riverpod_restorable/flutter_riverpod_restorable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_restorable/riverpod_restorable.dart';
 
-class Stories {
-  final List<Story> stories;
+final storiesProvider = StoriesProvider();
 
-  Stories(List<Story>? stories)
-      : stories = stories ?? [];
+class StoriesProvider extends FutureProviderFacade<List<Story>> {
+
+  StoriesProvider(): super((ref) => _callStoriesApi());
 
   /// Pseudo-data-access call emulating remote API invocation
   static Future<List<Story>> _callStoriesApi() async {
@@ -27,7 +27,7 @@ class Stories {
           pages:
           [
             StoryPage(id: 111,
-                imageURL: "https://lh3.googleusercontent.com/pw/AM-JKLXwPtGwAM_TreSNFtEl3dMQ8k1Mf2p6KMuB28ikQoEUChDceFywdumf_AoyWkfRnVUI0nhNEANV21hqxpEL1r6XjTjXoQUbofVxPfgdIF6C8qvF0ye_TulFMPrAzODlDxNyrhMnksjf_o4k4GjBcH82Bg=w3544-h1994-no",
+                imageURL: "https://3.bp.blogspot.com/-m6HW6cJbrZM/VoybblszDqI/AAAAAAAAYVU/t3pwGleRTosr5tVl7AgynRVvxFYofLVaQCKgB/w1200-h630-p-k-no-nu/IMG_4735.jpg",
                 duration: 5.0
             ),
             StoryPage(
@@ -35,7 +35,7 @@ class Stories {
                 id: 222
             ),
             StoryPage(
-                imageURL: "https://media-exp1.licdn.com/dms/image/C4E16AQEfgvakWxTjtQ/profile-displaybackgroundimage-shrink_200_800/0/1647441210890?e=1658966400&v=beta&t=FCzLYG22wJ8dSpqaSySk939n23ka9kGK8aIDkvqt9zI",
+                imageURL: "https://m.media-amazon.com/images/W/WEBP_402378-T1/images/I/41uPfg7sAxL._AC_SX679_.jpg",
                 id: 333
             )
           ]
@@ -43,57 +43,43 @@ class Stories {
     ];
   }
 
-  //  state rebuilding after  URL parsing is async.
-  static final FutureProvider<Stories> _storiesProvider = FutureProvider<Stories>(
-          (ref) async => Stories(await _callStoriesApi())
-  );
-
-  static Future<Stories> getUnwatchedFuture(WidgetRef ref) =>
-    _storiesProvider.getUnwatchedFuture(ref);
-
-  static AsyncValue<Stories> watch(WidgetRef ref) =>
-      _storiesProvider.watchAsyncValue(ref);
-
-  static AsyncValue<Stories> getUnwatched(WidgetRef ref) =>
-      _storiesProvider.getUnwatchedAsyncValue(ref);
-
-  static final RestorableProvider<RestorableIntN> _currentStoryIdProvider = RestorableProvider(
+  final RestorableProvider<RestorableIntN> _currentStoryIdProvider = RestorableProvider(
           (ref) => RestorableIntN(null),
       restorationId: "current-story-id"
   );
 
-  static List<RestorableProvider> get ephemerals => [_currentStoryIdProvider];
+  List<RestorableProvider> get ephemerals => [_currentStoryIdProvider];
 
-  static Story? watchForCurrentStory(WidgetRef ref) {
+  Story? watchForCurrentStory(WidgetRef ref) {
     final int? currentStoryId = ref.watch(_currentStoryIdProvider).value;
     if(currentStoryId == null) return null;
-    final Stories? stories = watch(ref).value;
-    return stories?.getById(currentStoryId);
+    final List<Story>? stories = watchForValue(ref);
+    return _getById(stories, currentStoryId);
   }
 
-  Story? getById(int? storyId) => storyId == null ? null :
-    stories.firstSafe((story) => story.id == storyId);
-  
-  int? indexOf(Story? story) {
+  static Story? _getById(List<Story>? stories, int? storyId) =>
+      storyId == null ? null :
+      stories?.firstSafe((story) => story.id == storyId);
+
+  static int? indexOf(List<Story> stories, Story? story) {
     if (story == null) return null;
     int index = stories.indexOf(story);
     return index < 0 ? null : index;
   }
 
-  Story? operator[](int? index) =>
-    index == null || index < 0 || index >= stories.length ? null : stories[index];
+  Story? storyAt(List<Story> stories, int? index) =>
+      index == null || index < 0 || index >= stories.length ? null : stories[index];
 
-  static RestorableIntN _currentStoryIdUnwatched(WidgetRef ref) =>
-        ref.read(_currentStoryIdProvider);
+  void setCurrentStory(WidgetRef ref, Story? story) {
+    ref.read(_currentStoryIdProvider).value = story?.id;
 
-  static void setCurrentStory(WidgetRef ref, Story? story) {
-      _currentStoryIdUnwatched(ref).value = story?.id;
-
-      if(story != null) {
-        final int? currentPageId = StoryEx._currentPageIdUnwatched(ref).value;
-        final StoryPage? currentPage = story.getPageById(currentPageId) ?? story[0];
-        StoryEx.setCurrentPage(ref, currentPage);
-      }
+    if(story == null) {
+      StoryEx.cancelNextPageOperation();
+    }else {
+      final int? currentPageId = StoryEx._currentPageIdUnwatched(ref).value;
+      final StoryPage? currentPage = story.getPageById(currentPageId) ?? story[0];
+      StoryEx.setCurrentPage(ref, currentPage);
+    }
   }
 }
 
@@ -110,7 +96,7 @@ extension StoryEx on Story {
   static StoryPage? watchForCurrentPage(WidgetRef ref) {
     final int? currentPageId = ref.watch(_currentPageIdProvider).value;
     if (currentPageId == null) return null;
-    final Story? currentStory = Stories.watchForCurrentStory(ref);
+    final Story? currentStory = storiesProvider.watchForCurrentStory(ref);
     return currentStory?.getPageById(currentPageId);
   }
 
@@ -144,12 +130,17 @@ extension StoryEx on Story {
   static RestorableIntN _currentPageIdUnwatched(WidgetRef ref) =>
       ref.read(_currentPageIdProvider);
 
-  static void setCurrentPage(WidgetRef ref, StoryPage? page) =>
-      _currentPageIdUnwatched(ref).value = page?.id;
+  static void setCurrentPage(WidgetRef ref, StoryPage? page) {
+    _currentPageIdUnwatched(ref).value = page?.id;
+    cancelNextPageOperation();
+  }
 
-  static final _nextPageScheduler = CancellableScheduledOperation();
+  static CancellationToken? _cancellationToken;
 
-  static void cancelNextPageOperation() => _nextPageScheduler.cancelOperation();
+  static void cancelNextPageOperation() {
+    _cancellationToken?.cancel();
+    _cancellationToken = null;
+  }
 
   void scheduleNextStoryPage(WidgetRef ref, StoryPage? currentPage) {
     final int delay = getPageDurationMillisec(currentPage);
@@ -160,15 +151,24 @@ extension StoryEx on Story {
   void scheduleStoryPage(WidgetRef ref, int delayMillisec, StoryPage? pageToShow) {
     if(pages.isEmpty || pageToShow == null) return;
 
-    _nextPageScheduler.delayOperation(
-      Duration(milliseconds: delayMillisec), () => setCurrentPage(ref, pageToShow)
+    cancelNextPageOperation();
+
+    _cancellationToken = CancellationToken();
+    final token = _cancellationToken!;
+    _cancellationToken!.run(() =>
+        Future.delayed(
+            Duration(milliseconds: delayMillisec),
+                () {
+              if(!token.isCancelled) setCurrentPage(ref, pageToShow);
+            }
+        )
     );
   }
 
   static Future<bool> validateAndSetCurrentStoryAndPage(WidgetRef ref, int storyId, int? pageId) async {
 
-    final Stories stories = await Stories.getUnwatchedFuture(ref);
-    final Story? story = stories.getById(storyId);
+    final List<Story> stories = await storiesProvider.getUnwatchedFuture(ref);
+    final Story? story = StoriesProvider._getById(stories, storyId);
     if(story == null) return false;
 
     StoryPage? page = story.getPageById(pageId);
@@ -179,7 +179,7 @@ extension StoryEx on Story {
       }
     }
 
-    Stories.setCurrentStory(ref, story);
+    storiesProvider.setCurrentStory(ref, story);
     StoryEx.setCurrentPage(ref, page);
 
     return true;

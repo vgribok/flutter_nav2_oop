@@ -23,4 +23,7 @@ extension ContextEx on BuildContext {
       showSnackBar(onErrorMessage);
     }
   }
+
+  Size screenSize() =>
+      MediaQuery.of(this).size;
 }

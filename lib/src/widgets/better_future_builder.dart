@@ -19,9 +19,14 @@ class BetterFutureBuilder<V> extends StatelessWidget {
   Widget build(BuildContext context) =>
       FutureBuilder<V>(
         future: future,
-        builder: (ctx, snapshot) =>
-          snapshot.connectionState == ConnectionState.done ?
-            builder(snapshot.data, ctx)
-            : WaitIndicator(waitText: waitText, centered: waitCursorCentered)
+        builder: (ctx, snapshot) {
+          if(snapshot.hasError) {
+            return ErrorDisplay(snapshot.error!, null, errorContext: "Error while $waitText");
+          }
+
+          return snapshot.connectionState == ConnectionState.done ?
+                      builder(snapshot.data, ctx) :
+                      WaitIndicator(waitText: waitText, centered: waitCursorCentered);
+        }
       );
 }

@@ -9,7 +9,7 @@ import 'package:flutter_nav2_oop/all.dart';
 
 class StoryScreen extends TabNavScreen {
   final Story selectedStory;
-  final Stories stories;
+  final List<Story> stories;
   final StoryPage? currentPage;
 
   const StoryScreen(super.tabIndex,
@@ -27,7 +27,7 @@ class StoryScreen extends TabNavScreen {
 
     selectedStory.scheduleNextStoryPage(ref, currentPage);
 
-    return StoryLayout(stories.stories, selectedStoryId: selectedStory.id,
+    return StoryLayout(stories, selectedStoryId: selectedStory.id,
         child: currentPage == null ? const Text(
             "The story is waiting to begin..")
             : StoryPageWidget(selectedStory, currentPage!)
@@ -40,6 +40,6 @@ class StoryScreen extends TabNavScreen {
   @override
   void updateStateOnScreenRemovalFromNavStackTop(WidgetRef ref) {
     super.updateStateOnScreenRemovalFromNavStackTop(ref);
-    Stories.setCurrentStory(ref, null);
+    storiesProvider.setCurrentStory(ref, null);
   }
 }

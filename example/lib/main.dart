@@ -42,7 +42,7 @@ TabNavAwareApp get theApp => TabNavAwareApp(
   globalRestorableProviders: [
     ...booksProvider.ephemerals,
     ...CounterScreen.ephemerals,
-    ...Stories.ephemerals,
+    ...storiesProvider.ephemerals,
     ...StoryEx.ephemerals
   ],
 

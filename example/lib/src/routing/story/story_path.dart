@@ -24,7 +24,7 @@ class StoryPath extends NestedRoutePath {
 
   static RoutePath? fromUri(Uri uri) {
     Map<String, String>? map = uri.segmentsFromUri([ StoriesPath.resourceName, resourceName ])
-                                ?? uri.segmentsFromUri([ StoriesPath.resourceName ]);
+        ?? uri.segmentsFromUri([ StoriesPath.resourceName ]);
     if(map == null) return null;
 
     int? pageId = int.tryParse(map[resourceName] ?? "");

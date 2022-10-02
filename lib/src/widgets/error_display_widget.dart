@@ -1,11 +1,19 @@
 part of flutter_nav2_oop;
 
+/// Displays error information widget. When debugging, shows the
+/// call stack is it's supplied.
 class ErrorDisplay extends StatelessWidget {
 
+  /// Error object of any kind, including but not limited to
+  /// [Error] and [Exception]
   final Object err;
+  /// Optional call stack
   final StackTrace? stack;
+  /// Error message telling what the app was trying to accomplish
+  /// when it failed
+  final String errorContext;
 
-  const ErrorDisplay(this.err, this.stack, {super.key});
+  const ErrorDisplay(this.err, this.stack, {super.key, required this.errorContext});
 
   String get errorMessage => err.toString();
 
@@ -16,7 +24,7 @@ class ErrorDisplay extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text("Failed to initialize the app due to \"$errorMessage\"",
+                Text("$errorContext. Reason: \"$errorMessage\"",
                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
 
                 if(stack != null && kDebugMode)

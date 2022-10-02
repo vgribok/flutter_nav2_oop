@@ -1,7 +1,10 @@
 part of flutter_nav2_oop;
 
+/// Shows the [CircularProgressIndicator] with an optional text,
+/// optionally wrapped in a [Center] widget.
 class WaitIndicator extends StatelessWidget {
 
+  /// Optional text to show along with the wait indicator
   final String? waitText;
   final bool centered;
 
