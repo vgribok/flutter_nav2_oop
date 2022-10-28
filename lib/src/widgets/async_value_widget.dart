@@ -19,7 +19,7 @@ class AsyncValueAwaiter<V> extends StatelessWidget {
   Widget build(BuildContext context) =>
       asyncData.when(
           data: (data) => builder(data),
-          error: (err, stack) => ErrorDisplay(err, stack, errorContext: "Error while $waitText"),
-          loading: () => WaitIndicator(waitText: waitText, centered: waitCursorCentered,)
+          error: (err, stack) => ErrorDisplay(err, stack, errorContext: "Error while $waitText", key: const ValueKey("async value awaiter error pane")),
+          loading: () => WaitIndicator(waitText: waitText, centered: waitCursorCentered, key: const ValueKey("async value awaiter wait indicator"))
       );
 }

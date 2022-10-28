@@ -21,12 +21,12 @@ class BetterFutureBuilder<V> extends StatelessWidget {
         future: future,
         builder: (ctx, snapshot) {
           if(snapshot.hasError) {
-            return ErrorDisplay(snapshot.error!, null, errorContext: "Error while $waitText");
+            return ErrorDisplay(snapshot.error!, null, errorContext: "Error while $waitText", key: const ValueKey("better future builder error pane"));
           }
 
           return snapshot.connectionState == ConnectionState.done ?
                       builder(snapshot.data, ctx) :
-                      WaitIndicator(waitText: waitText, centered: waitCursorCentered);
+                      WaitIndicator(waitText: waitText, centered: waitCursorCentered, key: const ValueKey("better future builder wait indicator"));
         }
       );
 }

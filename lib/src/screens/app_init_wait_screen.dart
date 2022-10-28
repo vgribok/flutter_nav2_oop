@@ -6,7 +6,7 @@ class AppInitWaitScreen extends NavScreen {
 
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) =>
-    const WaitIndicator(waitText: "Initializing the app...");
+    const WaitIndicator(waitText: "Initializing the app...", key: ValueKey("app init screen wait indicator"));
 
   @override
   RoutePath get routePath => const RoutePath(resource: "/");

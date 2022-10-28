@@ -25,6 +25,7 @@ class ErrorDisplay extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text("$errorContext. Reason: \"$errorMessage\"",
+                    key: const ValueKey("error text"),
                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
 
                 if(stack != null && kDebugMode)
@@ -36,7 +37,7 @@ class ErrorDisplay extends StatelessWidget {
   List<Widget> get _debugInfoWidgets => [
     const Divider(thickness: 1, indent: 50, endIndent: 50),
     Expanded(child: SingleChildScrollView(scrollDirection: Axis.vertical,
-        child: Text(stack!.toString(), style: GoogleFonts.cutiveMono(fontSize: 20))
+        child: Text(stack!.toString(), style: GoogleFonts.cutiveMono(fontSize: 20), key: const ValueKey("debug info text"))
     ))
   ];
 }

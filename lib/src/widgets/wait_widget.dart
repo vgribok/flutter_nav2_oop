@@ -23,7 +23,7 @@ class WaitIndicator extends StatelessWidget {
             if(waitText != null)
               const Divider(thickness: 1, indent: 50, endIndent: 50),
             if(waitText != null)
-              Text(waitText!)
+              Text(waitText!, key: const ValueKey("wait indicator text"))
           ]
       );
 }

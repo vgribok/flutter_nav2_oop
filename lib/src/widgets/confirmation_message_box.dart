@@ -1,3 +1,5 @@
+// ignore_for_file: sort_child_properties_last
+
 part of flutter_nav2_oop;
 
 /// Message box with binary answer buttons (yes/no,
@@ -51,8 +53,8 @@ class ConfirmationMessageBox extends StatelessWidget {
         title: title,
         children: [
           ListTile(leading: const Icon(Icons.question_mark),
-              title: Text(mainText),
-              subtitle: finePrint == null ? null : Text(finePrint),
+              title: Text(mainText, key: const ValueKey("confirmation box title")),
+              subtitle: finePrint == null ? null : Text(finePrint, key: const ValueKey("confirmation box subtitle")),
           )
         ],
         cancelButtonText: cancelButtonText,
@@ -75,6 +77,7 @@ class ConfirmationMessageBox extends StatelessWidget {
           ElevatedButton(
             child: Text(cancelButtonText),
             onPressed: () => Navigator.of(context).pop(),
+            key: const ValueKey("confirmation box cancel button")
           ),
           OutlinedButton(
             child: Text(continueButtonText),
@@ -82,6 +85,7 @@ class ConfirmationMessageBox extends StatelessWidget {
               Navigator.of(context).pop();
               continueButtonOnPressHandler(context);
             },
+              key: const ValueKey("confirmation box continue button")
           ),
         ],
       );

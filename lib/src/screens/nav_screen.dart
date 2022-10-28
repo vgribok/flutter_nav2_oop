@@ -68,6 +68,7 @@ abstract class NavScreen extends ConsumerWidget {
         appBar: appBar,
         body: body,
         floatingActionButton: actionButton,
+        key: const ValueKey("screen scaffold")
       );
 
   /// Override in subclasses to supply screen body
@@ -114,7 +115,7 @@ abstract class NavScreen extends ConsumerWidget {
   /// Default implementation of the [appBarBuilder] factory
   static AppBar buildDefaultAppBar(NavScreen screen, BuildContext context, WidgetRef ref) =>
       AppBar(
-          title: Text(screen.screenTitle),
+          title: Text(screen.screenTitle, key: const ValueKey("app bar title")),
           actions: screen.buildAppBarActions(context, ref)
       );
 

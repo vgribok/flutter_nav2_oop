@@ -10,7 +10,7 @@ class UrlNotFoundScreen extends NavScreen {
   /// User-replaceable factory instantiating the
   /// [UrlNotFoundScreen]
   static NotFoundScreenFactory notFoundScreenFactory =
-      (notFoundUrl) => UrlNotFoundScreen(notFoundUrl);
+      (notFoundUrl) => UrlNotFoundScreen(notFoundUrl, key: const ValueKey("default 404 screen"));
 
   /// User-replaceable message to be shown on the screen
   static String defaultMessage = 'Following URI is incorrect: ';
@@ -36,15 +36,17 @@ class UrlNotFoundScreen extends NavScreen {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(defaultMessage),
+          Text(defaultMessage, key: const ValueKey("404 message text")),
           Text(
               '"${navModel(ref)._notFoundUri}"',
-              style: const TextStyle(fontWeight: FontWeight.bold)
+              style: const TextStyle(fontWeight: FontWeight.bold),
+              key: const ValueKey("404 url")
           ),
           const Divider(thickness: 1, indent: 50, endIndent: 50),
           ElevatedButton(
-              child: Text(defaultCloseButtonText),
-              onPressed: () => updateStateOnScreenRemovalFromNavStackTop(ref)
+              onPressed: () => updateStateOnScreenRemovalFromNavStackTop(ref),
+              key: const ValueKey("404 screen close button"),
+              child: Text(defaultCloseButtonText, key: const ValueKey("404 screen close button text"))
           )
         ])
     );
@@ -53,9 +55,10 @@ class UrlNotFoundScreen extends NavScreen {
   List<Widget>? buildAppBarActions(BuildContext context, WidgetRef ref) =>
       [
         IconButton(
-            icon: const Icon(Icons.cancel),
+            icon: const Icon(Icons.cancel, key: ValueKey("app bar cancel icon")),
             tooltip: defaultCloseButtonText,
-            onPressed: () => updateStateOnScreenRemovalFromNavStackTop(ref)
+            onPressed: () => updateStateOnScreenRemovalFromNavStackTop(ref),
+            key: const ValueKey("app bar cancel button")
         )
       ];
 

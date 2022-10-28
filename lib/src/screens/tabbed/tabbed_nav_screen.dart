@@ -4,15 +4,15 @@ part of flutter_nav2_oop;
 /// navigation Widget - either a bottom tab bar, or
 /// a [Drawer]
 typedef NavigationWidgetBarBuilder = Widget Function(
-    TabNavScreen, BuildContext, WidgetRef, void Function(int index) tapHandler
+    TabNavScreen, BuildContext, WidgetRef, void Function(int index) tapHandler, {Key? key}
 );
 
 /// A signature of a programmer-replaceable method building
 /// vertical rail navigation widget
 typedef VerticalNavRailBuilder = Widget Function(Widget body, TabNavScreen,
-    WidgetRef, ValueChanged<int> tapHandler);
+    WidgetRef, ValueChanged<int> tapHandler, {Key? key});
 
-typedef NavDrawerHeaderBuilder = Widget? Function (TabNavScreen, BuildContext, WidgetRef);
+typedef NavDrawerHeaderBuilder = Widget? Function (TabNavScreen, BuildContext, WidgetRef, {Key? key});
 
 /// A base class for all application screens.
 ///
@@ -74,6 +74,7 @@ abstract class TabNavScreen extends NavScreen {
       bottomNavigationBar: navBar,
       drawer: drawer,
       floatingActionButton: actionButton,
+      key: const ValueKey("screen scaffold")
     );
   }
 
@@ -155,7 +156,7 @@ abstract class TabNavScreen extends NavScreen {
 
   /// Default implementation of the [tabBarBuilder] factory
   static Widget buildDefaultBottomTabBar(NavScreen screen,
-      BuildContext context, WidgetRef ref, ValueChanged<int> tapHandler) {
+      BuildContext context, WidgetRef ref, ValueChanged<int> tapHandler, {Key? key}) {
 
     final TabNavModel tabNavModel = navModel(ref, watch: true);
 
@@ -163,22 +164,24 @@ abstract class TabNavScreen extends NavScreen {
       items: tabNavModel._tabs.map(
               (tabInfo) =>
               BottomNavigationBarItem(
-                  icon: Icon(tabInfo.icon), label: tabInfo.title)
+                  icon: Icon(tabInfo.icon, key: ValueKey("tab icon ${tabInfo._tabIndex}")), label: tabInfo.title, tooltip: tabInfo.title)
       ).toList(),
       currentIndex: tabNavModel.selectedTabIndex,
       onTap: tapHandler,
       type: BottomNavigationBarType.fixed,
+      key: key
     );
   }
 
   /// Default implementation of the [drawerBuilder] factory
   static Widget buildDefaultDrawer(TabNavScreen screen,
-      BuildContext context, WidgetRef ref, ValueChanged<int> tapHandler) {
+      BuildContext context, WidgetRef ref, ValueChanged<int> tapHandler, {Key? key}) {
 
     final TabNavModel tabNavModel = navModel(ref, watch: true);
     final Widget? drawerHeader = screen.buildDrawerHeader(context, ref);
 
     return Drawer(
+      key: key,
       // Add a ListView to the drawer. This ensures the user can scroll
       // through the options in the drawer if there isn't enough vertical
       // space to fit everything.
@@ -193,7 +196,7 @@ abstract class TabNavScreen extends NavScreen {
             for(int i = 0; i < tabNavModel._tabs.length; i++)
               ListTile(
                 title: Text(tabNavModel._tabs[i].title!),
-                leading: Icon(tabNavModel._tabs[i].icon),
+                leading: Icon(tabNavModel._tabs[i].icon, key: ValueKey("tab icon $i")),
                 selected: i == tabNavModel.selectedTabIndex,
                 onTap: () => tapHandler(i),
               )
@@ -204,11 +207,12 @@ abstract class TabNavScreen extends NavScreen {
   }
 
   /// Default implementation of the [drawerHeaderBuilder] factory
-  static Widget buildDefaultDrawerHeader(TabNavScreen screen, BuildContext context, WidgetRef ref) {
+  static Widget buildDefaultDrawerHeader(TabNavScreen screen, BuildContext context, WidgetRef ref, {Key? key}) {
 
     final ThemeData theme = Theme.of(context);
 
     return DrawerHeader(
+      key: key,
       decoration: BoxDecoration(
         color: theme.primaryColor
       ),
@@ -216,13 +220,14 @@ abstract class TabNavScreen extends NavScreen {
         crossAxisAlignment: CrossAxisAlignment.start, // Align to the top of the Drawer Header
         children: [
           Row(children: [ // Align icon and text at text baseline
-            Icon(screen.tab(ref).icon, color: theme.colorScheme.secondary),
+            Icon(screen.tab(ref).icon, color: theme.colorScheme.secondary, key: const ValueKey("drawer header icon")),
             const Text(' '),
             Text(screen.screenTitle,
               style: TextStyle(
                   color: theme.colorScheme.secondary,
                   fontSize: theme.textTheme.headline6?.fontSize
               ),
+              key: const ValueKey("drawer header title")
             )
           ]
         )]
@@ -232,11 +237,11 @@ abstract class TabNavScreen extends NavScreen {
 
   /// Default implementation of the [verticalNavRailBuilder] factory
   static Widget buildDefaultVerticalNavRail(Widget body, NavScreen screen,
-    WidgetRef ref, ValueChanged<int> tapHandler) {
+    WidgetRef ref, ValueChanged<int> tapHandler, {Key? key}) {
 
     final TabNavModel tabNavModel = navModel(ref, watch: true);
 
-    return Row(children: [
+    return Row(key: key, children: [
       LayoutBuilder(builder: (context, constraint) =>
         SingleChildScrollView(
           child: ConstrainedBox(
@@ -248,7 +253,7 @@ abstract class TabNavScreen extends NavScreen {
                 labelType: NavigationRailLabelType.all,
                 destinations: tabNavModel._tabs.map((tab) =>
                     NavigationRailDestination(
-                        icon: Icon(tab.icon),
+                        icon: Icon(tab.icon, key: ValueKey("nav tab ${tabNavModel._tabs.indexOf(tab)}")),
                         label: Text(tab.title ?? '')
                     )).toList()
               )
@@ -277,7 +282,8 @@ abstract class TabNavScreen extends NavScreen {
   @protected
   Widget? buildNavTabBar(BuildContext context, WidgetRef ref) =>
       tabBarBuilder(this, context, ref,
-              (newTabIndex) => onTabTap(context, ref, newTabIndex)
+        (newTabIndex) => onTabTap(context, ref, newTabIndex),
+        key: const ValueKey("app tab bar")
       );
 
   Widget? _buildDrawerInternal(BuildContext context, NavControlType navControlType, WidgetRef ref) {
@@ -296,7 +302,8 @@ abstract class TabNavScreen extends NavScreen {
       drawerBuilder(this,
           context,
           ref,
-          (newTabIndex) => onTabTap(context, ref, newTabIndex)
+          (newTabIndex) => onTabTap(context, ref, newTabIndex),
+          key: const ValueKey("app nav drawer")
       );
 
   /// Method to override in subclasses to build screen-specific
@@ -306,7 +313,7 @@ abstract class TabNavScreen extends NavScreen {
   /// factory method building same drawer header for every
   /// screen.
   Widget? buildDrawerHeader(BuildContext context, WidgetRef ref) =>
-      drawerHeaderBuilder(this, context, ref);
+      drawerHeaderBuilder(this, context, ref, key: const ValueKey("app nav drawer header"));
 
   /// Method to override in subclasses to build screen-specific
   /// vertical rial navigation widget. May return `[body]` to
@@ -318,7 +325,8 @@ abstract class TabNavScreen extends NavScreen {
   @protected
   Widget buildVerticalRailAndBody(BuildContext context, WidgetRef ref, Widget body) =>
       verticalNavRailBuilder(body, this, ref,
-              (newTabIndex) => onTabTap(context, ref, newTabIndex)
+          (newTabIndex) => onTabTap(context, ref, newTabIndex),
+          key: const ValueKey("app nav vertical rail")
       );
 
   //#endregion

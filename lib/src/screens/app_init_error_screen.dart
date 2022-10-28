@@ -12,7 +12,7 @@ class AppInitErrorScreen extends NavScreen {
 
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) =>
-     ErrorDisplay(err, stack, errorContext: "Failed to initialize the app");
+     ErrorDisplay(err, stack, errorContext: "Failed to initialize the app", key: const ValueKey("app init error pane"));
 
   @override
   RoutePath get routePath => const RoutePath(resource: "/");
