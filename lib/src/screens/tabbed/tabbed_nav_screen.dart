@@ -253,7 +253,7 @@ abstract class TabNavScreen extends NavScreen {
                 labelType: NavigationRailLabelType.all,
                 destinations: tabNavModel._tabs.map((tab) =>
                     NavigationRailDestination(
-                        icon: Icon(tab.icon, key: ValueKey("nav tab ${tabNavModel._tabs.indexOf(tab)}")),
+                        icon: Icon(tab.icon, key: ValueKey("tab icon ${tabNavModel._tabs.indexOf(tab)}")),
                         label: Text(tab.title ?? '')
                     )).toList()
               )
