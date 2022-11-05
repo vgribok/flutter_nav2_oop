@@ -18,17 +18,18 @@ abstract class NavScreen extends ConsumerWidget {
 
   /// Screen title
   @protected
-  final String screenTitle;
+  final String _screenTitle;
 
   const NavScreen(
       {
         /// Screen title
-        required this.screenTitle,
+        required String screenTitle,
         /// Optional user-supplied key.
         /// If not supplied, route URI
         /// is used as the key
         super.key,
-      });
+      }) :
+        _screenTitle = screenTitle;
 
   /// Returns a Page instance used by the [Navigator] Widget
   Page get _page => MaterialPage(
@@ -103,6 +104,9 @@ abstract class NavScreen extends ConsumerWidget {
   @protected
   @mustCallSuper
   void updateStateOnScreenRemovalFromNavStackTop(WidgetRef ref) {}
+
+  @protected
+  String get screenTitle => _screenTitle;
 
   //#region App-wide screen customization factories
 
