@@ -106,7 +106,7 @@ abstract class NavScreen extends ConsumerWidget {
   void updateStateOnScreenRemovalFromNavStackTop(WidgetRef ref) {}
 
   @protected
-  String get screenTitle => _screenTitle;
+  String getScreenTitle(WidgetRef ref) => _screenTitle;
 
   //#region App-wide screen customization factories
 
@@ -119,7 +119,7 @@ abstract class NavScreen extends ConsumerWidget {
   /// Default implementation of the [appBarBuilder] factory
   static AppBar buildDefaultAppBar(NavScreen screen, BuildContext context, WidgetRef ref) =>
       AppBar(
-          title: Text(screen.screenTitle, key: const ValueKey("app bar title")),
+          title: Text(screen.getScreenTitle(ref), key: const ValueKey("app bar title")),
           actions: screen.buildAppBarActions(context, ref)
       );
 

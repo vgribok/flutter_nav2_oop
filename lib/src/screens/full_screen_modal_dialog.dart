@@ -24,7 +24,7 @@ abstract class FullScreenModalDialog extends NavScreen {
   @override
   AppBar? buildAppBar(BuildContext context, WidgetRef ref) =>
       AppBar(
-        title: Text(screenTitle, key: const ValueKey("app bar title")),
+        title: Text(getScreenTitle(ref), key: const ValueKey("app bar title")),
         leading: IconButton(icon: const Icon(Icons.cancel, key: ValueKey("app bar cancel icon")), onPressed: () => close(context), key: const ValueKey("app bar cancel button")),
         actions: buildAppBarActions(context, ref),
         key: const ValueKey("app bar")

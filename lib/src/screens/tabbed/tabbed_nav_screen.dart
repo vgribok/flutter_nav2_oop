@@ -222,7 +222,7 @@ abstract class TabNavScreen extends NavScreen {
           Row(children: [ // Align icon and text at text baseline
             Icon(screen.tab(ref).icon, color: theme.colorScheme.secondary, key: const ValueKey("drawer header icon")),
             const Text(' '),
-            Text(screen.screenTitle,
+            Text(screen.getScreenTitle(ref),
               style: TextStyle(
                   color: theme.colorScheme.secondary,
                   fontSize: theme.textTheme.headline6?.fontSize
