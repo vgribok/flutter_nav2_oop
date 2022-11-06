@@ -110,3 +110,162 @@ extension FutureProviderEx<T> on FutureProvider<T> {
   T? getUnwatchedValue2(Ref ref) =>
       getUnwatchedAsyncValue2(ref).value;
 }
+
+class RestorableEnumProviderFacadeN<T> {
+  final RestorableProvider<RestorableEnumN<T>> restorableProvider;
+
+  RestorableEnumProviderFacadeN(Iterable<T> enumValues, {T? initialValue, required String restorationId}) :
+        restorableProvider = RestorableProvider<RestorableEnumN<T>>(
+            (ref) => RestorableEnumN<T>(enumValues, initialValue),
+            restorationId: restorationId
+        );
+
+  T? watchValue(WidgetRef ref) =>
+      ref.watch(restorableProvider).enumValue;
+  T? readValue(WidgetRef ref) =>
+      ref.read(restorableProvider).enumValue;
+  void setValue(WidgetRef ref, T? val) =>
+      ref.read(restorableProvider).enumValue = val;
+
+  T? watchValue2(Ref ref) =>
+      ref.watch(restorableProvider).enumValue;
+  T? readValue2(Ref ref) =>
+      ref.read(restorableProvider).enumValue;
+  void setValue2(Ref ref, T? val) =>
+      ref.read(restorableProvider).enumValue = val;
+}
+
+class RestorableEnumProviderFacade<T> {
+  final RestorableProvider<RestorableEnum<T>> restorableProvider;
+
+  RestorableEnumProviderFacade(Iterable<T> enumValues, {required T initialValue, required String restorationId}) :
+        restorableProvider = RestorableProvider<RestorableEnum<T>>(
+            (ref) => RestorableEnum<T>(enumValues, initialValue),
+            restorationId: restorationId
+        );
+
+  T? watchValue(WidgetRef ref) =>
+      ref.watch(restorableProvider).enumValue;
+  T? readValue(WidgetRef ref) =>
+      ref.read(restorableProvider).enumValue;
+  void setValue(WidgetRef ref, T val) =>
+      ref.read(restorableProvider).enumValue = val;
+
+  T? watchValue2(Ref ref) =>
+      ref.watch(restorableProvider).enumValue;
+  T? readValue2(Ref ref) =>
+      ref.read(restorableProvider).enumValue;
+  void setValue2(Ref ref, T val) =>
+      ref.read(restorableProvider).enumValue = val;
+}
+
+class RestorableStringProviderFacadeN {
+  final RestorableProvider<RestorableStringN> restorableProvider;
+
+  RestorableStringProviderFacadeN({String? initialValue, required String restorationId}) :
+        restorableProvider = RestorableProvider<RestorableStringN>(
+            (ref) => RestorableStringN(initialValue),
+            restorationId: restorationId
+        );
+
+  String? watchValue(WidgetRef ref) =>
+      ref.watch(restorableProvider).value;
+  String? readValue(WidgetRef ref) =>
+      ref.read(restorableProvider).value;
+  void setValue(WidgetRef ref, String? val) =>
+      ref.read(restorableProvider).value = val;
+  void mutate(WidgetRef ref, String? Function(String?) updater) =>
+      setValue(ref, updater(readValue(ref)));
+
+  String? watchValue2(Ref ref) =>
+      ref.watch(restorableProvider).value;
+  String? readValue2(Ref ref) =>
+      ref.read(restorableProvider).value;
+  void setValue2(Ref ref, String? val) =>
+      ref.read(restorableProvider).value = val;
+  void mutate2(Ref ref, String? Function(String?) updater) =>
+      setValue2(ref, updater(readValue2(ref)));
+}
+
+class RestorableStringProviderFacade {
+  final RestorableProvider<RestorableString> restorableProvider;
+
+  RestorableStringProviderFacade(String initialValue, {required String restorationId}) :
+        restorableProvider = RestorableProvider<RestorableString>(
+            (ref) => RestorableString(initialValue),
+            restorationId: restorationId
+        );
+
+  String watchValue(WidgetRef ref) =>
+      ref.watch(restorableProvider).value;
+  String readValue(WidgetRef ref) =>
+      ref.read(restorableProvider).value;
+  void setValue(WidgetRef ref, String val) =>
+      ref.read(restorableProvider).value = val;
+  void mutate(WidgetRef ref, String Function(String) updater) =>
+      setValue(ref, updater(readValue(ref)));
+
+  String watchValue2(Ref ref) =>
+      ref.watch(restorableProvider).value;
+  String readValue2(Ref ref) =>
+      ref.read(restorableProvider).value;
+  void setValue2(Ref ref, String val) =>
+      ref.read(restorableProvider).value = val;
+  void mutate2(Ref ref, String Function(String) updater) =>
+      setValue2(ref, updater(readValue2(ref)));
+}
+class RestorableIntProviderFacadeN {
+  final RestorableProvider<RestorableIntN> restorableProvider;
+
+  RestorableIntProviderFacadeN({int? initialValue, required String restorationId}) :
+        restorableProvider = RestorableProvider<RestorableIntN>(
+            (ref) => RestorableIntN(initialValue),
+            restorationId: restorationId
+        );
+
+  int? watchValue(WidgetRef ref) =>
+      ref.watch(restorableProvider).value;
+  int? readValue(WidgetRef ref) =>
+      ref.read(restorableProvider).value;
+  void setValue(WidgetRef ref, int? val) =>
+      ref.read(restorableProvider).value = val;
+  void mutate(WidgetRef ref, int? Function(int?) updater) =>
+      setValue(ref, updater(readValue(ref)));
+
+  int? watchValue2(Ref ref) =>
+      ref.watch(restorableProvider).value;
+  int? readValue2(Ref ref) =>
+      ref.read(restorableProvider).value;
+  void setValue2(Ref ref, int? val) =>
+      ref.read(restorableProvider).value = val;
+  void mutate2(Ref ref, int? Function(int?) updater) =>
+      setValue2(ref, updater(readValue2(ref)));
+}
+
+class RestorableIntProviderFacade {
+  final RestorableProvider<RestorableInt> restorableProvider;
+
+  RestorableIntProviderFacade(int initialValue, {required String restorationId}) :
+        restorableProvider = RestorableProvider<RestorableInt>(
+            (ref) => RestorableInt(initialValue),
+            restorationId: restorationId
+        );
+
+  int watchValue(WidgetRef ref) =>
+      ref.watch(restorableProvider).value;
+  int readValue(WidgetRef ref) =>
+      ref.read(restorableProvider).value;
+  void setValue(WidgetRef ref, int val) =>
+      ref.read(restorableProvider).value = val;
+  void mutate(WidgetRef ref, int Function(int) updater) =>
+      setValue(ref, updater(readValue(ref)));
+
+  int watchValue2(Ref ref) =>
+      ref.watch(restorableProvider).value;
+  int readValue2(Ref ref) =>
+      ref.read(restorableProvider).value;
+  void setValue2(Ref ref, int val) =>
+      ref.read(restorableProvider).value = val;
+  void mutate2(Ref ref, int Function(int) updater) =>
+      setValue2(ref, updater(readValue2(ref)));
+}

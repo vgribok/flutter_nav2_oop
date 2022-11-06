@@ -25,16 +25,15 @@ class BooksProvider extends FutureProviderFacade<List<Book>> {
     }
   );
 
-  final RestorableProvider<RestorableIntN> _selectedBookIdProvider = RestorableProvider(
-      (_) => RestorableIntN(null),
+  final _selectedBookIdProvider = RestorableIntProviderFacadeN(
       restorationId: "selected-book-id"
   );
 
-  List<RestorableProvider> get ephemerals => [_selectedBookIdProvider];
+  List<RestorableProvider> get ephemerals => [_selectedBookIdProvider.restorableProvider];
 
   late final StateProvider<Book?> _selectedBookProvider = StateProvider<Book?>(
       (ref) {
-        final int? selectedBookId = ref.watch(_selectedBookIdProvider).value;
+        final int? selectedBookId = _selectedBookIdProvider.watchValue2(ref);
         if(selectedBookId == null) return null;
         final List<Book>? books = watchForValue2(ref);
         return _bookById(books, selectedBookId);
@@ -48,7 +47,7 @@ class BooksProvider extends FutureProviderFacade<List<Book>> {
       _selectedBookProvider.watch(ref);
 
   void setSelectedBook(WidgetRef ref, Book? book) =>
-      ref.read(_selectedBookIdProvider).value = book?.id;
+      _selectedBookIdProvider.setValue(ref, book?.id);
 
   Future<bool> validateAndSetSelectedBookId(WidgetRef ref, int bookId) async {
     final List<Book> books = await getUnwatchedFuture(ref);

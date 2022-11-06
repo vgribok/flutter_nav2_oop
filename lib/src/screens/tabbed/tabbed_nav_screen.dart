@@ -61,7 +61,7 @@ abstract class TabNavScreen extends NavScreen {
   }) {
 
     final NavControlType navControlType = effectiveNavType(context, ref,
-        ref.watch(TabNavAwareApp.navControlTypeProvider).enumValue
+        TabNavAwareApp.navControlTypeProvider.watchValue(ref)
     );
 
     var biggerBody = _buildBodyInternal(context, navControlType, ref, body);
@@ -87,7 +87,7 @@ abstract class TabNavScreen extends NavScreen {
   /// vertical rail is used.
   static NavControlType effectiveNavType(BuildContext context, WidgetRef ref, NavControlType? navControlType) =>
       navControlType
-          ?? ref.read(TabNavAwareApp.navControlTypeProvider).enumValue
+          ?? TabNavAwareApp.navControlTypeProvider.readValue(ref)
           ?? (context.isPortrait ? NavControlType.BottomTabBar : NavControlType.VerticalRail);
 
   Widget _buildBodyInternal(

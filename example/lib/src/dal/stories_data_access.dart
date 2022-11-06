@@ -43,15 +43,14 @@ class StoriesProvider extends FutureProviderFacade<List<Story>> {
     ];
   }
 
-  final RestorableProvider<RestorableIntN> _currentStoryIdProvider = RestorableProvider(
-          (ref) => RestorableIntN(null),
+  final _currentStoryIdProvider = RestorableIntProviderFacadeN(
       restorationId: "current-story-id"
   );
 
-  List<RestorableProvider> get ephemerals => [_currentStoryIdProvider];
+  List<RestorableProvider> get ephemerals => [_currentStoryIdProvider.restorableProvider];
 
   Story? watchForCurrentStory(WidgetRef ref) {
-    final int? currentStoryId = ref.watch(_currentStoryIdProvider).value;
+    final int? currentStoryId = _currentStoryIdProvider.watchValue(ref);
     if(currentStoryId == null) return null;
     final List<Story>? stories = watchForValue(ref);
     return _getById(stories, currentStoryId);
@@ -71,7 +70,7 @@ class StoriesProvider extends FutureProviderFacade<List<Story>> {
       index == null || index < 0 || index >= stories.length ? null : stories[index];
 
   void setCurrentStory(WidgetRef ref, Story? story) {
-    ref.read(_currentStoryIdProvider).value = story?.id;
+    _currentStoryIdProvider.setValue(ref, story?.id);
 
     if(story == null) {
       StoryEx.cancelNextPageOperation();

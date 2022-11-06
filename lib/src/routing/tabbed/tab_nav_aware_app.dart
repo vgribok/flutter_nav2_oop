@@ -6,7 +6,7 @@ class TabNavAwareApp extends _NavAwareAppBase<TabNavModel> {
   static late RestorableProvider<_TabNavStateRestorer> _privateNavModelProvider;
 
   /// A singleton of the [NavControlType] accessible via [RestorableProvider]
-  static late RestorableProvider<RestorableEnumN<NavControlType?>> navControlTypeProvider;
+  static late RestorableEnumProviderFacadeN<NavControlType> navControlTypeProvider;
 
   TabNavAwareApp({
     /// Application navigation tab definitions
@@ -34,8 +34,9 @@ class TabNavAwareApp extends _NavAwareAppBase<TabNavModel> {
       restorationId: "nav-state-restorer"
     );
 
-    navControlTypeProvider = RestorableProvider(
-            (_) => RestorableEnumN(NavControlType.values, navType),
+    navControlTypeProvider = RestorableEnumProviderFacadeN<NavControlType>(
+        NavControlType.values,
+        initialValue: navType,
         restorationId: "nav-control-type"
     );
   }
@@ -49,7 +50,7 @@ class TabNavAwareApp extends _NavAwareAppBase<TabNavModel> {
   @mustCallSuper
   List<RestorableProvider<RestorableProperty?>> get restorableProviders =>
     [
-      navControlTypeProvider,
+      navControlTypeProvider.restorableProvider,
       ...super.restorableProviders
     ];
 

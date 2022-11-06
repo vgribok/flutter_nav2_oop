@@ -15,9 +15,7 @@ class SettingsScreen extends TabNavScreen { // Subclass NavScreen to enable non-
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) {
 
-    final RestorableEnumN<NavControlType?> restorableNavControlType =
-        ref.watch(TabNavAwareApp.navControlTypeProvider);
-    final NavControlType? navControlType = restorableNavControlType.enumValue;
+    final NavControlType? navControlType = TabNavAwareApp.navControlTypeProvider.watchValue(ref);
 
     return Center(
         child: Column(
@@ -32,28 +30,22 @@ class SettingsScreen extends TabNavScreen { // Subclass NavScreen to enable non-
                     ChoiceChip(
                         label: const Text('Auto'),
                         selected: navControlType == null,
-                        onSelected: (selected) =>
-                            selected ? restorableNavControlType.enumValue = null : null
+                        onSelected: (selected) => _selectNavType(selected, ref, null)
                     ),
                     ChoiceChip(
                         label: const Text('Bottom Tab Bar'),
                         selected: navControlType == NavControlType.BottomTabBar,
-                        onSelected: (selected) =>
-                        selected ? restorableNavControlType.enumValue = NavControlType.BottomTabBar
-                                : null
+                        onSelected: (selected) => _selectNavType(selected, ref, NavControlType.BottomTabBar)
                     ),
                     ChoiceChip(
                         label: const Text('Side Drawer'),
                         selected: navControlType == NavControlType.Drawer,
-                        onSelected: (selected) =>
-                          selected ? restorableNavControlType.enumValue = NavControlType.Drawer : null
+                        onSelected: (selected) => _selectNavType(selected, ref, NavControlType.Drawer)
                     ),
                     ChoiceChip(
                         label: const Text('Vertical Rail'),
                         selected: navControlType == NavControlType.VerticalRail,
-                        onSelected: (selected) =>
-                          selected ? restorableNavControlType.enumValue = NavControlType.VerticalRail
-                            : null
+                        onSelected: (selected) => _selectNavType(selected, ref, NavControlType.VerticalRail)
                     ),
                   ]
               ),
@@ -65,6 +57,10 @@ class SettingsScreen extends TabNavScreen { // Subclass NavScreen to enable non-
             ]
         )
     );
+  }
+
+  void _selectNavType(bool selected, WidgetRef ref, NavControlType? navControlType) {
+    if(selected) TabNavAwareApp.navControlTypeProvider.setValue(ref, navControlType);
   }
 
   @override

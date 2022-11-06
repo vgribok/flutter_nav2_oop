@@ -6,12 +6,9 @@ import 'package:riverpod_restorable/riverpod_restorable.dart';
 
 class CounterScreen extends TabNavScreen { // Subclass NavScreen to enable non-tab navigation
 
-  static final _counterProvider = RestorableProvider<RestorableInt>(
-      (ref) => RestorableInt(0),
-      restorationId: "counter"
-  );
+  static final _counterProvider = RestorableIntProviderFacade(0, restorationId:  "counter");
 
-  static final List<RestorableProvider> ephemerals = [_counterProvider];
+  static final List<RestorableProvider> ephemerals = [_counterProvider.restorableProvider];
 
   const CounterScreen(super.tabIndex, // Comment super.tabIndex to enable non-tab navigation
       {super.key})
@@ -24,7 +21,7 @@ class CounterScreen extends TabNavScreen { // Subclass NavScreen to enable non-t
   @protected
   Widget? buildFloatingActionButton(BuildContext context, WidgetRef ref) =>
       FloatingActionButton(
-          onPressed: () => ref.read(_counterProvider).value++,
+          onPressed: () => _counterProvider.mutate(ref, (n) => n+1),
           tooltip: 'Increment',
           backgroundColor: Theme.of(context).primaryColor,
           child: const Icon(Icons.add)
@@ -40,7 +37,7 @@ class CounterScreen extends TabNavScreen { // Subclass NavScreen to enable non-t
                children: <Widget>[
                  const Text('You have pushed the button this many times:'),
                  Text(
-                   '${ref.watch(_counterProvider).value}',
+                   '${_counterProvider.watchValue(ref)}',
                    style: Theme.of(context).textTheme.headline4,
                  ),
                ],
