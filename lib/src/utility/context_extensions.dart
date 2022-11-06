@@ -15,6 +15,7 @@ extension ContextEx on BuildContext {
 
   void showSnackBar(String text) => showFancySnackBar(content: Text(text));
 
+  /// Fires and forgets, but shows error in the snack bar on exception
   Future<void> fireAsync({ required Future Function() stateMutator, required String onErrorMessage}) async {
     try {
       await stateMutator();
@@ -24,6 +25,9 @@ extension ContextEx on BuildContext {
     }
   }
 
-  Size screenSize() =>
-      MediaQuery.of(this).size;
+  Size get screenSize => MediaQuery.of(this).size;
+
+  ThemeData get theme => Theme.of(this);
+
+  ColorScheme get colorScheme => theme.colorScheme;
 }
