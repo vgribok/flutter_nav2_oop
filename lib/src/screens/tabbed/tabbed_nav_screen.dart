@@ -207,33 +207,26 @@ abstract class TabNavScreen extends NavScreen {
   }
 
   /// Default implementation of the [drawerHeaderBuilder] factory
-  static Widget buildDefaultDrawerHeader(TabNavScreen screen, BuildContext context, WidgetRef ref, {Key? key}) {
-
-    final ThemeData theme = Theme.of(context);
-
-    return DrawerHeader(
+  static Widget buildDefaultDrawerHeader(TabNavScreen screen, BuildContext context, WidgetRef ref, {Key? key}) =>
+    DrawerHeader(
       key: key,
       decoration: BoxDecoration(
-        color: theme.primaryColor
+        color: context.theme.primaryColor
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start, // Align to the top of the Drawer Header
         children: [
           Row(children: [ // Align icon and text at text baseline
-            Icon(screen.tab(ref).icon, color: theme.colorScheme.secondary, key: const ValueKey("drawer header icon")),
+            Icon(screen.tab(ref).icon, color: context.colorScheme.onPrimary, key: const ValueKey("drawer header icon")),
             const Text(' '),
             Text(screen.getScreenTitle(ref),
-              style: TextStyle(
-                  color: theme.colorScheme.secondary,
-                  fontSize: theme.textTheme.headline6?.fontSize
-              ),
+              style: context.theme.textTheme.headline6!.copyWith(color: context.colorScheme.onPrimary),
               key: const ValueKey("drawer header title")
             )
           ]
         )]
       )
     );
-  }
 
   /// Default implementation of the [verticalNavRailBuilder] factory
   static Widget buildDefaultVerticalNavRail(Widget body, NavScreen screen,

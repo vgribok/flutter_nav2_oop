@@ -23,7 +23,8 @@ class CounterScreen extends TabNavScreen { // Subclass NavScreen to enable non-t
       FloatingActionButton(
           onPressed: () => _counterProvider.mutate(ref, (n) => n+1),
           tooltip: 'Increment',
-          backgroundColor: Theme.of(context).primaryColor,
+          foregroundColor: context.colorScheme.onPrimary,
+          backgroundColor: context.colorScheme.primary,
           child: const Icon(Icons.add)
       );
 
