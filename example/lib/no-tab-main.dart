@@ -27,8 +27,8 @@ Future<void> _appInitSimulator(Ref ref) async {
 NavAwareApp get theApp => NavAwareApp (
     applicationId: "nav-aware-books-sample",
     appTitle: 'Books With Navigation',
-    theme: lightTheme,
-    darkTheme: darkTheme,
+    theme: mainColor.toTheme(),
+    darkTheme: mainColor.toDarkTheme(),
     initialPath: BookDetailsPath(bookId: 2),
     appGlobalStateInitProvider: FutureProvider(_appInitSimulator),
     key: const ValueKey("books-sample-app"),

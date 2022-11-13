@@ -34,8 +34,8 @@ Future<void> _appInitSimulator(Ref ref) async {
 TabNavAwareApp get theApp => TabNavAwareApp(
   applicationId: "nav-aware-books-sample",
   appTitle: 'Books With Navigation',
-  theme: lightTheme,
-  darkTheme: darkTheme,
+  theme: mainColor.toTheme(),
+  darkTheme: mainColor.toDarkTheme(),
   initialPath: CounterPath(),
   appGlobalStateInitProvider: FutureProvider(_appInitSimulator),
   key: const ValueKey("books-sample-app"),
