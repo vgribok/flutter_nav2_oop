@@ -7,15 +7,7 @@ const MaterialColor _mainColor = Colors.pink;
 final ThemeData lightTheme = ThemeData.from(
     useMaterial3: true,
     colorScheme: ColorScheme.fromSeed(seedColor: _mainColor)
-  // ColorScheme.fromSwatch(
-  //   primarySwatch: Colors.pink,
-  //   accentColor: Colors.white,
-  //   backgroundColor: Colors.white,
-  //   brightness: Brightness.light,
-  // ),
-)
-    .copyWith(indicatorColor: Colors.pink)
-;
+);
 
 final ThemeData darkTheme = ThemeData.from(
     useMaterial3: true,
@@ -23,13 +15,4 @@ final ThemeData darkTheme = ThemeData.from(
         seedColor: _mainColor,
         brightness: Brightness.dark
     )
-)
-//   ColorScheme.fromSwatch(
-//     primarySwatch: Colors.pink,
-//     accentColor: Colors.white,
-//     backgroundColor: Colors.black54,
-//     brightness: Brightness.dark,
-//   ),
-// )
-    .copyWith(indicatorColor: Colors.pink)
-;
+);

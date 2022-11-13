@@ -211,16 +211,20 @@ abstract class TabNavScreen extends NavScreen {
     DrawerHeader(
       key: key,
       decoration: BoxDecoration(
-        color: context.theme.primaryColor
+        color: context.colorScheme.primaryContainer,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start, // Align to the top of the Drawer Header
         children: [
           Row(children: [ // Align icon and text at text baseline
-            Icon(screen.tab(ref).icon, color: context.colorScheme.onPrimary, key: const ValueKey("drawer header icon")),
+            Icon(
+                screen.tab(ref).icon,
+                color: context.colorScheme.onPrimaryContainer,
+                key: const ValueKey("drawer header icon")
+            ),
             const Text(' '),
             Text(screen.getScreenTitle(ref),
-              style: context.theme.textTheme.headline6!.copyWith(color: context.colorScheme.onPrimary),
+              style: context.theme.textTheme.headline6!.copyWith(color: context.colorScheme.onPrimaryContainer),
               key: const ValueKey("drawer header title")
             )
           ]
