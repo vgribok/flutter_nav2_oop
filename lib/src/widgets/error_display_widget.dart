@@ -19,25 +19,31 @@ class ErrorDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      Padding(padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+      DecoratedBox(
+        decoration: BoxDecoration(color: context.colorScheme.errorContainer),
+        child: Padding(padding: const EdgeInsets.all(5),
           child: Center(child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text("$errorContext. Reason: \"$errorMessage\"",
                     key: const ValueKey("error text"),
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-
+                    style: context.theme.textTheme.bodyText1?.copyWith(color: context.colorScheme.onErrorContainer)
+                ),
                 if(stack != null && kDebugMode)
-                  ..._debugInfoWidgets
+                  ..._getDebugInfoWidgets(context)
               ]
-          ))
+          )))
       );
 
-  List<Widget> get _debugInfoWidgets => [
+  List<Widget> _getDebugInfoWidgets(BuildContext context) => [
     const Divider(thickness: 1, indent: 50, endIndent: 50),
     Expanded(child: SingleChildScrollView(scrollDirection: Axis.vertical,
-        child: Text(stack!.toString(), style: GoogleFonts.cutiveMono(fontSize: 20), key: const ValueKey("debug info text"))
+        child: Text(
+            stack!.toString(),
+            style: GoogleFonts.cutiveMono(fontSize: 20).copyWith(color: context.colorScheme.onErrorContainer),
+            key: const ValueKey("debug info text")
+        )
     ))
   ];
 }
