@@ -14,8 +14,14 @@ class BooksProvider extends FutureProviderFacade<List<Book>> {
 
   BooksProvider() : super(
     (ref) async {
+
         // Simulate long-ish API call to retrieve data
         await Future.delayed(const Duration(milliseconds: 750));
+        // Simulate throwing an exception
+        final int timestamp = DateTime.now().second;
+        if((timestamp % 3) == 0) {
+          throw Exception("Demo exception to simulate data retrieval failure");
+        }
 
         return [
           const Book(id: 0, title: 'Stranger in a Strange Land', author: 'Robert A. Heinlein'),

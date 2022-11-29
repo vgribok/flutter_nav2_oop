@@ -13,7 +13,9 @@ class ErrorDisplay extends StatelessWidget {
   /// when it failed
   final String errorContext;
 
-  const ErrorDisplay(this.err, this.stack, {super.key, required this.errorContext});
+  final void Function() onRetry;
+
+  const ErrorDisplay(this.err, this.stack, {super.key, required this.errorContext, required this.onRetry});
 
   String get errorMessage => err.toString();
 
@@ -26,6 +28,7 @@ class ErrorDisplay extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                ElevatedButton(onPressed: onRetry, child: const Text("Retry")),
                 Text("$errorContext. Reason: \"$errorMessage\"",
                     key: const ValueKey("error text"),
                     style: context.theme.textTheme.bodyText1?.copyWith(color: context.colorScheme.onErrorContainer)

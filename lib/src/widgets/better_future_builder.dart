@@ -6,12 +6,14 @@ class BetterFutureBuilder<V> extends StatelessWidget {
   final Widget Function(V?, BuildContext) builder;
   final String? waitText;
   final bool waitCursorCentered;
+  final VoidCallback onRetry;
 
   const BetterFutureBuilder({
     required this.future,
     required this.builder,
     this.waitText = "Processing...",
     this.waitCursorCentered = true,
+    required this.onRetry,
     super.key
   });
 
@@ -21,7 +23,7 @@ class BetterFutureBuilder<V> extends StatelessWidget {
         future: future,
         builder: (ctx, snapshot) {
           if(snapshot.hasError) {
-            return ErrorDisplay(snapshot.error!, null, errorContext: "Error while $waitText", key: const ValueKey("better future builder error pane"));
+            return buildErrorMessageWidget(snapshot);
           }
 
           return snapshot.connectionState == ConnectionState.done ?
@@ -29,4 +31,13 @@ class BetterFutureBuilder<V> extends StatelessWidget {
                       WaitIndicator(waitText: waitText, centered: waitCursorCentered, key: const ValueKey("better future builder wait indicator"));
         }
       );
+
+  @protected
+  ErrorDisplay buildErrorMessageWidget(AsyncSnapshot<dynamic> snapshot) {
+    return ErrorDisplay(snapshot.error!, null,
+        errorContext: "Error while $waitText",
+        onRetry: onRetry,
+        key: const ValueKey("better future builder error pane")
+    );
+  }
 }

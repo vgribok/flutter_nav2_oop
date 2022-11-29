@@ -17,6 +17,7 @@ class StoriesListScreen extends TabNavScreen {
       AsyncValueAwaiter<List<Story>>(
           asyncData: storiesProvider.watchAsyncValue(ref),
           waitText: "Loading stories...",
+          onRetry: () => storiesProvider.provider.invalidate(ref),
           builder: (stories) =>
             StoryLayout(stories, selectedStoryId: null,
                 child: Column(

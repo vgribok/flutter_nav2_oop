@@ -40,7 +40,9 @@ abstract class _NavAwareRouterDelegateBase<T extends _NavModelBase>
         loading: () =>
             _navigatorWidget(context, [const AppInitWaitScreen()]),
         error: (err, stack) =>
-            _navigatorWidget(context, [AppInitErrorScreen(err, stack)]),
+            _navigatorWidget(context, [AppInitErrorScreen(err, stack,
+                onRetry: () => _NavAwareAppBase.appInitProvider.invalidate(ref)
+            )]),
         data: (_) =>
             // Call the function converting state into the stack of screens.
             _navigatorWidget(context, navModel.buildNavigatorScreenStack(ref))

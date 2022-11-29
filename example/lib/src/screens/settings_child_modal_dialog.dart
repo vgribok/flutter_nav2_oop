@@ -17,7 +17,10 @@ class SettingsChildModalDialog extends FullScreenModalDialog {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Text('Full-Screen Modal Dialog'),
-            const ErrorDisplay("An example of error message,", null, errorContext: "Demo of the error output"),
+            ErrorDisplay("An example of error message,", null,
+                errorContext: "Demo of the error output",
+                onRetry: () => "Does nothing".debugPrint()
+            ),
             const Divider(thickness: 1, indent: 50, endIndent: 50),
             ElevatedButton(
                 child: const Text('Close Me'),

@@ -79,9 +79,6 @@ extension FutureProviderEx<T> on FutureProvider<T> {
   AsyncValue<T> getUnwatchedAsyncValue(WidgetRef ref) =>
       ref.read(this);
 
-  AsyncValue<T> refresh(WidgetRef ref) =>
-      ref.refresh(this);
-
   T? watchForValue(WidgetRef ref) =>
       watchAsyncValue(ref).value;
 
@@ -101,14 +98,17 @@ extension FutureProviderEx<T> on FutureProvider<T> {
   AsyncValue<T> getUnwatchedAsyncValue2(Ref ref) =>
       ref.read(this);
 
-  AsyncValue<T> refresh2(Ref ref) =>
-      ref.refresh(this);
+  AsyncValue<T> refresh(WidgetRef ref) => ref.refresh(this);
+  AsyncValue<T> refresh2(Ref ref) => ref.refresh(this);
 
   T? watchForValue2(Ref ref) =>
       watchAsyncValue2(ref).value;
 
   T? getUnwatchedValue2(Ref ref) =>
       getUnwatchedAsyncValue2(ref).value;
+
+  void invalidate(WidgetRef ref) => ref.invalidate(this);
+  void invalidate2(Ref ref) => ref.invalidate(this);
 }
 
 class RestorableEnumProviderFacadeN<T> {
