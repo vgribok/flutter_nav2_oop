@@ -1,9 +1,9 @@
 part of flutter_nav2_oop;
 
-class BetterFutureBuilder<V> extends StatelessWidget {
+class BetterFutureBuilder<T> extends StatefulWidget {
 
-  final Future<V> future;
-  final Widget Function(V?, BuildContext) builder;
+  final Future<T> future;
+  final Widget Function(T?, BuildContext) builder;
   final String? waitText;
   final bool waitCursorCentered;
   final VoidCallback onRetry;
@@ -18,25 +18,39 @@ class BetterFutureBuilder<V> extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) =>
-      FutureBuilder<V>(
-        future: future,
-        builder: (ctx, snapshot) {
-          if(snapshot.hasError) {
-            return buildErrorMessageWidget(snapshot);
-          }
+  State<BetterFutureBuilder<T>> createState() =>
+      _BetterFutureState<T>();
+}
 
-          return snapshot.connectionState == ConnectionState.done ?
-                      builder(snapshot.data, ctx) :
-                      WaitIndicator(waitText: waitText, centered: waitCursorCentered, key: const ValueKey("better future builder wait indicator"));
-        }
+class _BetterFutureState<T> extends State<BetterFutureBuilder<T>> {
+
+  @override
+  Widget build(BuildContext context) =>
+      FutureBuilder<T>(
+          future: widget.future,
+          builder: (ctx, snapshot) {
+            if(snapshot.hasError) {
+              return buildErrorMessageWidget(snapshot);
+            }
+
+            return snapshot.connectionState == ConnectionState.done ?
+              widget.builder(snapshot.data, ctx) :
+              WaitIndicator(
+                  waitText: widget.waitText,
+                  centered: widget.waitCursorCentered,
+                  key: const ValueKey("better future builder wait indicator")
+              );
+          }
       );
 
   @protected
   ErrorDisplay buildErrorMessageWidget(AsyncSnapshot<dynamic> snapshot) {
     return ErrorDisplay(snapshot.error!, null,
-        errorContext: "Error while $waitText",
-        onRetry: onRetry,
+        errorContext: "Error while ${widget.waitText}",
+        onRetry: () {
+          triggerRepaint();
+          widget.onRetry();
+        },
         key: const ValueKey("better future builder error pane")
     );
   }

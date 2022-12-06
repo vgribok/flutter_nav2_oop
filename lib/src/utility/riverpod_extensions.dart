@@ -33,15 +33,11 @@ abstract class FutureProviderFacade<T> {
   AsyncValue<T> getUnwatchedAsyncValue(WidgetRef ref) =>
       ref.read(provider);
 
-  AsyncValue<T> refresh(WidgetRef ref) =>
-      ref.refresh(provider);
-
   T? watchForValue(WidgetRef ref) =>
       watchAsyncValue(ref).value;
 
   T? getUnwatchedValue(WidgetRef ref) =>
       getUnwatchedAsyncValue(ref).value;
-
 
   Future<T> getUnwatchedFuture2(Ref ref) =>
       ref.read(provider.future);
@@ -54,6 +50,12 @@ abstract class FutureProviderFacade<T> {
 
   AsyncValue<T> getUnwatchedAsyncValue2(Ref ref) =>
       ref.read(provider);
+
+  void invalidate(WidgetRef ref) => provider.refresh(ref);
+  void invalidate2(Ref ref) => provider.refresh2(ref);
+
+  AsyncValue<T> refresh(WidgetRef ref) =>
+      ref.refresh(provider);
 
   AsyncValue<T> refresh2(Ref ref) =>
       ref.refresh(provider);
@@ -84,7 +86,6 @@ extension FutureProviderEx<T> on FutureProvider<T> {
 
   T? getUnwatchedValue(WidgetRef ref) =>
       getUnwatchedAsyncValue(ref).value;
-
 
   Future<T> getUnwatchedFuture2(Ref ref) =>
       ref.read(future);

@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'book_details_screen.dart';
 
 class BooksListScreen extends TabNavScreen { // Subclass NavScreen to enable non-tab navigation
-  static final _asyncActionInProgressProvider = StateProvider<bool>((ref) => false);
+  static final _asyncActionInProgressProvider = AsyncButton.createActionProgressProvider();
 
   const BooksListScreen(super.tabIndex, // Comment super.tabIndex to enable non-tab navigation
       {super.key})
@@ -18,7 +18,7 @@ class BooksListScreen extends TabNavScreen { // Subclass NavScreen to enable non
       AsyncValueAwaiter<List<Book>>(
         asyncData: booksProvider.watchAsyncValue(ref),
         waitText: "Loading books...",
-        onRetry: () => booksProvider.provider.invalidate(ref),
+        onRetry: () => booksProvider.invalidate(ref),
         builder: (books) =>
             Center(
                 child: Column(

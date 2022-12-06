@@ -1,9 +1,9 @@
 part of flutter_nav2_oop;
 
-class AsyncValueAwaiter<V> extends StatelessWidget {
+class AsyncValueAwaiter<T> extends StatefulWidget {
 
-  final AsyncValue<V> asyncData;
-  final Widget Function(V) builder;
+  final AsyncValue<T> asyncData;
+  final Widget Function(T) builder;
   final String? waitText;
   final bool waitCursorCentered;
   final VoidCallback onRetry;
@@ -18,19 +18,56 @@ class AsyncValueAwaiter<V> extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) =>
-      asyncData.when(
-          data: (data) => builder(data),
-          error: onError,
-          loading: () => WaitIndicator(waitText: waitText, centered: waitCursorCentered, key: const ValueKey("async value awaiter wait indicator"))
-      );
+  State<AsyncValueAwaiter<T>> createState() =>
+      _AsyncValueAwaiterState<T>();
+}
+
+class _AsyncValueAwaiterState<T> extends State<AsyncValueAwaiter<T>> {
+
+  @override
+  Widget build(BuildContext context) {
+    if(widget.asyncData.isLoading) {
+      return _buildWaitIndicator();
+    }
+
+    if(widget.asyncData.hasError) {
+      return onError(widget.asyncData.error!, widget.asyncData.stackTrace!);
+    }
+
+    if(widget.asyncData.hasValue) {
+      return widget.builder(widget.asyncData.value!);
+    }
+
+    return _buildWaitIndicator();
+  }
+
+  WaitIndicator _buildWaitIndicator() {
+    return WaitIndicator(
+        waitText: widget.waitText,
+        centered: widget.waitCursorCentered,
+        key: const ValueKey("async value awaiter wait indicator")
+    );
+  }
+      // widget.asyncData.when(
+      //     data: (data) => widget.builder(data),
+      //     error: onError,
+      //     loading: () => WaitIndicator(
+      //         waitText: widget.waitText,
+      //         centered: widget.waitCursorCentered,
+      //         key: const ValueKey("async value awaiter wait indicator")
+      //     )
+      // );
 
   @protected
   Widget onError(Object error, StackTrace callStack) =>
       ErrorDisplay(error, callStack,
-          errorContext: "Error while $waitText",
-          onRetry: onRetry,
+          errorContext: "Error while ${widget.waitText}",
+          onRetry: () {
+            // setState(() {});
+            widget.onRetry();
+            // setState(() {});
+            // triggerRepaint();
+          },
           key: const ValueKey("async value awaiter error pane")
-      )
-  ;
+      );
 }

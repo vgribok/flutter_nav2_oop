@@ -5,10 +5,9 @@ class ElevatedAsyncButton extends AsyncButton {
       StateProvider<bool>  asyncActionProgressProvider,
       {
         required super.child, required super.onPressed, required super.onDisplayError, required super.onLogError, super.key
-      }
-      ) : super(asyncActionProgressProvider,
+      }) : super(asyncActionProgressProvider,
           (context, ref, innerChild, internalKey, internalOnPress) =>
-          ElevatedButton(onPressed: internalOnPress, key: internalKey, child: innerChild)
+            ElevatedButton(onPressed: internalOnPress, key: internalKey, child: innerChild)
   );
 }
 
@@ -35,6 +34,9 @@ class TextAsyncButton extends AsyncButton {
 }
 
 abstract class AsyncButton extends ConsumerWidget {
+
+  static StateProvider<bool> createActionProgressProvider() =>
+      StateProvider<bool>((ref) => false);
 
   final Widget Function(BuildContext context, WidgetRef ref, Widget child, Key key, Future Function() onPressed) _mainControlBuilder;
   final StateProvider<bool> _asyncActionProgressProvider;
