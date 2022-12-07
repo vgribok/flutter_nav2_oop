@@ -18,11 +18,27 @@ class AsyncValueAwaiter<V> extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) =>
-      asyncData.when(
-          data: (data) => builder(data),
-          error: onError,
-          loading: () => WaitIndicator(waitText: waitText, centered: waitCursorCentered, key: const ValueKey("async value awaiter wait indicator"))
+  Widget build(BuildContext context) {
+    if(asyncData.isLoading) {
+      return _buildWaitIndicator();
+    }
+
+    if(asyncData.hasError) {
+      return onError(asyncData.error!, asyncData.stackTrace!);
+    }
+
+    if(asyncData.hasValue) {
+      return builder(asyncData.value!);
+    }
+
+    return _buildWaitIndicator();
+  }
+
+  WaitIndicator _buildWaitIndicator() =>
+      WaitIndicator(
+          waitText: waitText,
+          centered: waitCursorCentered,
+          key: const ValueKey("async value awaiter wait indicator")
       );
 
   @protected

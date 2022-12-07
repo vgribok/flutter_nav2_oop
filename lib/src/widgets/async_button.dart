@@ -81,15 +81,19 @@ abstract class AsyncButton extends ConsumerWidget {
       return;
     }
 
+    final progressStateProvider = _asyncActionProgressProvider.writable(ref);
+
     try {
-      _asyncActionProgressProvider.writable(ref).state = true;
+      progressStateProvider.state = true;
       await _onPressed();
     } catch(e) {
       _onLogError(e).debugPrint();
       context.showSnackBar(_onDisplayError());
     }
-    finally {
-      _asyncActionProgressProvider.writable(ref).state = false;
+    finally
+    {
+      progressStateProvider.state = false;
+      assert(progressStateProvider.state == false);
     }
   }
 }
