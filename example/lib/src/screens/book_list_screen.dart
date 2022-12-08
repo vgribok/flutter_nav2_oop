@@ -7,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'book_details_screen.dart';
 
 class BooksListScreen extends TabNavScreen { // Subclass NavScreen to enable non-tab navigation
-  static final _asyncActionInProgressProvider = StateProvider<bool>((ref) => false);
 
   const BooksListScreen(super.tabIndex, // Comment super.tabIndex to enable non-tab navigation
       {super.key})
@@ -20,26 +19,16 @@ class BooksListScreen extends TabNavScreen { // Subclass NavScreen to enable non
         waitText: "Loading books...",
         key: const ValueKey("book list"),
         builder: (books) =>
-          CenteredColumn(
-            key: const ValueKey("book list column"),
-            children: [
-              ElevatedAsyncButton(_asyncActionInProgressProvider,
-                  onPressed: () { booksProvider.invalidate(ref); return Future.value(); },
-                  onDisplayError: () => "Failed to refresh",
-                  onLogError: (err) => "Failed to refresh due to $err",
-                  child: const Text("Refresh book data")),
-              Expanded(child:
-                ListView(children: [
-                  for (Book book in books)
-                    ListTile(
-                      title: Text(book.title),
-                      subtitle: Text(book.author),
-                      onTap: () => booksProvider.setSelectedBook(ref, book),
-                      key: book.key,
-                    )
-                ])
-              )
-            ]
+          RefreshIndicator(onRefresh: () { booksProvider.invalidate(ref); return Future.value(); },
+            child: ListView(children: [
+              for (Book book in books)
+                ListTile(
+                  title: Text(book.title),
+                  subtitle: Text(book.author),
+                  onTap: () => booksProvider.setSelectedBook(ref, book),
+                  key: book.key,
+                )
+            ])
           )
       );
 

@@ -58,3 +58,4 @@ part './src/widgets/wait_widget.dart';
 part './src/widgets/confirmation_message_box.dart';
 part './src/widgets/centered_column.dart';
 part './src/widgets/future_provider_widget.dart';
+part './src/widgets/refresh_indicator_container.dart';

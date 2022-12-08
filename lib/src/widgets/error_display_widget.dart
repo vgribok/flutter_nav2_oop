@@ -15,7 +15,11 @@ class ErrorDisplay extends StatelessWidget {
 
   final void Function() onRetry;
 
-  const ErrorDisplay(this.err, this.stack, {super.key, required this.errorContext, required this.onRetry});
+  const ErrorDisplay(this.err, this.stack,
+      {
+        super.key, required this.errorContext, required this.onRetry
+      })
+  ;
 
   String get errorMessage => err.toString();
 
@@ -36,7 +40,8 @@ class ErrorDisplay extends StatelessWidget {
                 if(stack != null && kDebugMode)
                   ..._getDebugInfoWidgets(context)
               ]
-          )))
+          )
+        ))
       );
 
   List<Widget> _getDebugInfoWidgets(BuildContext context) => [
@@ -49,4 +54,18 @@ class ErrorDisplay extends StatelessWidget {
         )
     ))
   ];
+}
+
+class ExpandedErrorDisplay extends ErrorDisplay {
+
+  const ExpandedErrorDisplay(super.err, super.stack, {
+    super.key, required super.errorContext, required super.onRetry
+  });
+
+  @override
+  Widget build(BuildContext context) =>
+      RefreshIndicatorContainer(
+        onRefresh: () { onRetry(); return Future.value(); },
+        child: super.build(context)
+      );
 }

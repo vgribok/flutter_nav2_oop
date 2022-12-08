@@ -18,7 +18,8 @@ class StoriesListScreen extends TabNavScreen {
           provider: storiesProvider.provider,
           waitText: "Loading stories...",
           builder: (stories) =>
-            StoryLayout(stories, selectedStoryId: null,
+            RefreshIndicatorProviderContainer(refreshProvider: storiesProvider.provider,
+              child: StoryLayout(stories, selectedStoryId: null,
                 child: Column(
                     children: [
                       Icon(Icons.north, color: Theme.of(context).textTheme.headlineMedium?.color),
@@ -29,6 +30,7 @@ class StoriesListScreen extends TabNavScreen {
                       )
                     ]
                 )
+              )
             )
       );
 
