@@ -14,10 +14,9 @@ class StoriesListScreen extends TabNavScreen {
 
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) =>
-      AsyncValueAwaiter<List<Story>>(
-          asyncData: storiesProvider.watchAsyncValue(ref),
+      FutureProviderBuilder<List<Story>>(
+          provider: storiesProvider.provider,
           waitText: "Loading stories...",
-          onRetry: () => storiesProvider.provider.invalidate(ref),
           builder: (stories) =>
             StoryLayout(stories, selectedStoryId: null,
                 child: Column(

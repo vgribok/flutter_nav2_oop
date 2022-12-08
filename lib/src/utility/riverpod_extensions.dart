@@ -58,6 +58,9 @@ abstract class FutureProviderFacade<T> {
   AsyncValue<T> refresh2(Ref ref) =>
       ref.refresh(provider);
 
+  void invalidate(WidgetRef ref) => ref.invalidate(provider);
+  void invalidate2(Ref ref) => ref.invalidate(provider);
+
   T? watchForValue2(Ref ref) =>
       watchAsyncValue2(ref).value;
 

@@ -1,9 +1,9 @@
 part of flutter_nav2_oop;
 
-class AsyncValueAwaiter<V> extends StatelessWidget {
+class AsyncValueAwaiter<T> extends StatelessWidget {
 
-  final AsyncValue<V> asyncData;
-  final Widget Function(V) builder;
+  final AsyncValue<T> asyncData;
+  final Widget Function(T) builder;
   final String? waitText;
   final bool waitCursorCentered;
   final VoidCallback onRetry;

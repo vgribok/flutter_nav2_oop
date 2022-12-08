@@ -15,35 +15,32 @@ class BooksListScreen extends TabNavScreen { // Subclass NavScreen to enable non
 
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) =>
-      AsyncValueAwaiter<List<Book>>(
-        asyncData: booksProvider.watchAsyncValue(ref),
+      FutureProviderBuilder<List<Book>>(
+        provider: booksProvider.provider,
         waitText: "Loading books...",
-        onRetry: () => booksProvider.provider.invalidate(ref),
+        key: const ValueKey("book list"),
         builder: (books) =>
-            Center(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      ElevatedAsyncButton(_asyncActionInProgressProvider,
-                          onPressed: () { ref.invalidate(booksProvider.provider); return booksProvider.watchFuture(ref); },
-                          onDisplayError: () => "Failed to refresh",
-                          onLogError: (err) => "Failed to refresh due to $err",
-                          child: const Text("Refresh")),
-                      Expanded(child:
-                        ListView(children: [
-                          for (Book book in books)
-                            ListTile(
-                              title: Text(book.title),
-                              subtitle: Text(book.author),
-                              onTap: () => booksProvider.setSelectedBook(ref, book),
-                              key: book.key,
-                            )
-                        ])
-                      )
-                    ]
-                ))
-
+          CenteredColumn(
+            key: const ValueKey("book list column"),
+            children: [
+              ElevatedAsyncButton(_asyncActionInProgressProvider,
+                  onPressed: () { booksProvider.invalidate(ref); return Future.value(); },
+                  onDisplayError: () => "Failed to refresh",
+                  onLogError: (err) => "Failed to refresh due to $err",
+                  child: const Text("Refresh book data")),
+              Expanded(child:
+                ListView(children: [
+                  for (Book book in books)
+                    ListTile(
+                      title: Text(book.title),
+                      subtitle: Text(book.author),
+                      onTap: () => booksProvider.setSelectedBook(ref, book),
+                      key: book.key,
+                    )
+                ])
+              )
+            ]
+          )
       );
 
   @override

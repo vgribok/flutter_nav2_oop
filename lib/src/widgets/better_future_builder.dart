@@ -1,9 +1,9 @@
 part of flutter_nav2_oop;
 
-class BetterFutureBuilder<V> extends StatelessWidget {
+class BetterFutureBuilder<T> extends StatelessWidget {
 
-  final Future<V> future;
-  final Widget Function(V?, BuildContext) builder;
+  final Future<T> future;
+  final Widget Function(T?, BuildContext) builder;
   final String? waitText;
   final bool waitCursorCentered;
   final VoidCallback onRetry;
@@ -19,7 +19,7 @@ class BetterFutureBuilder<V> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      FutureBuilder<V>(
+      FutureBuilder<T>(
         future: future,
         builder: (ctx, snapshot) {
           if(snapshot.hasError) {

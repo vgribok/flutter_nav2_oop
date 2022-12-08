@@ -19,7 +19,7 @@ class SettingsChildModalDialog extends FullScreenModalDialog {
             const Text('Full-Screen Modal Dialog'),
             ErrorDisplay("An example of error message,", null,
                 errorContext: "Demo of the error output",
-                onRetry: () => "Does nothing".debugPrint()
+                onRetry: () => context.showSnackBar("Retry is invoked")
             ),
             const Divider(thickness: 1, indent: 50, endIndent: 50),
             ElevatedButton(
