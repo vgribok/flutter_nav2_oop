@@ -17,10 +17,7 @@ class SettingsScreen extends TabNavScreen { // Subclass NavScreen to enable non-
 
     final NavControlType? navControlType = TabNavAwareApp.navControlTypeProvider.watchValue(ref);
 
-    return Center(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+    return CenteredColumn(
             children: [
               const Text('Navigation Mode:'),
               Wrap(
@@ -55,7 +52,6 @@ class SettingsScreen extends TabNavScreen { // Subclass NavScreen to enable non-
                   onPressed: () => SettingsScreen.showSettingsDialogProvider.writable(ref).state = true
               )
             ]
-        )
     );
   }
 

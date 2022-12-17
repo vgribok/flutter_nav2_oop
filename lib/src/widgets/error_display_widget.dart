@@ -25,24 +25,28 @@ class ErrorDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      DecoratedBox(
-        decoration: BoxDecoration(color: context.colorScheme.errorContainer),
+    Padding(padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: context.colorScheme.errorContainer,
+          borderRadius: const BorderRadius.all(Radius.circular(15))
+        ),
         child: Padding(padding: const EdgeInsets.all(5),
-          child: Center(child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+          child: CenteredColumn(
               children: [
-                ElevatedButton(onPressed: onRetry, child: const Text("Retry")),
                 Text("$errorContext. Reason: \"$errorMessage\"",
                     key: const ValueKey("error text"),
+                    textAlign: TextAlign.center,
                     style: context.theme.textTheme.bodyText1?.copyWith(color: context.colorScheme.onErrorContainer)
                 ),
+                ElevatedButton(onPressed: onRetry, child: const Text("Retry")),
                 if(stack != null && kDebugMode)
                   ..._getDebugInfoWidgets(context)
               ]
           )
-        ))
-      );
+        )
+      )
+    );
 
   List<Widget> _getDebugInfoWidgets(BuildContext context) => [
     const Divider(thickness: 1, indent: 50, endIndent: 50),

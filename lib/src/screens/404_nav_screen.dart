@@ -31,10 +31,7 @@ class UrlNotFoundScreen extends NavScreen {
 
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) =>
-    Center(child:
-      Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+    CenteredColumn(
         children: [
           Text(defaultMessage, key: const ValueKey("404 message text")),
           Text(
@@ -48,7 +45,7 @@ class UrlNotFoundScreen extends NavScreen {
               key: const ValueKey("404 screen close button"),
               child: Text(defaultCloseButtonText, key: const ValueKey("404 screen close button text"))
           )
-        ])
+        ]
     );
 
   @override

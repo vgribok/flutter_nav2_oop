@@ -11,10 +11,7 @@ class SettingsChildModalDialog extends FullScreenModalDialog {
 
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) =>
-      Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+      CenteredColumn(
           children: [
             const Text('Full-Screen Modal Dialog'),
             ErrorDisplay("An example of error message,", null,
@@ -27,7 +24,6 @@ class SettingsChildModalDialog extends FullScreenModalDialog {
                 onPressed: () => close(context)
             )
           ]
-        )
     );
 
   @override
