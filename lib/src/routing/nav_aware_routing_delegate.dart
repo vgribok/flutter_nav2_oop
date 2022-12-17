@@ -58,7 +58,7 @@ abstract class _NavAwareRouterDelegateBase<T extends _NavModelBase>
     // handler to the Navigator object
     return Navigator(
         key: navigatorKey,
-        transitionDelegate: NoAnimationTransitionDelegate(),
+        // transitionDelegate: NoAnimationTransitionDelegate(),
         pages: pageStack,
         onPopPage: _onBackButtonPress,
         restorationScopeId: "main-navigator"
