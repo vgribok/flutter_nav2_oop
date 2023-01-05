@@ -23,13 +23,14 @@ class AsyncValueAwaiter<T> extends StatelessWidget {
       return _buildWaitIndicator();
     }
 
-    if(asyncData.hasError) {
-      return onError(asyncData.error!, asyncData.stackTrace!);
+    final Object? error = asyncData.error;
+    if(error != null) {
+      return onError(error, asyncData.stackTrace);
     }
 
-    final T? val = asyncData.value;
-    if(val != null) {
-      return builder(val);
+    final T? data = asyncData.value;
+    if(data != null) {
+      return builder(data);
     }
 
     return _buildWaitIndicator();
@@ -43,7 +44,7 @@ class AsyncValueAwaiter<T> extends StatelessWidget {
       );
 
   @protected
-  Widget onError(Object error, StackTrace callStack) =>
+  Widget onError(Object error, StackTrace? callStack) =>
       ErrorDisplay(error, callStack,
           errorContext: "Error while $waitText",
           onRetry: onRetry,
