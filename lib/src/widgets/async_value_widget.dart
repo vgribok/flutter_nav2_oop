@@ -28,7 +28,7 @@ class AsyncValueAwaiter<T> extends StatelessWidget {
       return onError(error, asyncData.stackTrace);
     }
 
-    final T? data = asyncData.value;
+    final T? data = asyncData.valueOrNull;
     if(data != null) {
       return builder(data);
     }
