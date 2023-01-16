@@ -54,7 +54,7 @@ class StoriesProvider extends FutureProvider<List<Story>> {
   Story? watchForCurrentStory(WidgetRef ref) {
     final int? currentStoryId = _currentStoryIdProvider.watchValue(ref);
     if(currentStoryId == null) return null;
-    final List<Story>? stories = watchForValue(ref);
+    final List<Story>? stories = watchValue(ref);
     return _getById(stories, currentStoryId);
   }
 
@@ -168,7 +168,7 @@ extension StoryEx on Story {
 
   static Future<bool> validateAndSetCurrentStoryAndPage(WidgetRef ref, int storyId, int? pageId) async {
 
-    final List<Story> stories = await storiesProvider.getUnwatchedFuture(ref);
+    final List<Story> stories = await storiesProvider.readFuture(ref);
     final Story? story = StoriesProvider._getById(stories, storyId);
     if(story == null) return false;
 

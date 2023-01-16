@@ -43,7 +43,7 @@ class BooksProvider extends FutureProvider<List<Book>> {
       (ref) {
         final int? selectedBookId = _selectedBookIdProvider.watchValue2(ref);
         if(selectedBookId == null) return null;
-        final List<Book>? books = watchForValue2(ref);
+        final List<Book>? books = watchValue2(ref);
         return _bookById(books, selectedBookId);
       }
   );
@@ -52,13 +52,13 @@ class BooksProvider extends FutureProvider<List<Book>> {
       bookId == null ? null : books?.firstSafe((book) => book.id == bookId);
 
   Book? watchForSelectedBook(WidgetRef ref) =>
-      _selectedBookProvider.watch(ref);
+      _selectedBookProvider.watchValue(ref);
 
   void setSelectedBook(WidgetRef ref, Book? book) =>
       _selectedBookIdProvider.setValue(ref, book?.id);
 
   Future<bool> validateAndSetSelectedBookId(WidgetRef ref, int bookId) async {
-    final List<Book> books = await getUnwatchedFuture(ref);
+    final List<Book> books = await readFuture(ref);
     final Book? selectedBook = _bookById(books, bookId);
     if(selectedBook == null) return false;
     setSelectedBook(ref, selectedBook);

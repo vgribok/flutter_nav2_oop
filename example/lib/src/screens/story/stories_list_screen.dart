@@ -44,7 +44,7 @@ class StoriesListScreen extends TabNavScreen {
     if(selectedStory == null) return null;
 
     final StoryPage? page = StoryEx.watchForCurrentPage(ref);
-    final List<Story> stories = storiesProvider.watchForValue(ref)!;
+    final List<Story> stories = storiesProvider.watchValue(ref)!;
 
     return StoryScreen(tabIndex, stories, selectedStory, page);
   }

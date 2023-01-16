@@ -1,113 +1,68 @@
+// ignore_for_file: subtype_of_sealed_class
+
 part of flutter_nav2_oop;
 
-extension StateProviderEx<T> on StateProvider<T> {
+abstract class IProviderListenableEx<T> {
 
-  /// Adds more expressive way to access Riverpod's
-  /// StateProvider writable state notifier
-  StateController writable(WidgetRef ref) => ref.read(notifier);
+  AlwaysAliveProviderListenable<T> get provider;
 
-  T watch(WidgetRef ref) => ref.watch(this);
+  T watchValue(WidgetRef ref) => provider.watchValue(ref);
+  T readValue(WidgetRef ref) => provider.readValue(ref);
+  T watchValue2(Ref ref) => provider.watchValue2(ref);
+  T readValue2(Ref ref) => provider.readValue2(ref);
 }
 
-// abstract class FutureProviderFacade<T> {
-//
-//   final FutureProvider<T> provider;
-//
-//   FutureProviderFacade(FutureOr<T> Function(FutureProviderRef<T> ref) create, {
-//     String? name,
-//     List<Provider>? dependencies,
-//     Family? from,
-//     Object? argument,
-//   }) :
-//     provider = FutureProvider(create, name: name, dependencies: dependencies, from: from, argument: argument);
-//
-//   Future<T> getUnwatchedFuture(WidgetRef ref) =>
-//       ref.read(provider.future);
-//
-//   Future<T> watchFuture(WidgetRef ref) =>
-//       ref.watch(provider.future);
-//
-//   AsyncValue<T> watchAsyncValue(WidgetRef ref) =>
-//       ref.watch(provider);
-//
-//   AsyncValue<T> getUnwatchedAsyncValue(WidgetRef ref) =>
-//       ref.read(provider);
-//
-//   AsyncValue<T> refresh(WidgetRef ref) =>
-//       ref.refresh(provider);
-//
-//   T? watchForValue(WidgetRef ref) =>
-//       watchAsyncValue(ref).valueOrNull;
-//
-//   T? getUnwatchedValue(WidgetRef ref) =>
-//       getUnwatchedAsyncValue(ref).valueOrNull;
-//
-//   Future<T> getUnwatchedFuture2(Ref ref) =>
-//       ref.read(provider.future);
-//
-//   Future<T> watchFuture2(Ref ref) =>
-//       ref.watch(provider.future);
-//
-//   AsyncValue<T> watchAsyncValue2(Ref ref) =>
-//       ref.watch(provider);
-//
-//   AsyncValue<T> getUnwatchedAsyncValue2(Ref ref) =>
-//       ref.read(provider);
-//
-//   AsyncValue<T> refresh2(Ref ref) =>
-//       ref.refresh(provider);
-//
-//   void invalidate(WidgetRef ref) => ref.invalidate(provider);
-//   void invalidate2(Ref ref) => ref.invalidate(provider);
-//
-//   T? watchForValue2(Ref ref) =>
-//       watchAsyncValue2(ref).valueOrNull;
-//
-//   T? getUnwatchedValue2(Ref ref) =>
-//       getUnwatchedAsyncValue2(ref).valueOrNull;
-// }
+class BetterStateProvider<T> extends StateProvider<T> with IProviderListenableEx<T> {
+  BetterStateProvider(super.createFn);
+
+  @override
+  AlwaysAliveProviderListenable<T> get provider => this;
+}
+
+extension StateProviderEx<T> on StateProvider<T> {
+  StateController<T> writable(WidgetRef ref) => ref.read(notifier);
+  StateController<T> writable2(Ref ref) => ref.read(notifier);
+
+  void setValue(WidgetRef ref, T newValue) => writable(ref).state = newValue;
+  void setValue2(Ref ref, T newValue) => writable2(ref).state = newValue;
+}
+
+extension ProviderListenableEx<T> on ProviderListenable<T> {
+  T watchValue(WidgetRef ref) => ref.watch(this);
+  T readValue(WidgetRef ref) => ref.read(this);
+  T readValue2(Ref ref) => ref.read(this);
+}
+
+extension AlwaysAliveProviderListenableEx<T> on AlwaysAliveProviderListenable<T> {
+  T watchValue2(Ref ref) => ref.watch(this);
+}
 
 extension FutureProviderEx<T> on FutureProvider<T> {
 
-  Future<T> getUnwatchedFuture(WidgetRef ref) =>
-      ref.read(future);
+  Future<T> watchFuture(WidgetRef ref) => future.watchValue(ref);
+  Future<T> readFuture(WidgetRef ref) => future.readValue(ref);
+  Future<T> watchFuture2(Ref ref) => future.watchValue2(ref);
+  Future<T> readFuture2(Ref ref) => future.readValue2(ref);
 
-  Future<T> watchFuture(WidgetRef ref) =>
-      ref.watch(future);
+  AsyncValue<T> watchAsyncValue(WidgetRef ref) => ref.watch(this);
+  AsyncValue<T> readAsyncValue(WidgetRef ref) => ref.read(this);
+  AsyncValue<T> watchAsyncValue2(Ref ref) => ref.watch(this);
+  AsyncValue<T> readAsyncValue2(Ref ref) => ref.read(this);
 
-  AsyncValue<T> watchAsyncValue(WidgetRef ref) =>
-      ref.watch(this);
+  T? watchValue(WidgetRef ref) => watchAsyncValue(ref).valueOrNull;
+  T? getUnwatchedValue(WidgetRef ref) => readAsyncValue(ref).valueOrNull;
+  T? watchValue2(Ref ref) => watchAsyncValue2(ref).valueOrNull;
+  T? readValue2(Ref ref) => readAsyncValue2(ref).valueOrNull;
+}
 
-  AsyncValue<T> getUnwatchedAsyncValue(WidgetRef ref) =>
-      ref.read(this);
-
-  T? watchForValue(WidgetRef ref) =>
-      watchAsyncValue(ref).valueOrNull;
-
-  T? getUnwatchedValue(WidgetRef ref) =>
-      getUnwatchedAsyncValue(ref).valueOrNull;
-
-
-  Future<T> getUnwatchedFuture2(Ref ref) =>
-      ref.read(future);
-
-  Future<T> watchFuture2(Ref ref) =>
-      ref.watch(future);
-
-  AsyncValue<T> watchAsyncValue2(Ref ref) =>
-      ref.watch(this);
-
-  AsyncValue<T> getUnwatchedAsyncValue2(Ref ref) =>
-      ref.read(this);
-
-  AsyncValue<T> refresh(WidgetRef ref) => ref.refresh(this);
-  AsyncValue<T> refresh2(Ref ref) => ref.refresh(this);
-
-  T? watchForValue2(Ref ref) => watchAsyncValue2(ref).valueOrNull;
-  T? getUnwatchedValue2(Ref ref) => getUnwatchedAsyncValue2(ref).valueOrNull;
-
+extension ProviderOrFamilyEx on ProviderOrFamily {
   void invalidate(WidgetRef ref) => ref.invalidate(this);
   void invalidate2(Ref ref) => ref.invalidate(this);
+}
+
+extension RefreshableEx<T> on Refreshable<T> {
+  T refresh(WidgetRef ref) => ref.refresh(this);
+  T refresh2(Ref ref) => ref.refresh(this);
 }
 
 class RestorableEnumProviderFacadeN<T> {
@@ -119,19 +74,12 @@ class RestorableEnumProviderFacadeN<T> {
             restorationId: restorationId
         );
 
-  T? watchValue(WidgetRef ref) =>
-      ref.watch(restorableProvider).enumValue;
-  T? readValue(WidgetRef ref) =>
-      ref.read(restorableProvider).enumValue;
-  void setValue(WidgetRef ref, T? val) =>
-      ref.read(restorableProvider).enumValue = val;
-
-  T? watchValue2(Ref ref) =>
-      ref.watch(restorableProvider).enumValue;
-  T? readValue2(Ref ref) =>
-      ref.read(restorableProvider).enumValue;
-  void setValue2(Ref ref, T? val) =>
-      ref.read(restorableProvider).enumValue = val;
+  T? watchValue(WidgetRef ref) => ref.watch(restorableProvider).enumValue;
+  T? readValue(WidgetRef ref) => ref.read(restorableProvider).enumValue;
+  void setValue(WidgetRef ref, T? val) => ref.read(restorableProvider).enumValue = val;
+  T? watchValue2(Ref ref) => ref.watch(restorableProvider).enumValue;
+  T? readValue2(Ref ref) => ref.read(restorableProvider).enumValue;
+  void setValue2(Ref ref, T? val) => ref.read(restorableProvider).enumValue = val;
 }
 
 class RestorableEnumProviderFacade<T> {
