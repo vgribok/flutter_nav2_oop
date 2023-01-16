@@ -16,7 +16,7 @@ extension ContextEx on BuildContext {
   void showSnackBar(String text) => showFancySnackBar(content: Text(text));
 
   /// Fires and forgets, but shows error in the snack bar on exception
-  Future<void> fireAsync({ required Future Function() stateMutator, required String onErrorMessage}) async {
+  Future<void> fireAsync({ required Future<void> Function() stateMutator, required String onErrorMessage}) async {
     try {
       await stateMutator();
     } on Exception catch (e) {
