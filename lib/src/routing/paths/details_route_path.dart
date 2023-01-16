@@ -25,7 +25,7 @@ abstract class DetailsRoutePath<T> extends RoutePath {
   String get location => '${super.location}$id';
 
   /// A convenience method simplifying parsing of two-part
-  /// paths, like '/orders/123456'.
+  /// paths, like '/orders/123456' or '/user/orders/123'.
   ///
   /// Should be called by [RoutePath] subclasses'
   /// URL parser factories instantiating routes
@@ -35,9 +35,9 @@ abstract class DetailsRoutePath<T> extends RoutePath {
     final List<String> pathSegments = uri.nonEmptyPathSegments;
 
     // Test two-part path for matching route's pattern
-    if(pathSegments.length == 2 && pathSegments[0] == resource) {
+    if(pathSegments.length > 1 && pathSegments.allButLast().join('/') == resource) {
       // Call route-specific Id test-parser
-      RoutePath? route = idParser(pathSegments[1]);
+      RoutePath? route = idParser(pathSegments.last);
       if(route != null) return route;
     }
     return null;

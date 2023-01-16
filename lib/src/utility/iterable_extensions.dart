@@ -14,6 +14,20 @@ extension IterableExtensions<E> on Iterable<E> {
     return null;
   }
 
+  Iterable<E> allButLast() sync* {
+    bool firstIteration = true;
+    E? previousElem;
+    for(final elem in this) {
+      final firstIter = firstIteration;
+      firstIteration = false;
+      E? prev = firstIter ? null : previousElem;
+      previousElem = elem;
+      if(!firstIter) {
+        yield prev!;
+      }
+    }
+  }
+
   /// Converts [Iterable] to a [Map]
   Map<K,V> toMap<K,V>(K Function(E element) keyGetter, V Function(E element) valueGetter) =>
       { for (E e in this) keyGetter(e) : valueGetter(e) };

@@ -71,6 +71,15 @@ abstract class _NavAwareAppBase<T extends _NavModelBase> extends ConsumerWidget 
   RestorableProvider get navModelProvider;
 
   @protected
+  Iterable<Locale>? get supportedLocales => null;
+
+  @protected
+  Locale? get currentLocale => null;
+
+  @protected
+  Iterable<LocalizationsDelegate<dynamic>>? get localizationDelegates => null;
+
+  @protected
   T navModel(WidgetRef ref);
 
   @protected
@@ -115,6 +124,9 @@ abstract class _NavAwareAppBase<T extends _NavModelBase> extends ConsumerWidget 
         routeInformationParser: getRouteParser(ref),
         restorationScopeId: "app-router-restoration-scope",
         debugShowCheckedModeBanner: false, // Hide 'Debug' ribbon on the AppBar,
+        supportedLocales: supportedLocales ?? const <Locale>[Locale('en', 'US')],
+        locale: currentLocale,
+        localizationsDelegates: localizationDelegates,
 
         // An observation critical to successfully implementing restorable state
         // with the [MaterialApp.router] is that the builder can be used to

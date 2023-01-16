@@ -34,6 +34,47 @@ class TextAsyncButton extends AsyncButton {
   );
 }
 
+class FloatingActionAsyncButton extends AsyncButton {
+
+  FloatingActionAsyncButton(
+      StateProvider<bool>  asyncActionProgressProvider,
+      {
+        required String tooltip,
+        required super.child, required super.onPressed, required super.onDisplayError, required super.onLogError, super.key
+      }) : super(
+      asyncActionProgressProvider,
+          (context, ref, innerChild, internalKey, internalOnPress) =>
+          FloatingActionButton(
+            key: internalKey,
+            onPressed: internalOnPress,
+            tooltip: tooltip,
+            foregroundColor: context.colorScheme.onPrimary,
+            backgroundColor: context.colorScheme.primary,
+            child: innerChild,
+          )
+  );
+}
+
+class IconAsyncButton extends AsyncButton {
+
+  IconAsyncButton(
+      StateProvider<bool>  asyncActionProgressProvider,
+      {
+        required String tooltip,
+        required Widget icon, required super.onPressed, required super.onDisplayError, required super.onLogError, super.key
+      }) : super(
+      asyncActionProgressProvider,
+          (context, ref, innerChild, internalKey, internalOnPress) =>
+          IconButton(
+            key: internalKey,
+            onPressed: internalOnPress,
+            tooltip: tooltip,
+            icon: innerChild,
+          ),
+      child: icon
+  );
+}
+
 abstract class AsyncButton extends ConsumerWidget {
 
   final Widget Function(BuildContext context, WidgetRef ref, Widget child, Key key, Future Function() onPressed) _mainControlBuilder;
