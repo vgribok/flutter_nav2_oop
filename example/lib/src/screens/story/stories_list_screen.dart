@@ -15,10 +15,10 @@ class StoriesListScreen extends TabNavScreen {
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) =>
       FutureProviderBuilder<List<Story>>(
-          provider: storiesProvider.provider,
+          provider: storiesProvider,
           waitText: "Loading stories...",
           builder: (stories) =>
-            RefreshIndicatorProviderContainer(refreshProvider: storiesProvider.provider,
+            RefreshIndicatorProviderContainer(refreshProvider: storiesProvider,
               child: StoryLayout(stories, selectedStoryId: null,
                 child: Column(
                     children: [

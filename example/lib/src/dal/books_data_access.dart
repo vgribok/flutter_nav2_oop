@@ -1,3 +1,5 @@
+// ignore_for_file: subtype_of_sealed_class
+
 import 'package:flutter/material.dart';
 import 'package:flutter_nav2_oop/all.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,7 +12,7 @@ extension BookEx on Book {
 
 final BooksProvider booksProvider = BooksProvider();
 
-class BooksProvider extends FutureProviderFacade<List<Book>> {
+class BooksProvider extends FutureProvider<List<Book>> {
 
   BooksProvider() : super(
     (ref) async {

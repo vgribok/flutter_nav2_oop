@@ -1,3 +1,5 @@
+// ignore_for_file: subtype_of_sealed_class
+
 import 'package:example/src/models/stories_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nav2_oop/all.dart';
@@ -6,7 +8,7 @@ import 'package:riverpod_restorable/riverpod_restorable.dart';
 
 final storiesProvider = StoriesProvider();
 
-class StoriesProvider extends FutureProviderFacade<List<Story>> {
+class StoriesProvider extends FutureProvider<List<Story>> {
 
   StoriesProvider(): super((ref) => _callStoriesApi());
 

@@ -15,7 +15,7 @@ class BooksListScreen extends TabNavScreen { // Subclass NavScreen to enable non
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) =>
       FutureProviderBuilder<List<Book>>(
-        provider: booksProvider.provider,
+        provider: booksProvider,
         waitText: "Loading books...",
         key: const ValueKey("book list"),
         builder: (books) =>
