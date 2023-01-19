@@ -50,7 +50,7 @@ extension FutureProviderEx<T> on FutureProvider<T> {
   AsyncValue<T> readAsyncValue2(Ref ref) => ref.read(this);
 
   T? watchValue(WidgetRef ref) => watchAsyncValue(ref).valueOrNull;
-  T? getUnwatchedValue(WidgetRef ref) => readAsyncValue(ref).valueOrNull;
+  T? readValue(WidgetRef ref) => readAsyncValue(ref).valueOrNull;
   T? watchValue2(Ref ref) => watchAsyncValue2(ref).valueOrNull;
   T? readValue2(Ref ref) => readAsyncValue2(ref).valueOrNull;
 }
