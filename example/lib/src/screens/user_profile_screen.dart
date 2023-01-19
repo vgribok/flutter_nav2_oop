@@ -7,7 +7,7 @@ class UserProfileScreen extends TabNavScreen { // Subclass NavScreen to enable n
 
   const UserProfileScreen(super.tabIndex, // Comment super.tabIndex to enable non-tab navigation
           {super.key}) :
-        super(screenTitle: 'User Profile');
+        super(screenTitle: 'User\nProfile');
 
   @override
   Widget buildBody(BuildContext context, WidgetRef ref)  =>

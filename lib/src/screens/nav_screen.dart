@@ -119,7 +119,7 @@ abstract class NavScreen extends ConsumerWidget {
   /// Default implementation of the [appBarBuilder] factory
   static AppBar buildDefaultAppBar(NavScreen screen, BuildContext context, WidgetRef ref) =>
       AppBar(
-          title: Text(screen.getScreenTitle(ref), key: const ValueKey("app bar title")),
+          title: Text(screen.getScreenTitle(ref), textAlign: TextAlign.center, key: const ValueKey("app bar title")),
           actions: screen.buildAppBarActions(context, ref)
       );
 
