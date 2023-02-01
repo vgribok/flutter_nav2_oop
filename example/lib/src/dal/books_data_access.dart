@@ -49,7 +49,7 @@ class BooksProvider extends FutureProvider<List<Book>> {
   );
 
   static Book? _bookById(List<Book>? books, int? bookId) =>
-      bookId == null ? null : books?.firstSafe((book) => book.id == bookId);
+      bookId == null ? null : books?.firstSafeWhere((book) => book.id == bookId);
 
   Book? watchForSelectedBook(WidgetRef ref) =>
       _selectedBookProvider.watchValue(ref);

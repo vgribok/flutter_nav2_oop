@@ -60,7 +60,7 @@ class StoriesProvider extends FutureProvider<List<Story>> {
 
   static Story? _getById(List<Story>? stories, int? storyId) =>
       storyId == null ? null :
-      stories?.firstSafe((story) => story.id == storyId);
+      stories?.firstSafeWhere((story) => story.id == storyId);
 
   static int? indexOf(List<Story> stories, Story? story) {
     if (story == null) return null;
@@ -108,7 +108,7 @@ extension StoryEx on Story {
 
   StoryPage? getPageById(int? pageId) =>
       pageId == null ? null :
-      pages.firstSafe((page) => page.id == pageId);
+      pages.firstSafeWhere((page) => page.id == pageId);
 
   int? indexOf(StoryPage? page) {
     if (page == null) return null;

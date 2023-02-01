@@ -31,7 +31,7 @@ class NavAwareRouteInfoParser extends RouteInformationParser<RoutePath> {
     /// Let each route factory test-parse the URL.
     RoutePath? path = routeParsers
       .map((parser) => parser(uri))
-      .firstSafe((path) => path != null);
+      .firstSafeWhere((path) => path != null);
 
     // None of URL parsers have recognized the URL.
     // Return the 404 route object.

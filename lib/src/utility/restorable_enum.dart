@@ -8,7 +8,7 @@ class RestorableEnumN<T> extends RestorableString {
     : super(initialValue?.toString() ?? "");
 
   set enumValue(T? value) => super.value = (value?.toString() ?? "");
-  T? get enumValue => enumValues.firstSafe(
+  T? get enumValue => enumValues.firstSafeWhere(
           (enumVal) => enumVal.toString() == super.value
   );
 }

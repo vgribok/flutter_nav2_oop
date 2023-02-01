@@ -4,9 +4,20 @@ extension IterableExtensions<E> on Iterable<E> {
 
   /// Returns first item matching
   /// given criterion, or null if item was not found.
-  E? firstSafe(bool Function(E element)? test) {
+  E? firstSafe() {
     for(var e in this) {
-      if (test == null || test(e)) {
+      return e;
+    }
+
+    return null;
+  }
+
+
+  /// Returns first item matching
+  /// given criterion, or null if item was not found.
+  E? firstSafeWhere(bool Function(E element) test) {
+    for(var e in this) {
+      if (test(e)) {
         return e;
       }
     }
@@ -38,6 +49,19 @@ extension IterableExtensions<E> on Iterable<E> {
     }
 
     return true;
+  }
+
+  /// Returns null if the [elem] is either not found
+  /// in the collection, or was the last element.
+  /// Otherwise returns the element next after [elem].
+  E? nextAfter(E elem) {
+    E? prev;
+    for(final iterator = this.iterator ; iterator.moveNext() ; prev = iterator.current) {
+      if(prev == elem) {
+        return iterator.current;
+      }
+    }
+    return null;
   }
 
   bool containsAny(List<E> list) => any((element) => list.contains(element));
