@@ -51,10 +51,9 @@ abstract class NavScreen extends ConsumerWidget {
     {
       PreferredSizeWidget? appBar = buildAppBar(context, ref);
       Widget body = buildBody(context, ref);
-      Widget? actionButton = buildFloatingActionButton(context, ref);
 
       return buildScaffold(context, ref,
-          appBar: appBar, body: body, actionButton: actionButton
+          appBar: appBar, body: body
       );
     });
 
@@ -63,12 +62,10 @@ abstract class NavScreen extends ConsumerWidget {
   {
     PreferredSizeWidget? appBar,
     required Widget body,
-    Widget? actionButton
   }) =>
       Scaffold(
         appBar: appBar,
         body: body,
-        floatingActionButton: actionButton,
         key: const ValueKey("screen scaffold")
       );
 
@@ -142,8 +139,5 @@ abstract class NavScreen extends ConsumerWidget {
   /// in no action Widgets added
   @protected
   List<Widget>? buildAppBarActions(BuildContext context, WidgetRef ref) => null;
-
-  @protected
-  Widget? buildFloatingActionButton(BuildContext context, WidgetRef ref) => null;
   //#endregion
 }

@@ -56,8 +56,7 @@ abstract class TabNavScreen extends NavScreen {
   Scaffold buildScaffold(BuildContext context, WidgetRef ref,
   {
     PreferredSizeWidget? appBar,
-    required Widget body,
-    Widget? actionButton
+    required Widget body
   }) {
 
     final NavControlType navControlType = effectiveNavType(context, ref,
@@ -73,7 +72,6 @@ abstract class TabNavScreen extends NavScreen {
       body: biggerBody,
       bottomNavigationBar: navBar,
       drawer: drawer,
-      floatingActionButton: actionButton,
       key: const ValueKey("screen scaffold")
     );
   }
@@ -224,7 +222,7 @@ abstract class TabNavScreen extends NavScreen {
             ),
             const Text(' '),
             Text(screen.getScreenTitle(ref),
-              style: context.theme.textTheme.headline6!.copyWith(color: context.colorScheme.onPrimaryContainer),
+              style: context.theme.textTheme.headlineMedium!.copyWith(color: context.colorScheme.onPrimaryContainer),
               key: const ValueKey("drawer header title")
             )
           ]

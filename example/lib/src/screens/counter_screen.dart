@@ -17,9 +17,8 @@ class CounterScreen extends TabNavScreen { // Subclass NavScreen to enable non-t
   @override
   RoutePath get routePath => CounterPath();
 
-  @override
-  @protected
-  Widget? buildFloatingActionButton(BuildContext context, WidgetRef ref) =>
+
+  Widget _buildFloatingActionButton(BuildContext context, WidgetRef ref) =>
       FloatingActionButton(
           onPressed: () => _counterProvider.mutate(ref, (n) => n+1),
           tooltip: 'Increment',
@@ -30,7 +29,8 @@ class CounterScreen extends TabNavScreen { // Subclass NavScreen to enable non-t
 
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) =>
-    Consumer(
+    Scaffold(
+      body: Consumer(
         builder: (context, ref, child) =>
            Center(
              child: Column(
@@ -39,10 +39,12 @@ class CounterScreen extends TabNavScreen { // Subclass NavScreen to enable non-t
                  const Text('You have pushed the button this many times:'),
                  Text(
                    '${_counterProvider.watchValue(ref)}',
-                   style: Theme.of(context).textTheme.headline4,
+                   style: Theme.of(context).textTheme.headlineLarge,
                  ),
                ],
              ),
            )
+      ),
+      floatingActionButton: _buildFloatingActionButton(context, ref) ,
     );
 }
