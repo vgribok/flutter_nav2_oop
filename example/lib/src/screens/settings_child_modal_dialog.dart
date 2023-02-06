@@ -14,10 +14,47 @@ class SettingsChildModalDialog extends FullScreenModalDialog {
       CenteredColumn(
           children: [
             const Text('Full-Screen Modal Dialog'),
-            ErrorDisplay("An example of error message,", null,
+            Expanded(child: ErrorDisplay("An example of a very long, "
+                "a reaaally, very, super long, a reaaally, very, super long, "
+                "a reaaally, very, super long, a reaaally, very, super long, "
+                "a reaaally, very, super long, a reaaally, very, super long, "
+                "a reaaally, very, super long, a reaaally, very, super long, "
+                "a reaaally, very, super long, a reaaally, very, super long, "
+                "a reaaally, very, super long, a reaaally, very, super long, "
+                "a reaaally, very, super long, a reaaally, very, super long, "
+                "a reaaally, very, super long, a reaaally, very, super long, "
+                "a reaaally, very, super long, a reaaally, very, super long, "
+                "a reaaally, very, super long, a reaaally, very, super long, "
+                "a reaaally, very, super long, a reaaally, very, super long, "
+                "a reaaally, very, super long, a reaaally, very, super long, "
+                "a reaaally, very, super long, a reaaally, very, super long, "
+                "a reaaally, very, super long, a reaaally, very, super long, "
+                "a reaaally, very, super long, a reaaally, very, super long, "
+                "a reaaally, very, super long, a reaaally, very, super long, "
+                "a reaaally, very, super long, a reaaally, very, super long, "
+                "a reaaally, very, super long, a reaaally, very, super long, "
+                "a reaaally, very, super long, a reaaally, very, super long, "
+                "a reaaally, very, super long, a reaaally, very, super long, "
+                "a reaaally, very, super long, a reaaally, very, super long, "
+                "\nerror message,",
+                StackTrace.fromString(
+                    'Stack line with function call details.\n'
+                        'Stack line with function call details.\n'
+                        'Stack line with function call details.\n'
+                        'Stack line with function call details.\n'
+                        'Stack line with function call details.\n'
+                        'Stack line with function call details.\n'
+                        'Stack line with function call details.\n'
+                        'Stack line with function call details.\n'
+                        'Stack line with function call details.\n'
+                        'Stack line with function call details.\n'
+                        'Stack line with function call details.\n'
+                        'Stack line with function call details.\n'
+                        'Stack line with function call details.\n'
+                ),
                 errorContext: "Demo of the error output",
                 onRetry: () => context.showSnackBar("Retry is invoked")
-            ),
+            )),
             const Divider(thickness: 1, indent: 50, endIndent: 50),
             ElevatedButton(
                 child: const Text('Close Me'),

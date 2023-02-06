@@ -15,7 +15,7 @@ class ErrorDisplay extends StatelessWidget {
 
   final void Function() onRetry;
 
-  const ErrorDisplay(this.err, this.stack,
+  ErrorDisplay(this.err, this.stack,
       {
         super.key, required this.errorContext, required this.onRetry
       })
@@ -23,25 +23,36 @@ class ErrorDisplay extends StatelessWidget {
 
   String get errorMessage => err.toString();
 
+  final _errorMessageScroller = ScrollController();
+
   @override
   Widget build(BuildContext context) =>
     Padding(padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-      child: DecoratedBox(
+      child:
+        DecoratedBox(
         decoration: BoxDecoration(
           color: context.colorScheme.errorContainer,
           borderRadius: const BorderRadius.all(Radius.circular(15))
         ),
-        child: Padding(padding: const EdgeInsets.all(5),
-          child: CenteredColumn(
+        child: Padding(padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 7),
+          child:
+            Column(
               children: [
-                Text("$errorContext. Reason: \"$errorMessage\"",
-                    key: const ValueKey("error text"),
-                    textAlign: TextAlign.center,
-                    style: context.theme.textTheme.bodyText1?.copyWith(color: context.colorScheme.onErrorContainer)
+                Expanded(child:
+                  Scrollbar(trackVisibility: true,
+                    child: SingleChildScrollView(controller: _errorMessageScroller,
+                      child: SelectableText("$errorContext. Reason: \"$errorMessage\"",
+                        key: const ValueKey("error text"),
+                        textAlign: TextAlign.start,
+                        style: context.theme.textTheme.bodyLarge?.
+                              copyWith(color: context.colorScheme.onErrorContainer, height: 1.25)
+                      )
+                    )
+                  )
                 ),
-                ElevatedButton(onPressed: onRetry, child: const Text("Retry")),
                 if(stack != null && kDebugMode)
-                  ..._getDebugInfoWidgets(context)
+                  ..._getDebugInfoWidgets(context),
+                ElevatedButton(onPressed: onRetry, child: const Text("Retry")),
               ]
           )
         )
@@ -50,19 +61,25 @@ class ErrorDisplay extends StatelessWidget {
 
   List<Widget> _getDebugInfoWidgets(BuildContext context) => [
     const Divider(thickness: 1, indent: 50, endIndent: 50),
-    Expanded(child: SingleChildScrollView(scrollDirection: Axis.vertical,
-        child: Text(
+    Expanded(
+      child: Scrollbar(trackVisibility: true,
+        child: SingleChildScrollView(
+          child: SelectableText(
+            textAlign: TextAlign.start,
             stack!.toString(),
-            style: GoogleFonts.cutiveMono(fontSize: 20).copyWith(color: context.colorScheme.onErrorContainer),
+            style: GoogleFonts.cutiveMono(fontSize: 20)
+                .copyWith(color: context.colorScheme.onErrorContainer, height: 1),
             key: const ValueKey("debug info text")
+          )
         )
-    ))
+      )
+    )
   ];
 }
 
 class ExpandedErrorDisplay extends ErrorDisplay {
 
-  const ExpandedErrorDisplay(super.err, super.stack, {
+  ExpandedErrorDisplay(super.err, super.stack, {
     super.key, required super.errorContext, required super.onRetry
   });
 
