@@ -25,8 +25,9 @@ extension ContextEx on BuildContext {
     }
   }
 
-  Size get safeAreaSize => MediaQuery.of(this).size;
-  EdgeInsets get safeAreaPadding => MediaQuery.of(this).padding;
+  MediaQueryData get mediaQuery => MediaQuery.of(this);
+  Size get safeAreaSize => mediaQuery.size;
+  EdgeInsets get safeAreaPadding => mediaQuery.padding;
 
   ThemeData get theme => Theme.of(this);
   TextTheme get textTheme => theme.textTheme;
