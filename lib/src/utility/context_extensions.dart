@@ -25,9 +25,10 @@ extension ContextEx on BuildContext {
     }
   }
 
-  Size get screenSize => MediaQuery.of(this).size;
+  Size get safeAreaSize => MediaQuery.of(this).size;
+  EdgeInsets get safeAreaPadding => MediaQuery.of(this).padding;
 
   ThemeData get theme => Theme.of(this);
-
+  TextTheme get textTheme => theme.textTheme;
   ColorScheme get colorScheme => theme.colorScheme;
 }
