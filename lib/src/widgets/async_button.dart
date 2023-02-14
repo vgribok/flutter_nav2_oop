@@ -80,7 +80,7 @@ class IconAsyncButton extends AsyncButton {
         required Widget icon,
         required super.onPressed, required super.onDisplayError, required super.onLogError,
         super.timeout = const Duration(seconds: 5),
-        Color? color,
+        super.color,
         super.key
       }) : super(
               asyncActionProgressProvider,
