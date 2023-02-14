@@ -7,6 +7,7 @@ class BetterFutureBuilder<T> extends StatelessWidget {
   final String? waitText;
   final bool waitCursorCentered;
   final VoidCallback onRetry;
+  final Color? waitIndicatorColor;
 
   const BetterFutureBuilder({
     required this.future,
@@ -14,6 +15,7 @@ class BetterFutureBuilder<T> extends StatelessWidget {
     this.waitText = "Processing...",
     this.waitCursorCentered = true,
     required this.onRetry,
+    this.waitIndicatorColor,
     super.key
   });
 
@@ -28,7 +30,11 @@ class BetterFutureBuilder<T> extends StatelessWidget {
 
           return snapshot.connectionState == ConnectionState.done ?
                       builder(snapshot.data, ctx) :
-                      WaitIndicator(waitText: waitText, centered: waitCursorCentered, key: const ValueKey("better future builder wait indicator"));
+                      WaitIndicator(waitText: waitText,
+                          centered: waitCursorCentered,
+                          color: waitIndicatorColor,
+                          key: const ValueKey("better future builder wait indicator")
+                      );
         }
       );
 
