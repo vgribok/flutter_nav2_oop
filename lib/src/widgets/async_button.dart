@@ -7,9 +7,10 @@ class ElevatedAsyncButton extends AsyncButton {
         required super.child,
         required super.onPressed, required super.onDisplayError, required super.onLogError,
         super.timeout = const Duration(seconds: 5),
+        super.color,
         super.key
       }) : super(asyncActionProgressProvider,
-              (context, ref, innerChild, internalKey, internalOnPress) =>
+              (context, ref, innerChild, internalKey, internalOnPress, color) =>
                 ElevatedButton(onPressed: internalOnPress, key: internalKey, child: innerChild)
            );
 }
@@ -21,9 +22,10 @@ class OutlinedAsyncButton extends AsyncButton {
         required super.child,
         required super.onPressed, required super.onDisplayError, required super.onLogError,
         super.timeout = const Duration(seconds: 5),
+        super.color,
         super.key
       }) : super(asyncActionProgressProvider,
-            (context, ref, innerChild, internalKey, internalOnPress) =>
+            (context, ref, innerChild, internalKey, internalOnPress, color) =>
                 OutlinedButton(onPressed: internalOnPress, key: internalKey, child: innerChild)
           );
 }
@@ -35,9 +37,10 @@ class TextAsyncButton extends AsyncButton {
         required super.child,
         required super.onPressed, required super.onDisplayError, required super.onLogError,
         super.timeout = const Duration(seconds: 5),
+        super.color,
         super.key
       }) : super(asyncActionProgressProvider,
-              (context, ref, innerChild, internalKey, internalOnPress) =>
+              (context, ref, innerChild, internalKey, internalOnPress, color) =>
                 TextButton(onPressed: internalOnPress, key: internalKey, child: innerChild)
           );
 }
@@ -51,16 +54,18 @@ class FloatingActionAsyncButton extends AsyncButton {
         required super.child,
         required super.onPressed, required super.onDisplayError, required super.onLogError,
         super.timeout = const Duration(seconds: 5),
+        super.color,
+        Color? backgroundColor,
         super.key
       }) : super(
               asyncActionProgressProvider,
-              (context, ref, innerChild, internalKey, internalOnPress) =>
+              (context, ref, innerChild, internalKey, internalOnPress, color) =>
                   FloatingActionButton(
                     key: internalKey,
                     onPressed: internalOnPress,
                     tooltip: tooltip,
-                    foregroundColor: context.colorScheme.onPrimary,
-                    backgroundColor: context.colorScheme.primary,
+                    foregroundColor: color ?? context.colorScheme.onPrimary,
+                    backgroundColor: backgroundColor ?? context.colorScheme.primary,
                     child: innerChild,
                   )
           );
@@ -75,29 +80,32 @@ class IconAsyncButton extends AsyncButton {
         required Widget icon,
         required super.onPressed, required super.onDisplayError, required super.onLogError,
         super.timeout = const Duration(seconds: 5),
+        Color? color,
         super.key
       }) : super(
               asyncActionProgressProvider,
               child: icon,
-              (context, ref, innerChild, internalKey, internalOnPress) =>
+              (context, ref, innerChild, internalKey, internalOnPress, color) =>
                   IconButton(
                     key: internalKey,
                     onPressed: internalOnPress,
                     tooltip: tooltip,
                     icon: innerChild,
+                    color: color
                   ),
           );
 }
 
 abstract class AsyncButton extends ConsumerWidget {
 
-  final Widget Function(BuildContext context, WidgetRef ref, Widget child, Key key, Future Function() onPressed) _mainControlBuilder;
+  final Widget Function(BuildContext context, WidgetRef ref, Widget child, Key key, Future Function() onPressed, Color? color) _mainControlBuilder;
   final StateProvider<bool> _asyncActionProgressProvider;
   final Future Function() _onPressed;
   final String Function() _onDisplayError;
   final String Function(Object error) _onLogError;
   final Widget _child;
   final Duration _timeout;
+  final Color? color;
 
   const AsyncButton(
       this._asyncActionProgressProvider,
@@ -111,6 +119,7 @@ abstract class AsyncButton extends ConsumerWidget {
         /// Returns a detailed error message to be logged for debugging
         required String Function(Object error) onLogError,
         required Duration timeout,
+        this.color,
         super.key
       }) :
         _onPressed = onPressed,
@@ -125,9 +134,10 @@ abstract class AsyncButton extends ConsumerWidget {
     final bool asyncActionInProgress = ref.watch(_asyncActionProgressProvider);
     return _mainControlBuilder(
       context, ref,
-      asyncActionInProgress ? const CircularProgressIndicator(strokeWidth: 2) : _child,
+      asyncActionInProgress ? CircularProgressIndicator(strokeWidth: 2, color: color) : _child,
       ValueKey("${super.key}-button"),
-          () => _internalOnPress(context, ref),
+      () => _internalOnPress(context, ref),
+      color
     );
   }
 
