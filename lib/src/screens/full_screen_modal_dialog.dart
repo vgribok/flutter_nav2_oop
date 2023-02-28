@@ -17,7 +17,7 @@ abstract class FullScreenModalDialog extends NavScreen {
   bool get isModal => true;
 
   /// Closes the dialog
-  void close(BuildContext context) => Navigator.pop(context);
+  void close(BuildContext context) => context.navigateBack();
 
   /// Builds dialog-specific [AbbBar] with the
   /// Cancel icon instead of the back arrow.

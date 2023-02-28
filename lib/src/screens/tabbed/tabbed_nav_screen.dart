@@ -108,7 +108,7 @@ abstract class TabNavScreen extends NavScreen {
   void onTabTap(BuildContext context, WidgetRef ref, int newTabIndex) {
     if(effectiveNavType(context, ref, null) == NavControlType.Drawer) {
       // Hide the Drawer
-      Navigator.pop(context);
+      context.navigateBack();
     }
 
     bool tappedSameTabWithMultipleScreensInStack =
@@ -116,7 +116,7 @@ abstract class TabNavScreen extends NavScreen {
 
     if(tappedSameTabWithMultipleScreensInStack) {
       // Remove top screen from the stack
-      Navigator.pop(context);
+      context.navigateBack();
     }else {
       navModel(ref)._setSelectedTabIndex(newTabIndex, byUser: true);
     }
