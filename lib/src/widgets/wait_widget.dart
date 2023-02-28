@@ -7,8 +7,9 @@ class WaitIndicator extends StatelessWidget {
   /// Optional text to show along with the wait indicator
   final String? waitText;
   final bool centered;
+  final Color? color;
 
-  const WaitIndicator({this.waitText = "Loading...", this.centered = true, super.key});
+  const WaitIndicator({this.waitText = "Loading...", this.centered = true, this.color, super.key});
 
   @override
   Widget build(BuildContext context) =>
@@ -19,11 +20,13 @@ class WaitIndicator extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const CircularProgressIndicator(),
+            CircularProgressIndicator(color: color),
             if(waitText != null)
-              const Divider(thickness: 1, indent: 50, endIndent: 50),
+              Divider(thickness: 1, indent: 50, endIndent: 50, color: color),
             if(waitText != null)
-              Text(waitText!, key: const ValueKey("wait indicator text"))
+              Text(waitText!, key: const ValueKey("wait indicator text"),
+                  style: context.textTheme.bodyMedium!.copyWith(color: color ?? context.colorScheme.onBackground)
+              )
           ]
       );
 }

@@ -7,6 +7,7 @@ class AsyncValueAwaiter<T> extends StatelessWidget {
   final String? waitText;
   final bool waitCursorCentered;
   final VoidCallback onRetry;
+  final Color? waitIndicatorColor;
 
   const AsyncValueAwaiter({
     required this.asyncData,
@@ -14,6 +15,7 @@ class AsyncValueAwaiter<T> extends StatelessWidget {
     this.waitText = "Processing...",
     this.waitCursorCentered = true,
     required this.onRetry,
+    this.waitIndicatorColor,
     super.key
   });
 
@@ -40,6 +42,7 @@ class AsyncValueAwaiter<T> extends StatelessWidget {
       WaitIndicator(
           waitText: waitText,
           centered: waitCursorCentered,
+          color: waitIndicatorColor,
           key: const ValueKey("async value awaiter wait indicator")
       );
 
