@@ -38,4 +38,23 @@ extension ContextEx on BuildContext {
   NavigatorState get navigator => Navigator.of(this);
 
   void showModal(FullScreenModalDialog modalDialog) => navigator.push(modalDialog.getRoute(this));
+
+  Route<dynamic>? get currentRoute {
+    bool isFirst = true;
+    Route<dynamic>? currentRoute;
+
+    // Use this trick to pick the top route in the nav stack
+    // but never actually pop any route.
+    navigator.popUntil((Route<dynamic> route) {
+      if(isFirst) {
+        isFirst = false;
+        currentRoute = route;
+      }
+      // Tell to not pop the route.
+      return true;
+    });
+    return currentRoute;
+  }
+
+  NavScreen? get currentScreen => currentRoute?.navScreen;
 }

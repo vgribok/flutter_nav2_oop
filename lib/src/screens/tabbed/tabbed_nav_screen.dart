@@ -122,10 +122,6 @@ abstract class TabNavScreen extends NavScreen {
     }
   }
 
-  @override
-  bool isDisplayedScreen(WidgetRef ref) =>
-      watchForInCurrentTab(ref) && isTopScreenInSlot(ref);
-
   //#region App-wide screen customization factories
 
   /// A user-replaceable factory building

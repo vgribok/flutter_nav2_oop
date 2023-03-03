@@ -40,6 +40,9 @@ abstract class NavScreen extends ConsumerWidget {
 
   Route getRoute(BuildContext context) => _page.createRoute(context);
 
+  bool isCurrentScreen(BuildContext context) =>
+      this == context.currentScreen;
+
   /// Overridden by subclasses, returns
   /// [RoutePath] instance corresponding to
   /// this screen
@@ -88,10 +91,6 @@ abstract class NavScreen extends ConsumerWidget {
   /// screen stack.
   @protected
   NavScreen? topScreen(WidgetRef ref) => null;
-
-  bool isTopScreenInSlot(WidgetRef ref) => topScreen(ref) == null;
-
-  bool isDisplayedScreen(WidgetRef ref) => isTopScreenInSlot(ref);
 
   @protected
   bool get isModal => false;

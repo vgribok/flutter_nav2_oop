@@ -49,6 +49,7 @@ part './src/utility/platform_utilities.dart';
 part './src/utility/disposable.dart';
 part './src/utility/cancellable_token.dart';
 part './src/utility/color_extensions.dart';
+part './src/utility/routing_extensions.dart';
 
 part './src/widgets/async_button.dart';
 part './src/widgets/async_value_widget.dart';

@@ -72,17 +72,10 @@ abstract class _NavAwareRouterDelegateBase<T extends NavModelBase>
       return false;
     }
 
-    NavScreen navScreen = _screenFromRoute(route);
+    final NavScreen navScreen = route.navScreen;
     navScreen.updateStateOnScreenRemovalFromNavStackTop(ref);
 
     return true;
-  }
-
-  static NavScreen _screenFromRoute(Route route) {
-    MaterialPage page = route.settings as MaterialPage; // Cast settings to Page
-    // Cast page.child to NavScreen
-    NavScreen navScreen = page.child as NavScreen;
-    return navScreen;
   }
 
   /// Returns current route associated with the top nav stack screen.
