@@ -38,6 +38,8 @@ abstract class NavScreen extends ConsumerWidget {
       restorationId: routePath.location
   );
 
+  Route getRoute(BuildContext context) => _page.createRoute(context);
+
   /// Overridden by subclasses, returns
   /// [RoutePath] instance corresponding to
   /// this screen

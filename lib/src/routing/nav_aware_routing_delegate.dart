@@ -16,7 +16,7 @@ class NavAwareRouterDelegate extends _NavAwareRouterDelegateBase<NavModel> {
 /// Its [build] method returns [Navigator] Widget, with
 /// [Page] stack back navigation arrow handler supplied by
 /// the framework.
-abstract class _NavAwareRouterDelegateBase<T extends _NavModelBase>
+abstract class _NavAwareRouterDelegateBase<T extends NavModelBase>
     extends RouterDelegate<RoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<RoutePath> {
 
@@ -38,17 +38,17 @@ abstract class _NavAwareRouterDelegateBase<T extends _NavModelBase>
   Widget build(BuildContext context) =>
     _NavAwareAppBase.appInitProvider.watchAsyncValue(ref).when(
         loading: () =>
-            _navigatorWidget(context, [const AppInitWaitScreen()]),
+            _buildNavigatorWidget(context, [const AppInitWaitScreen()]),
         error: (err, stack) =>
-            _navigatorWidget(context, [AppInitErrorScreen(err, stack,
+            _buildNavigatorWidget(context, [AppInitErrorScreen(err, stack,
                 onRetry: () => _NavAwareAppBase.appInitProvider.invalidate(ref)
             )]),
         data: (_) =>
             // Call the function converting state into the stack of screens.
-            _navigatorWidget(context, navModel.buildNavigatorScreenStack(ref))
+            _buildNavigatorWidget(context, navModel.buildNavigatorScreenStack(ref))
     );
 
-  Widget _navigatorWidget(BuildContext context, Iterable<NavScreen> screens) {
+  Widget _buildNavigatorWidget(BuildContext context, Iterable<NavScreen> screens) {
 
     _attachDelegateListenerToNavStateNotifier();
 
@@ -79,7 +79,7 @@ abstract class _NavAwareRouterDelegateBase<T extends _NavModelBase>
   }
 
   static NavScreen _screenFromRoute(Route route) {
-    dynamic page = route.settings; // Cast settings to Page
+    MaterialPage page = route.settings as MaterialPage; // Cast settings to Page
     // Cast page.child to NavScreen
     NavScreen navScreen = page.child as NavScreen;
     return navScreen;

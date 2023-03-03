@@ -20,7 +20,7 @@ class RoutePath {
   });
 
   @protected
-  _NavModelBase navModel(WidgetRef ref) => _NavAwareAppBase.navModelFactory(ref);
+  NavModelBase navModel(WidgetRef ref) => _NavAwareAppBase.navModelFactory(ref);
 
   Future<void> _configureStateFromUriFuture(WidgetRef ref) async {
     navModel(ref).notFoundUri = null; // cleans up 404 url before another attempt at paring user-typed URL

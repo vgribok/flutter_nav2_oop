@@ -14,7 +14,7 @@ class TabRoutePathAdapter extends RoutePath {
   TabNavModel tabNavState(WidgetRef ref) => navModel(ref) as TabNavModel;
 
   @override
-  _NavModelBase navModel(WidgetRef ref) => routePath.navModel(ref);
+  NavModelBase navModel(WidgetRef ref) => routePath.navModel(ref);
 
   @override
   Future<bool> configureStateFromUriFuture(WidgetRef ref) =>

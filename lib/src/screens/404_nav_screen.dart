@@ -22,7 +22,7 @@ class UrlNotFoundScreen extends NavScreen {
   /// address bar by the user
   final Uri notFoundUri;
 
-  _NavModelBase navModel(WidgetRef ref) => _NavAwareAppBase.navModelFactory(ref);
+  NavModelBase navModel(WidgetRef ref) => _NavAwareAppBase.navModelFactory(ref);
 
   /// Do not instantiate directly! Use [notFoundScreenFactory]
   /// instead.

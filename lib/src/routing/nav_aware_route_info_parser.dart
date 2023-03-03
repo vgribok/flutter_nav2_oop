@@ -15,7 +15,7 @@ class NavAwareRouteInfoParser extends RouteInformationParser<RoutePath> {
   final WidgetRef ref;
 
   @protected
-  _NavModelBase get navModel => _NavAwareAppBase.navModelFactory(ref);
+  NavModelBase get navModel => _NavAwareAppBase.navModelFactory(ref);
 
   /// Collection of parsers each serving as a factory
   /// for instantiating [RoutePath] subclass corresponding

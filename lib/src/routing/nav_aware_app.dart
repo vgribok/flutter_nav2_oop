@@ -54,7 +54,7 @@ class NavAwareApp extends _NavAwareAppBase<NavModel> {
       NavAwareRouterDelegate(ref);
 }
 
-abstract class _NavAwareAppBase<T extends _NavModelBase> extends ConsumerWidget {
+abstract class _NavAwareAppBase<T extends NavModelBase> extends ConsumerWidget {
 
   /// Application name
   final String _appTitle;
@@ -65,7 +65,7 @@ abstract class _NavAwareAppBase<T extends _NavModelBase> extends ConsumerWidget 
   final List<RestorableProvider<RestorableProperty?>>? globalRestorableProviders;
   static late FutureProvider<bool> appInitProvider;
 
-  static late _NavModelBase Function(WidgetRef) navModelFactory;
+  static late NavModelBase Function(WidgetRef) navModelFactory;
 
   @protected
   RestorableProvider get navModelProvider;

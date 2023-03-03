@@ -34,4 +34,8 @@ extension ContextEx on BuildContext {
   ColorScheme get colorScheme => theme.colorScheme;
 
   void navigateBack() => Navigator.pop(this);
+
+  NavigatorState get navigator => Navigator.of(this);
+
+  void showModal(FullScreenModalDialog modalDialog) => navigator.push(modalDialog.getRoute(this));
 }

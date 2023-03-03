@@ -16,7 +16,7 @@ enum NavControlType {
 /// objects. Does not need state persistence or restorability because
 /// [Navigator] class has its own built-in state restoration that is enabled
 /// by supplying restorationId.
-class TabNavModel extends _NavModelBase {
+class TabNavModel extends NavModelBase {
   /// State: collection of navigation tab
   /// definitions and tab state
   final List<TabScreenSlot> _tabs = [];

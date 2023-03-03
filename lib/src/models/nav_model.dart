@@ -2,7 +2,7 @@
 
 part of flutter_nav2_oop;
 
-class NavModel extends _NavModelBase {
+class NavModel extends NavModelBase {
 
   final RootScreenSlot _rootScreenSlot;
 
@@ -28,7 +28,7 @@ class NavModel extends _NavModelBase {
 /// objects. Does not need state persistence or restorability because
 /// [Navigator] class has its own built-in state restoration that is enabled
 /// by supplying restorationId.
-abstract class _NavModelBase extends ChangeNotifier {
+abstract class NavModelBase extends ChangeNotifier {
 
   /// State: not-null if user entered invalid URL
   Uri? _notFoundUri;
@@ -39,7 +39,7 @@ abstract class _NavModelBase extends ChangeNotifier {
   @protected
   final RoutePath homeRoute;
 
-  _NavModelBase(this.homeRoute);
+  NavModelBase(this.homeRoute);
 
   /// The *`UI = f(state)`* function.
   ///
@@ -82,7 +82,7 @@ abstract class _NavModelBase extends ChangeNotifier {
 
 /// Saves and restores a [ChangeNotifier] ViewModel like [NavModel]
 /// to/from the ephemeral state.
-class _NavStateRestorerBase<T extends _NavModelBase> extends RestorableListenable<T> {
+class _NavStateRestorerBase<T extends NavModelBase> extends RestorableListenable<T> {
 
   final T _navModel;
 
@@ -96,7 +96,7 @@ class _NavStateRestorerBase<T extends _NavModelBase> extends RestorableListenabl
   @override
   T fromPrimitives(Object? data) {
     final savedData = Map<String, dynamic>.from(data as Map);
-    final navModel = createDefaultValue();
+    final T navModel = createDefaultValue();
 
     deserialize(navModel, savedData);
 

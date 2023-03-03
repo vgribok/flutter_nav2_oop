@@ -76,13 +76,13 @@ class ConfirmationMessageBox extends StatelessWidget {
         actions: [
           ElevatedButton(
             child: Text(cancelButtonText),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => context.navigateBack(),
             key: const ValueKey("confirmation box cancel button")
           ),
           OutlinedButton(
             child: Text(continueButtonText),
             onPressed: () {
-              Navigator.of(context).pop();
+              context.navigateBack();
               continueButtonOnPressHandler(context);
             },
               key: const ValueKey("confirmation box continue button")
