@@ -19,7 +19,7 @@ Future<void> buttonAsyncOnPress(BuildContext context, StateController<bool> stat
     await onPressed().timeout(timeout);
   } catch(e) {
     if(logErrorMessage != null) {
-      '$logErrorMessage due to e'.debugPrint();
+      'E: $logErrorMessage due to e'.debugPrint();
     }
     context.showSnackBar(uiErrorMessage);
   }
