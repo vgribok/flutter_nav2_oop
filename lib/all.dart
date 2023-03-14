@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 library flutter_nav2_oop;
 
 // TODO: add localization support
@@ -51,7 +53,6 @@ part './src/utility/cancellable_token.dart';
 part './src/utility/color_extensions.dart';
 part './src/utility/routing_extensions.dart';
 
-part './src/widgets/async_button.dart';
 part './src/widgets/async_value_widget.dart';
 part './src/widgets/better_future_builder.dart';
 part './src/widgets/error_display_widget.dart';
