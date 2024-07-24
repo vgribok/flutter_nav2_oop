@@ -25,8 +25,8 @@ class BookDetailsScreen extends TabNavScreen { // Subclass NavScreen to enable n
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ...[
-              Text(selectedBook.title, style: Theme.of(context).textTheme.headline6),
-              Text(selectedBook.author, style: Theme.of(context).textTheme.subtitle1),
+              Text(selectedBook.title, style: Theme.of(context).textTheme.headlineSmall),
+              Text(selectedBook.author, style: Theme.of(context).textTheme.titleMedium),
             ],
           ],
         ),
