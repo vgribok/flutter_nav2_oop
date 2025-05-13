@@ -1,0 +1,38 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "flutter: build debug",
+        "type": "shell",
+        "command": "flutter",
+        "args": ["build", "apk", "--debug"],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "flutter: build release",
+        "type": "shell",
+        "command": "flutter",
+        "args": ["build", "apk", "--release"],
+        "group": {
+          "kind": "build",
+          "isDefault": false
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "flutter: clean",
+        "type": "shell",
+        "command": "flutter",
+        "args": ["clean"],
+        "group": {
+          "kind": "build",
+          "isDefault": false
+        },
+        "problemMatcher": []
+      }
+    ]
+  }
