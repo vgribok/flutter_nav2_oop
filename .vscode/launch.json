@@ -3,7 +3,7 @@
     "configurations": [
         
       {
-        "name": "Flutter: Launch main.dart",
+        "name": "Flutter: Run Example in Web Browser",
         "request": "launch",
         "type": "dart",
         "program": "example/lib/main.dart"
@@ -13,6 +13,13 @@
         "request": "attach",
         "type": "dart",
         "deviceId": "flutter-tester"
+      },
+      {
+        "name": "Flutter: Launch iPhone 16 Simulator",
+        "request": "launch",
+        "type": "dart",
+        "program": "example/lib/main.dart",
+        "deviceId": "49699B02-E3CA-49FE-9931-8B0D2E23F34F" // iPhone 16 Simulator
       }
     ]
   }
