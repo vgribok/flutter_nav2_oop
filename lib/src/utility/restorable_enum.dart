@@ -1,4 +1,4 @@
-part of flutter_nav2_oop;
+part of '../../all.dart';
 
 /// Implements ephemeral state restoration for nullable enums
 class RestorableEnumN<T> extends RestorableString {
@@ -19,9 +19,6 @@ class RestorableEnum<T> extends RestorableEnumN {
 
   RestorableEnum(Iterable<T> enumValues, this.defaultValue)
       : super(enumValues, defaultValue);
-
-  @override
-  set enumValue(dynamic value) => super.enumValue = value;
 
   @override
   T get enumValue => super.enumValue ?? defaultValue;

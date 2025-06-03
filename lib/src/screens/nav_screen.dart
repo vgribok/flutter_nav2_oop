@@ -1,4 +1,4 @@
-part of flutter_nav2_oop;
+part of '../../all.dart';
 
 /// A signature of a programmer-replaceable method building
 /// navigation drawer header widget

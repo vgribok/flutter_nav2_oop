@@ -6,7 +6,8 @@
         "name": "Flutter: Run Example in Web Browser",
         "request": "launch",
         "type": "dart",
-        "program": "example/lib/main.dart"
+        "program": "example/lib/main.dart",
+        "deviceId": "chrome"
       },
       {
         "name": "Flutter: Attach to Running App",

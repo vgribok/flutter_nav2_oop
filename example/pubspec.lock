@@ -101,6 +101,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.6.1"
+  flutter_riverpod_restorable:
+    dependency: "direct main"
+    description:
+      name: flutter_riverpod_restorable
+      sha256: "7af01d6306411e285e67ac224d6d4696aaa3eae1605c47036ed72cfa042b67ed"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -266,15 +274,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.6.1"
-  riverpod_restorable:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "609032797af92b15cd137e853a6808101ab8cf9d"
-      url: "https://github.com/vgribok/flutter-riverpod-restorable"
-    source: git
-    version: "2.0.0"
   sky_engine:
     dependency: transitive
     description: flutter

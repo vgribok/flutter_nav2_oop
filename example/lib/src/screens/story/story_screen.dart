@@ -28,7 +28,7 @@ class StoryScreen extends TabNavScreen {
     selectedStory.scheduleNextStoryPage(ref, currentPage);
 
     return StoryLayout(stories, selectedStoryId: selectedStory.id,
-        child: currentPage == null ? const Text(
+        childWidget: currentPage == null ? const Text(
             "The story is waiting to begin..")
             : StoryPageWidget(selectedStory, currentPage!)
     );

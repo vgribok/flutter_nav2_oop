@@ -1,4 +1,4 @@
-part of flutter_nav2_oop;
+part of '../../all.dart';
 
 class NavAwareApp extends _NavAwareAppBase<NavModel> {
   /// A singleton of [TabNavModel] accessible via [Provider]

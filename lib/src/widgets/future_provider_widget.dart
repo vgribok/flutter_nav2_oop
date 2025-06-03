@@ -1,4 +1,4 @@
-part of flutter_nav2_oop;
+part of '../../all.dart';
 
 class FutureProviderBuilder<T> extends ConsumerWidget {
 

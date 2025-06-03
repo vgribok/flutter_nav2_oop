@@ -1,6 +1,6 @@
 // ignore_for_file: avoid_renaming_method_parameters
 
-part of flutter_nav2_oop;
+part of '../../all.dart';
 
 class NavAwareRouterDelegate extends _NavAwareRouterDelegateBase<NavModel> {
 
@@ -60,20 +60,18 @@ abstract class _NavAwareRouterDelegateBase<T extends NavModelBase>
         key: navigatorKey,
         // transitionDelegate: NoAnimationTransitionDelegate(),
         pages: pageStack,
-        onPopPage: _onBackButtonPress,
+        onDidRemovePage: _onBackButtonPress,
         restorationScopeId: "main-navigator"
     );
   }
 
-
   /// Standard handler of the back arrow navigation button
-  bool _onBackButtonPress(Route route, dynamic result) {
-    if (!route.didPop(result)) {
-      return false;
+  bool _onBackButtonPress(Page<Object?> page) {
+  
+    if(page is MaterialPage && page.child is NavScreen) {
+      final NavScreen navScreen = page.child as NavScreen;
+      navScreen.updateStateOnScreenRemovalFromNavStackTop(ref);
     }
-
-    final NavScreen navScreen = route.navScreen;
-    navScreen.updateStateOnScreenRemovalFromNavStackTop(ref);
 
     return true;
   }

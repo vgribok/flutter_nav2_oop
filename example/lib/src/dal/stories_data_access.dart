@@ -4,7 +4,7 @@ import 'package:example/src/models/stories_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nav2_oop/all.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_restorable/riverpod_restorable.dart';
+import 'package:flutter_riverpod_restorable/flutter_riverpod_restorable.dart';
 
 final storiesProvider = StoriesProvider();
 
@@ -101,7 +101,7 @@ extension StoryEx on Story {
     return currentStory?.getPageById(currentPageId);
   }
 
-  int getPageDurationMillisec(StoryPage? page) {
+  int getPageDurationMilliseconds(StoryPage? page) {
     final double durationSeconds = page?.duration ?? defaultDuration;
     return (durationSeconds * 1000).toInt();
   }
@@ -144,12 +144,12 @@ extension StoryEx on Story {
   }
 
   void scheduleNextStoryPage(WidgetRef ref, StoryPage? currentPage) {
-    final int delay = getPageDurationMillisec(currentPage);
+    final int delay = getPageDurationMilliseconds(currentPage);
     final StoryPage? nPage = nextPage(currentPage, loop: true);
     scheduleStoryPage(ref, delay, nPage);
   }
 
-  void scheduleStoryPage(WidgetRef ref, int delayMillisec, StoryPage? pageToShow) {
+  void scheduleStoryPage(WidgetRef ref, int delayMilliseconds, StoryPage? pageToShow) {
     if(pages.isEmpty || pageToShow == null) return;
 
     cancelNextPageOperation();
@@ -158,7 +158,7 @@ extension StoryEx on Story {
     final token = _cancellationToken!;
     _cancellationToken!.run(() =>
         Future.delayed(
-            Duration(milliseconds: delayMillisec),
+            Duration(milliseconds: delayMilliseconds),
                 () {
               if(!token.isCancelled) setCurrentPage(ref, pageToShow);
             }

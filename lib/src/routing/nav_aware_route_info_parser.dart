@@ -1,6 +1,6 @@
 // ignore_for_file: avoid_renaming_method_parameters
 
-part of flutter_nav2_oop;
+part of '../../all.dart';
 
 /// Factory method signature for converting URLs
 /// to [RoutePath] instances
@@ -26,7 +26,7 @@ class NavAwareRouteInfoParser extends RouteInformationParser<RoutePath> {
 
   @override
   Future<RoutePath> parseRouteInformation(RouteInformation routeInformation) {
-    final uri = Uri.parse(routeInformation.location!);
+    final uri = routeInformation.uri;
 
     /// Let each route factory test-parse the URL.
     RoutePath? path = routeParsers

@@ -20,7 +20,7 @@ class StoriesListScreen extends TabNavScreen {
           builder: (stories) =>
             RefreshIndicatorProviderContainer(refreshProvider: storiesProvider,
               child: StoryLayout(stories, selectedStoryId: null,
-                child: Column(
+                childWidget: Column(
                     children: [
                       Icon(Icons.north, color: Theme.of(context).textTheme.headlineMedium?.color),
                       Text(

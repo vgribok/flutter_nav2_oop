@@ -28,9 +28,7 @@ dependencies:
   cupertino_icons: ^1.0.5
   flutter_riverpod: ^2.0.1
   google_fonts: ^6.0.0
-  riverpod_restorable:
-    git:
-      url: https://github.com/vgribok/flutter-riverpod-restorable
+  flutter_riverpod_restorable: ^2.0.1
 
 dev_dependencies:
   flutter_lints: ^5.0.0

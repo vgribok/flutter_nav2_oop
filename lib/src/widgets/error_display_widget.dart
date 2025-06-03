@@ -1,4 +1,4 @@
-part of flutter_nav2_oop;
+part of '../../all.dart';
 
 /// Displays error information widget. When debugging, shows the
 /// call stack is it's supplied.

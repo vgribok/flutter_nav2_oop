@@ -1,4 +1,4 @@
-part of flutter_nav2_oop;
+part of '../../all.dart';
 
 /// Enables cancelling multiple cancellable operations at once,
 /// and provides less error-prone pattern for using [CancelableOperation].

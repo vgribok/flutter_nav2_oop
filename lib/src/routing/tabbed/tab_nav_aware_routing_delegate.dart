@@ -1,6 +1,6 @@
 // ignore_for_file: avoid_renaming_method_parameters
 
-part of flutter_nav2_oop;
+part of '../../../all.dart';
 
 class TabNavAwareRouterDelegate extends _NavAwareRouterDelegateBase<TabNavModel> {
 

@@ -1,4 +1,4 @@
-part of flutter_nav2_oop;
+part of '../../all.dart';
 
 /// Factory method signature for instantiating a screen for 404 situations
 typedef NotFoundScreenFactory = UrlNotFoundScreen Function(Uri);

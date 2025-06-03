@@ -1,4 +1,4 @@
-part of flutter_nav2_oop;
+part of '../../all.dart';
 
 /// Prints only in debug mode and not in release mode. Prevents leaking of
 /// sensitive information.

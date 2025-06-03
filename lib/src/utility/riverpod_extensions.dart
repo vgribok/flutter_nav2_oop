@@ -1,10 +1,10 @@
 // ignore_for_file: subtype_of_sealed_class
 
-part of flutter_nav2_oop;
+part of '../../all.dart';
 
 abstract class IProviderListenableEx<T> {
 
-  AlwaysAliveProviderListenable<T> get provider;
+  ProviderListenable<T> get provider;
 
   T watchValue(WidgetRef ref) => provider.watchValue(ref);
   T readValue(WidgetRef ref) => provider.readValue(ref);
@@ -16,7 +16,7 @@ class BetterStateProvider<T> extends StateProvider<T> with IProviderListenableEx
   BetterStateProvider(super.createFn);
 
   @override
-  AlwaysAliveProviderListenable<T> get provider => this;
+  ProviderListenable<T> get provider => this;
 }
 
 extension StateProviderEx<T> on StateProvider<T> {
@@ -31,9 +31,6 @@ extension ProviderListenableEx<T> on ProviderListenable<T> {
   T watchValue(WidgetRef ref) => ref.watch(this);
   T readValue(WidgetRef ref) => ref.read(this);
   T readValue2(Ref ref) => ref.read(this);
-}
-
-extension AlwaysAliveProviderListenableEx<T> on AlwaysAliveProviderListenable<T> {
   T watchValue2(Ref ref) => ref.watch(this);
 }
 

@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:riverpod_restorable/riverpod_restorable.dart';
+import 'package:flutter_riverpod_restorable/flutter_riverpod_restorable.dart';
 
 part './src/models/root_screen_slot.dart';
 part './src/models/nav_model.dart';

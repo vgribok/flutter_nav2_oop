@@ -1,4 +1,4 @@
-part of flutter_nav2_oop;
+part of '../../../all.dart';
 
 /// Represents current navigation state as a URI.
 /// [RoutePath]s gets constructed by [NavScreen]s to report current
@@ -64,10 +64,10 @@ class RoutePath {
   String get location => '/$resource/';
 
   /// Maps current route object to Flutter-required [RouteInformation] object
-  RouteInformation? get _routeInformation => RouteInformation(location: location);
+  RouteInformation? get _routeInformation => RouteInformation(uri: Uri.parse(location));
 
   TabRoutePathAdapter tabbed({required int tabIndex}) =>
       TabRoutePathAdapter(tabIndex: tabIndex, routePath: this);
 
-  Uri get uri => Uri.parse("${Uri.base}$location");
+  Uri get uri => Uri.parse("${Uri.base}$resource");
 }

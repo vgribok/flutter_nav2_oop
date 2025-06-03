@@ -2,7 +2,7 @@ import 'package:example/src/routing/counter_path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nav2_oop/all.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_restorable/riverpod_restorable.dart';
+import 'package:flutter_riverpod_restorable/flutter_riverpod_restorable.dart';
 
 class CounterScreen extends TabNavScreen { // Subclass NavScreen to enable non-tab navigation
 

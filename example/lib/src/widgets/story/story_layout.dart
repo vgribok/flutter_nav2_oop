@@ -6,13 +6,13 @@ class StoryLayout extends StatelessWidget {
 
   final List<Story> stories;
   final int? selectedStoryId;
-  final Widget child;
+  final Widget childWidget;
 
   const StoryLayout(
       this.stories,
       {
         required this.selectedStoryId,
-        required this.child,
+        required this.childWidget,
         super.key
       }
   );
@@ -24,8 +24,7 @@ class StoryLayout extends StatelessWidget {
               ProfileBubbleList(stories, selectedStoryId: selectedStoryId),
               const Padding(padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5)),
               Expanded(child:
-                Padding(child: child,
-                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10)
+                Padding(padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10), child: childWidget
                 )
               )
             ]

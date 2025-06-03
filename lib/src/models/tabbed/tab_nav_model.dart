@@ -1,6 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
-part of flutter_nav2_oop;
+part of '../../../all.dart';
 
 enum NavControlType {
   BottomTabBar,
@@ -121,21 +121,19 @@ class TabNavModel extends NavModelBase {
 
   /// Internal. Tests whether selected tab needs to be changed
   /// on route pop, when user hits navigation back button.
-  void changeTabOnBackArrowTapIfNecessary(TabNavScreen topScreen, WidgetRef ref) {
+  void changeTabOnBackArrowTapIfNecessary(TabNavScreen removedScreen, WidgetRef ref) {
 
     /// Check whether there is info about previously selected tab.
     /// If not, no change to make.
     if (_prevSelectedTabIndex == null) return;
+    final bool isTopScreen = removedScreen.tabIndex == _selectedTabIndex;
 
-    assert(topScreen.tabIndex == _selectedTabIndex);
-
-    if (topScreen.tab(ref).hasOnlyOneScreenInStack(ref)) {
+    if (isTopScreen && removedScreen.tab(ref).hasOnlyOneScreenInStack(ref)) {
       // Tab screen stack has only one (current) screen,
       // meaning back arrow tap should change the tab.
       selectedTabIndex = _prevSelectedTabIndex!;
     }
   }
-
 
   Iterable<RoutePathFactory> _getRouteParsers() sync* {
 
@@ -172,7 +170,7 @@ class TabNavModel extends NavModelBase {
 /// to/from the ephemeral state.
 class _TabNavStateRestorer extends _NavStateRestorerBase<TabNavModel> {
 
-  _TabNavStateRestorer(TabNavModel tabNavModel) : super(tabNavModel);
+  _TabNavStateRestorer(super.tabNavModel);
 
   @override
   void deserialize(TabNavModel navModel, Map<String, dynamic> savedData) {

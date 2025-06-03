@@ -1,4 +1,4 @@
-part of flutter_nav2_oop;
+part of '../../../all.dart';
 
 /// Signature of a method instantiating a root screen for a tab
 typedef TabRootScreenFactory = NavScreen Function(int tabIndex, WidgetRef ref);

@@ -1,4 +1,4 @@
-part of flutter_nav2_oop;
+part of '../../all.dart';
 
 extension RouteEx<T> on Route<T> {
   NavScreen get navScreen {

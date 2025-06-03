@@ -1,4 +1,4 @@
-part of flutter_nav2_oop;
+part of '../../all.dart';
 
 class AppInitWaitScreen extends NavScreen {
   const AppInitWaitScreen({super.key, this.waitIndicatorColor})

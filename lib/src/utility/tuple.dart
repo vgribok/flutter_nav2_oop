@@ -14,5 +14,5 @@ class Tuple {
       items[index] as T?;
 
   MapEntry<K, V>? asKvPair<K,V>() =>
-      items.length != 2 ? null : MapEntry(getAt<K>(0)!, getAt<V>(1)!);
+      items.length != 2 ? null : MapEntry(getAt<K>(0) as K, getAt<V>(1) as V);
 }

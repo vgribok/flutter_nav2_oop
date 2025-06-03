@@ -1,4 +1,4 @@
-part of flutter_nav2_oop;
+part of '../../../all.dart';
 
 /// Route object representing invalid
 /// user-typed browser web address URL

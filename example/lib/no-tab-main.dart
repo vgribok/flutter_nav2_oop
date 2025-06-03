@@ -1,13 +1,8 @@
 import 'package:example/src/dal/books_data_access.dart';
-import 'package:example/src/routing/counter_path.dart';
 import 'package:example/src/screens/counter_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:example/src/routing/book_details_path.dart';
 import 'package:example/src/routing/book_list_path.dart';
-import 'package:example/src/routing/settings_modal_child_path.dart';
-import 'package:example/src/routing/settings_path.dart';
-import 'package:example/src/routing/user_profile_path.dart';
-import 'package:example/src/screens/book_list_screen.dart';
 import 'package:example/theme.dart';
 import 'package:flutter_nav2_oop/all.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

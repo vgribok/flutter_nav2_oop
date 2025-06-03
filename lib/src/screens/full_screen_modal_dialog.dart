@@ -1,4 +1,4 @@
-part of flutter_nav2_oop;
+part of '../../all.dart';
 
 /// A base class for full-screen modal dialogs
 abstract class FullScreenModalDialog extends NavScreen {

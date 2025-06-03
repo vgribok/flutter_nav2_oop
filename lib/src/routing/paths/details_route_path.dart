@@ -1,4 +1,4 @@
-part of flutter_nav2_oop;
+part of '../../../all.dart';
 
 /// Method signature for Id parser function
 typedef IdParser = RoutePath? Function(String);

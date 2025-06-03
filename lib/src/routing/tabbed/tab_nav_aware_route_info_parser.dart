@@ -1,6 +1,6 @@
 // ignore_for_file: avoid_renaming_method_parameters
 
-part of flutter_nav2_oop;
+part of '../../../all.dart';
 
 /// Abstracts away parsing URLs typed by users into the web browser address bar,
 /// and then updating application state to show either a corresponding screen,

@@ -1,4 +1,4 @@
-part of flutter_nav2_oop;
+part of '../../all.dart';
 
 /// Shows the [CircularProgressIndicator] with an optional text,
 /// optionally wrapped in a [Center] widget.
@@ -25,7 +25,7 @@ class WaitIndicator extends StatelessWidget {
               Divider(thickness: 1, indent: 50, endIndent: 50, color: color),
             if(waitText != null)
               Text(waitText!, key: const ValueKey("wait indicator text"),
-                  style: context.textTheme.bodyMedium!.copyWith(color: color ?? context.colorScheme.onBackground)
+                  style: context.textTheme.bodyMedium!.copyWith(color: color ?? context.colorScheme.onSurface)
               )
           ]
       );

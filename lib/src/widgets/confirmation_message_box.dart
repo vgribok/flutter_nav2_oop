@@ -1,6 +1,6 @@
 // ignore_for_file: sort_child_properties_last
 
-part of flutter_nav2_oop;
+part of '../../all.dart';
 
 /// Message box with binary answer buttons (yes/no,
 /// stop/continue, OK/Cancel, etc).
