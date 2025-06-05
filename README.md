@@ -6,61 +6,29 @@ It holds a small [library](./lib) and a [sample application](./example/)
 
 ## Summary
 
-This application starter abstracts away sources of boilerplate like
-declarative navigation, ephemeral state and application state
-management, parsing user-typed urls and bookmarks when running
-in the browser, screen orientation handling, modal screens - leaving
-you to implement [Screens](./example/lib/src/screens/),
-[Routes](./example/lib/src/routing), [persistent state](./example/lib/src/dal/),
-and tie everything together in a small, clean [main.dart](./example/lib/main.dart).
+This application starter abstracts away main sources of Flutter application boilerplate like declarative navigation, ephemeral state and application state management, parsing user-typed URLs and bookmarks when running in the browser, screen orientation handling, modal screens - leaving you to implement [Screens](./example/lib/src/screens/), [Routes](./example/lib/src/routing), [persistent state](./example/lib/src/dal/), and tie everything together in a small, clean [main.dart](./example/lib/main.dart).
 
-This application starter reins in the issues
-stemming from the difficulty of making
-[declarative navigation](https://medium.com/flutter/learning-flutters-new-navigation-and-routing-system-7c9068155ade),
-[application state, and ephemeral state](https://docs.flutter.dev/development/data-and-backend/state-mgmt/ephemeral-vs-app)
-work together. Most intro-level samples will show you how to use
-them in isolation, but in reality it's quite challenging to get
-these concerns implemented in a way that does not bog the developer
-down in an ocean of hacks and interdependencies.
+This application starter reins in the issues stemming from the difficulty of making [declarative navigation](https://medium.com/flutter/learning-flutters-new-navigation-and-routing-system-7c9068155ade), [application state, and ephemeral state](https://docs.flutter.dev/development/data-and-backend/state-mgmt/ephemeral-vs-app) work together. Most intro-level samples will show you how to use them in isolation, but in reality it's quite challenging to get these concerns implemented in a way that does not bog the developer down in an ocean of hacks and interdependencies.
 
-Clone and evolve your own application if you don't want to fight
-the boilerplate war. For the state management it uses
-[Riverpod](https://riverpod.dev/) - the successor of the popular
-[Provider](https://github.com/rrousselGit/provider) package, both
-created by the same person. The [Riverpod Restorable](https://pub.dev/packages/flutter_riverpod_restorable)
-extends the Riverpod state management model to dealing with the
-ephemeral state, which is crucial to the UX for users of low-RAM,
-older Android phones.
+Clone and evolve your own application if you don't want to fight the boilerplate war. For the state management it uses [Riverpod](https://riverpod.dev/) - the successor of the popular [Provider](https://github.com/rrousselGit/provider) package, both created by the same person. The [Riverpod Restorable](https://pub.dev/packages/flutter_riverpod_restorable) extends the Riverpod state management model to dealing with the ephemeral state, which is crucial to the UX for users of low-RAM, older Android phones.
 
-The project goes past the typical PoC/HelloWorld and showcases more
-real-world-ish approach, where the app has its state restored after
-it gets evicted on Android when user switches between apps and back,
-where the async application initialization code has a clear place
-with the corresponding waiting UI, and where the application state
-gets rebuilt when the web browser user jumps to a bookmark.
+The project goes past the typical PoC/HelloWorld and showcases more real-world-ish approach, where the app has its state restored after it gets evicted on Android when user switches between apps and back, where the async application initialization code has a clear place with the corresponding waiting UI, and where the application state gets rebuilt when the web browser user jumps to a bookmark.
 
 ### A Deeper Dive
 
 Features delivered by this library out-of-the-box are:
 - Near zero boilerplate code in the application (see the main.dart example below).
 - Tab-based and non-tabbed navigation using Flutter Router instead of the Navigator.
-- Flutter v2 declarative navigation approach - crucial for supporting
-  Web - enabling parsing and routing for user-typed (Web) URL.
+- Flutter v2 declarative navigation approach - crucial for supporting Web - enabling parsing and routing for user-typed (Web) URL.
 - Properly wired [Riverpod](https://pub.dev/packages/flutter_riverpod) app state management.
 - Ephemeral state restoration with [Riverpod Restorable](https://pub.dev/packages/flutter_riverpod_restorable).
 - Responsive handling of navigation controls when device
   screen orientation changes.
 - Support of the 404 page when user types an unknown URL in the browser URL bar.
 - Easy creation of modal screens.
-- A [separate branch](https://github.com/vgribok/flutter_nav2_oop/tree/ios-and-android-only)
-  shows the (iOS and Android only) implementation of the
-  camera usage with the picture review. Here the real-world approach
-  is implemented by ensuring the pictures get the GPS geotagging metadata
-  and that the application works correctly on low-RAM, older Android
-  phones.
+- A [separate branch](https://github.com/vgribokflutter_nav2_oop/tree/ios-and-android-only) shows the (iOS and Android only) implementation of the camera usage with the picture review. Here the real-world approach is implemented by ensuring the pictures get the GPS geotagging metadata and that the application works correctly on low-RAM, older Android phones.
 
-As you can see, this is significantly more than the "Counter" or a
-"Hello, World!" examples could ever teach you.
+As you can see, this is significantly more than the "Counter" or a "Hello, World!" examples could ever teach you.
 
 Your application `main.dart` will look like this:
 <details>
