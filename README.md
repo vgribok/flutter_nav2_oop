@@ -14,21 +14,49 @@ Clone and evolve your own application if you don't want to fight the boilerplate
 
 The project goes past the typical PoC/HelloWorld and showcases more real-world-ish approach, where the app has its state restored after it gets evicted on Android when user switches between apps and back, where the async application initialization code has a clear place with the corresponding waiting UI, and where the application state gets rebuilt when the web browser user jumps to a bookmark.
 
-### A Deeper Dive
+### Main Features
 
 Features delivered by this library out-of-the-box are:
-- Near zero boilerplate code in the application (see the main.dart example below).
-- Tab-based and non-tabbed navigation using Flutter Router instead of the Navigator.
-- Flutter v2 declarative navigation approach - crucial for supporting Web - enabling parsing and routing for user-typed (Web) URL.
-- Properly wired [Riverpod](https://pub.dev/packages/flutter_riverpod) app state management.
-- Ephemeral state restoration with [Riverpod Restorable](https://pub.dev/packages/flutter_riverpod_restorable).
-- Responsive handling of navigation controls when device
-  screen orientation changes.
-- Support of the 404 page when user types an unknown URL in the browser URL bar.
-- Easy creation of modal screens.
-- A [separate branch](https://github.com/vgribokflutter_nav2_oop/tree/ios-and-android-only) shows the (iOS and Android only) implementation of the camera usage with the picture review. Here the real-world approach is implemented by ensuring the pictures get the GPS geotagging metadata and that the application works correctly on low-RAM, older Android phones.
+
+- **Near zero boilerplate code in the application**  
+  See the [main.dart](./example/lib/main.dart) example below for a minimal setup.
+- **Tab-based and non-tabbed navigation using Flutter Router**  
+  Utilizes Flutter's Router API instead of the classic Navigator, enabling both tabbed and non-tabbed navigation patterns.
+- **Flutter v2 declarative navigation approach**  
+  Crucial for supporting Web: enables parsing and routing for user-typed (Web) URLs, direct URL pasting, and bookmarking.
+- **Properly wired [Riverpod](https://pub.dev/packages/flutter_riverpod) app state management**  
+  Ensures robust, testable, and maintainable state management across the app.
+- **Ephemeral state restoration with [Riverpod Restorable](https://pub.dev/packages/flutter_riverpod_restorable)**  
+  Supports restoring ephemeral state, which is essential for a smooth UX, especially on low-RAM devices.
+- **Responsive handling of navigation controls**  
+  Navigation adapts seamlessly when device screen orientation changes.
+- **Support for 404 pages**  
+  When a user types an unknown URL in the browser URL bar, a customizable 404 page is shown.
+- **Easy creation of modal screens**  
+  Modal screens can be defined and managed with minimal effort.
+- **Real-world camera and geotagging example**  
+  A [separate branch](https://github.com/vgribok/flutter_nav2_oop/tree/ios-and-android-only) demonstrates iOS and Android-only camera usage, including GPS geotagging and robust handling on low-RAM Android phones.
+
+**Additional highlights:**
+
+- **Direct Web URL Support**  
+  The library parses URLs entered in the browser and reconstructs the navigation stack accordingly, supporting deep linking, direct URL pasting, and bookmarking.
+- **404 and Deep Link Handling**  
+  Each route class (see [routing](./example/lib/src/routing/)) provides a `fromUri(Uri)` factory method to match and parse URLs, including support for unknown routes.
+- **Separation of Concerns**  
+  Application logic, navigation, and state management are cleanly separated, making the codebase maintainable and extensible.
+- **Customizable Tab Navigation**  
+  Define tabs and their root screens using [TabScreenSlot](./lib/src/models/tabbed/tab_screen_slot.dart), with per-tab route parsing.
+- **Screen and Route Abstractions**  
+  Implement your own [screens](./example/lib/src/screens/) and [routes](./example/lib/src/routing/) by subclassing framework-provided base classes.
+- **MaterialApp.router Integration**  
+  Uses `MaterialApp.router` for full declarative navigation and state restoration.
+
+This feature set goes far beyond simple "Counter" or "Hello, World!" examples, providing a robust foundation for real-world Flutter apps targeting mobile, web, and desktop platforms.
 
 As you can see, this is significantly more than the "Counter" or a "Hello, World!" examples could ever teach you.
+
+### Example
 
 Your application `main.dart` will look like this:
 <details>
@@ -127,9 +155,9 @@ Navigator 2, as a part of Flutter 2.0, is quite [complex](https://miro.medium.co
 
 > This project has started as an attempt to abstract away FN2 boilerplate code into a reusable set of library classes, and to create a simple application starter template with tabbed navigation enabled by default, and with a few more very basic features, like app state management and restoration.
 
-Declarative UI is an approach where *UI widgets are not responsible managing the state*, but instead are re-rendered on each relevant state change. This approach has become quite common, first popularized to React, and now with Flutter tpp. Still, it poses challenges to navigation flow development as with declarative UI there can *no longer* be a `screenStack.push(topScreen)` type of code. Instead, `Widget[] renderScreenNavStack(appState)` is how navigation stacks are rendered in declarative UIs.
+Declarative UI is an approach where *UI widgets are not responsible for managing the state*, but instead are re-rendered on each relevant state change. This approach has become quite common, first popularized by React, and now with Flutter tpp. Still, it poses challenges to navigation flow development as with declarative UI there can *no longer* be a `screenStack.push(topScreen)` type of code. Instead, `Widget[] renderScreenNavStack(appState)` is how navigation stacks are rendered in declarative UIs.
 
-To complicate matters a bit more, supporting web UIs in addition to phone and desktop ones means that routing and navigation has to render meaningful URLs in the web browser address bar, as wells as being able to do the opposite: *construct the navigation stack* state from a URL typed in by a human being.
+To complicate matters a bit more, supporting web UIs in addition to phone and desktop ones means that routing and navigation has to render meaningful URLs in the web browser address bar, as wells as being able to do the opposite: *construct the navigation stack* state from a URL typed in by user.
 
 The [Google-sanctioned app code example](https://gist.github.com/johnpryan/430c1d3ad771c43bf249c07fa3aeef14#file-main-dart) everyone has to rely upon (as of time of writing) to learn Navigator 2 (N2) programming, is pretty opaque, has a good amount of boilerplate, but most importantly, it does not separate concerns, mixing together library/framework parts with actual end-user application logic, resulting in steep learning curve required to make sense of the FN2 and for using it efficiently.
 
@@ -151,10 +179,8 @@ The [reusable library part](./lib/) takes care of the following application UI &
 4. No need to write [spaghetti code](https://gist.github.com/johnpryan/430c1d3ad771c43bf249c07fa3aeef14#file-main-dart-L36) parsing user-entered browser URLs to set the app state. Instead, each route class has a standard `fromUri(Uri)` [factory method](example/lib/src/routing/user_profile_path.dart) that looks at the user-entered URI and decides whether it matches.
 5. Use [`topScreen()` method](example/lib/src/screens/book_list_screen.dart) override to check relevant state and tell the framework whether another "overlay" screen needs to be shown on top of the current one. **This is the famous `UI = f(state)` part in action**.
 6. Use [`removeFromNavStackTop()` method](example/lib/src/screens/book_details_screen.dart) override to update the state so that current screen would be removed from the top of the nav stack.
-7. Get consistent and straightforward access to mutable state by
-   using Riverpod library.
-8. Use factories to customize framework-defined UI, like AppBar
-   colors, bottom nav tabs, and the 404 screen.
+7. Get consistent and straightforward access to mutable state by using Riverpod library.
+8. Use factories to customize framework-defined UI, like AppBar colors, bottom nav tabs, and the 404 screen.
 
 > All of the above enables transparent routing and navigation
 > implemented by the framework, leaving you with having to
