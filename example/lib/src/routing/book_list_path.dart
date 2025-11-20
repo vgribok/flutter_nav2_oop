@@ -11,7 +11,7 @@ class BookListPath extends RoutePath {
 
   @override
   bool configureStateFromUri(WidgetRef ref) {
-    booksProvider.setSelectedBookId(ref, null);
+    booksDal.setSelectedBookId(ref, null);
     return true;
   }
 }

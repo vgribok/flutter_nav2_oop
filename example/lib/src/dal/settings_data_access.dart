@@ -10,10 +10,6 @@ class SettingsDataAccess {
   
   static void hideDialog(WidgetRef ref) => 
       ref.read(providers.restorableShowSettingsDialogProvider).value = false;
-
-  static List<NotifierProvider> get ephemerals => [
-    providers.restorableShowSettingsDialogProvider,
-  ];
 }
 
-final settingsProvider = SettingsDataAccess();
+final settingsDal = SettingsDataAccess();

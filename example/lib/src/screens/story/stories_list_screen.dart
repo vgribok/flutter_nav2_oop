@@ -13,11 +13,11 @@ class StoriesListScreen extends TabNavScreen {
 
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) {
-    final storiesAsync = storiesProvider.getStories(ref);
+    final storiesAsync = storiesDal.getStories(ref);
     
     return storiesAsync.when(
       data: (stories) => RefreshIndicator(
-        onRefresh: () async => storiesProvider.invalidate(ref),
+        onRefresh: () async => storiesDal.invalidate(ref),
         child: StoryLayout(
           stories,
           selectedStoryId: null,
@@ -43,14 +43,14 @@ class StoriesListScreen extends TabNavScreen {
 
   @override
   NavScreen? topScreen(WidgetRef ref) {
-    final Story? selectedStory = storiesProvider.getCurrentStory(ref);
+    final Story? selectedStory = storiesDal.getCurrentStory(ref);
     if (selectedStory == null) return null;
     
-    final storiesAsync = storiesProvider.getStories(ref);
+    final storiesAsync = storiesDal.getStories(ref);
     final stories = storiesAsync.valueOrNull;
     if (stories == null) return null;
     
-    final pageId = storiesProvider.getCurrentPageId(ref);
+    final pageId = storiesDal.getCurrentPageId(ref);
     final page = pageId == null ? null :
         selectedStory.pages.cast<StoryPage?>().firstWhere(
           (p) => p?.id == pageId,

@@ -39,6 +39,6 @@ class StoryScreen extends TabNavScreen {
   @override
   void updateStateOnScreenRemovalFromNavStackTop(WidgetRef ref) {
     super.updateStateOnScreenRemovalFromNavStackTop(ref);
-    storiesProvider.setCurrentStory(ref, null);
+    storiesDal.setCurrentStory(ref, null);
   }
 }

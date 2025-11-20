@@ -19,5 +19,5 @@ class BookDetailsPath extends DetailsRoutePath {
 
   @override
   Future<bool> configureStateFromUriFuture(WidgetRef ref) async =>
-      booksProvider.selectBookIfExists(ref, id);
+      booksDal.selectBookIfExists(ref, id);
 }

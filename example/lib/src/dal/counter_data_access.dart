@@ -10,10 +10,6 @@ class CounterDataAccess {
   
   static void decrement(WidgetRef ref) => 
       ref.read(providers.restorableCounterProvider).value--;
-
-  static List<NotifierProvider> get ephemerals => [
-    providers.restorableCounterProvider,
-  ];
 }
 
-final counterProvider = CounterDataAccess();
+final counterDal = CounterDataAccess();

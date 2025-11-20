@@ -43,17 +43,7 @@ class Stories {
   }
 
   void invalidate(WidgetRef ref) => ref.invalidate(providers.storiesProvider);
-
-  List<NotifierProvider> get ephemerals => [
-    providers.restorableCurrentStoryIdProvider,
-    providers.restorableCurrentPageIdProvider,
-  ];
 }
 
-final storiesProvider = Stories();
+final storiesDal = Stories();
 
-class StoryEx {
-  List<NotifierProvider> get ephemerals => [];
-}
-
-final storyProvider = StoryEx();

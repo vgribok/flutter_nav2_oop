@@ -42,7 +42,7 @@ class StoryPageWidget extends ConsumerWidget {
                     onTap: () {
                       final next = _nextPage();
                       if (next != null) {
-                        storiesProvider.setCurrentPage(ref, next.id);
+                        storiesDal.setCurrentPage(ref, next.id);
                       }
                     }
                   )

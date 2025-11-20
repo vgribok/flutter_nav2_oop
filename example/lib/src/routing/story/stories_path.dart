@@ -11,7 +11,7 @@ class StoriesPath extends RoutePath {
 
   @override
   bool configureStateFromUri(WidgetRef ref) {
-    storiesProvider.setCurrentStory(ref, null);
+    storiesDal.setCurrentStory(ref, null);
     return true;
   }
 }

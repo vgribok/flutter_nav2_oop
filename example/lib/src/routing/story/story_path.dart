@@ -35,5 +35,5 @@ class StoryPath extends NestedRoutePath {
 
   @override
   Future<bool> configureStateFromUriFuture(WidgetRef ref) async =>
-      storiesProvider.selectStoryIfExists(ref, storyId, pageId);
+      storiesDal.selectStoryIfExists(ref, storyId, pageId);
 }

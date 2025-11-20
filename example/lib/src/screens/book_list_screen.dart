@@ -14,10 +14,10 @@ class BooksListScreen extends TabNavScreen { // Subclass NavScreen to enable non
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) =>
       AsyncValueAwaiter<List<Book>>(
-        asyncData: booksProvider.getBooks(ref),
-        onRetry: () => booksProvider.invalidate(ref),
+        asyncData: booksDal.getBooks(ref),
+        onRetry: () => booksDal.invalidate(ref),
         builder: (books) => RefreshIndicator(
-          onRefresh: () async => booksProvider.invalidate(ref),
+          onRefresh: () async => booksDal.invalidate(ref),
           child: ListView(
             children: [
               for (final book in books)
@@ -25,7 +25,7 @@ class BooksListScreen extends TabNavScreen { // Subclass NavScreen to enable non
                   key: ValueKey(book.id),
                   title: Text(book.title),
                   subtitle: Text(book.author),
-                  onTap: () => booksProvider.setSelectedBookId(ref, book.id),
+                  onTap: () => booksDal.setSelectedBookId(ref, book.id),
                 )
             ],
           ),
@@ -34,7 +34,7 @@ class BooksListScreen extends TabNavScreen { // Subclass NavScreen to enable non
 
   @override
   NavScreen? topScreen(WidgetRef ref) {
-    final Book? selectedBook = booksProvider.getSelectedBook(ref);
+    final Book? selectedBook = booksDal.getSelectedBook(ref);
     return selectedBook == null
         ? null
         : BookDetailsScreen(tabIndex, selectedBook: selectedBook);
