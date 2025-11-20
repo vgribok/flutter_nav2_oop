@@ -1,5 +1,7 @@
-import 'package:example/src/dal/books_data_access.dart';
-import 'package:example/src/dal/stories_data_access.dart';
+import 'package:example/src/providers/counter_provider.dart';
+import 'package:example/src/providers/books_provider.dart';
+import 'package:example/src/providers/stories_provider.dart';
+import 'package:example/src/providers/settings_provider.dart';
 import 'package:example/src/routing/counter_path.dart';
 import 'package:example/src/routing/story/stories_path.dart';
 import 'package:example/src/routing/story/story_path.dart';
@@ -16,7 +18,6 @@ import 'package:example/src/screens/settings_screen.dart';
 import 'package:example/src/screens/user_profile_screen.dart';
 import 'package:example/theme.dart';
 import 'package:flutter_nav2_oop/all.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Run this file to see tab-based navigation demo
 void main() {
@@ -41,10 +42,11 @@ TabNavAwareApp get theApp => TabNavAwareApp(
   key: const ValueKey("books-sample-app"),
 
   globalRestorableProviders: [
-    ...booksProvider.ephemerals,
-    ...CounterScreen.ephemerals,
-    ...storiesProvider.ephemerals,
-    ...StoryEx.ephemerals
+    restorableCounterProvider,
+    restorableSelectedBookIdProvider,
+    restorableCurrentStoryIdProvider,
+    restorableCurrentPageIdProvider,
+    restorableShowSettingsDialogProvider,
   ],
 
   tabs: [

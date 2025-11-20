@@ -13,7 +13,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_riverpod_restorable/flutter_riverpod_restorable.dart';
+import 'package:riverpod_restorable/riverpod_restorable.dart';
+
+export 'src/extensions/riverpod_v3_extensions.dart';
+export 'package:flutter_riverpod/flutter_riverpod.dart';
+export 'package:riverpod_annotation/riverpod_annotation.dart';
+export 'package:riverpod_restorable/riverpod_restorable.dart';
 
 part './src/models/root_screen_slot.dart';
 part './src/models/nav_model.dart';
@@ -43,7 +48,6 @@ part './src/screens/app_init_wait_screen.dart';
 
 part './src/utility/restorable_enum.dart';
 part './src/utility/uri_extensions.dart';
-part './src/utility/riverpod_extensions.dart';
 part './src/utility/iterable_extensions.dart';
 part './src/utility/context_extensions.dart';
 part './src/utility/object_extensions.dart';

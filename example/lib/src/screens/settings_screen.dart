@@ -1,12 +1,10 @@
 import 'package:example/src/routing/settings_path.dart';
 import 'package:example/src/screens/settings_child_modal_dialog.dart';
+import 'package:example/src/dal/settings_data_access.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nav2_oop/all.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SettingsScreen extends TabNavScreen { // Subclass NavScreen to enable non-tab navigation
-
-  static final StateProvider<bool> showSettingsDialogProvider = StateProvider<bool>((ref) => false);
+class SettingsScreen extends TabNavScreen {
 
   const SettingsScreen(super.tabIndex, // Comment super.tabIndex to enable non-tab navigation
       {super.key}) :
@@ -15,7 +13,7 @@ class SettingsScreen extends TabNavScreen { // Subclass NavScreen to enable non-
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) {
 
-    final NavControlType? navControlType = TabNavAwareApp.navControlTypeProvider.watchValue(ref);
+    final NavControlType? navControlType = TabNavAwareApp.getNavControlType(ref);
 
     return CenteredColumn(
             children: [
@@ -49,21 +47,24 @@ class SettingsScreen extends TabNavScreen { // Subclass NavScreen to enable non-
               const Divider(thickness: 1, indent: 50, endIndent: 50),
               ElevatedButton(
                   child: const Text('Show Modal Dialog'),
-                  onPressed: () => context.showModal(const SettingsChildModalDialog())
-
+                  onPressed: () {
+                    SettingsDataAccess.showDialog(ref);
+                  }
               )
             ]
     );
   }
 
   void _selectNavType(bool selected, WidgetRef ref, NavControlType? navControlType) {
-    if(selected) TabNavAwareApp.navControlTypeProvider.setValue(ref, navControlType);
+    if(selected) TabNavAwareApp.setNavControlType(ref, navControlType);
   }
 
   @override
   RoutePath get routePath => SettingsPath();
 
   @override
-  NavScreen? topScreen(WidgetRef ref) => ref.watch(showSettingsDialogProvider) ?
-      const SettingsChildModalDialog() : null;
+  NavScreen? topScreen(WidgetRef ref) {
+    final showDialog = SettingsDataAccess.shouldShowDialog(ref);
+    return showDialog ? const SettingsChildModalDialog() : null;
+  }
 }

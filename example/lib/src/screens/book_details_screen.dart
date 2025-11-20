@@ -3,7 +3,6 @@ import 'package:example/src/models/book.dart';
 import 'package:example/src/routing/book_details_path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nav2_oop/all.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class BookDetailsScreen extends TabNavScreen { // Subclass NavScreen to enable non-tab navigation
 
@@ -35,7 +34,7 @@ class BookDetailsScreen extends TabNavScreen { // Subclass NavScreen to enable n
   @override
   void updateStateOnScreenRemovalFromNavStackTop(WidgetRef ref) {
     super.updateStateOnScreenRemovalFromNavStackTop(ref);
-    booksProvider.setSelectedBook(ref, null);
+    booksProvider.setSelectedBookId(ref, null);
   }
 
   @override

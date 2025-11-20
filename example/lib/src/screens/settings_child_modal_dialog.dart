@@ -1,8 +1,7 @@
 import 'package:example/src/routing/settings_modal_child_path.dart';
-import 'package:example/src/screens/settings_screen.dart';
+import 'package:example/src/dal/settings_data_access.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nav2_oop/all.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SettingsChildModalDialog extends FullScreenModalDialog {
 
@@ -67,11 +66,10 @@ class SettingsChildModalDialog extends FullScreenModalDialog {
   RoutePath get routePath => SettingsModalChildPath();
 
   @override
-  // ignore: must_call_super
-  void updateStateOnScreenRemovalFromNavStackTop(WidgetRef ref) =>
-    // Set the state that will hide this screen
-    // when UI is rebuilt due to this state change
-    SettingsScreen.showSettingsDialogProvider.setValue(ref, false);
+  void updateStateOnScreenRemovalFromNavStackTop(WidgetRef ref) {
+    super.updateStateOnScreenRemovalFromNavStackTop(ref);
+    SettingsDataAccess.hideDialog(ref);
+  }
 
   @override
   List<Widget>? buildAppBarActions(BuildContext context, WidgetRef ref) =>

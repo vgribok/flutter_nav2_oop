@@ -1,7 +1,7 @@
 import 'package:example/src/dal/stories_data_access.dart';
 import 'package:example/src/models/stories_models.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_nav2_oop/all.dart';
 
 /// Renders the story page
 class StoryPageWidget extends ConsumerWidget {
@@ -14,8 +14,18 @@ class StoryPageWidget extends ConsumerWidget {
       {super.key}
   );
 
-  double get _progress => ((story.indexOf(page) ?? 0)+1)/story.pages.length;
-  StoryPage? get _nextPage => story.nextPage(page, loop: true);
+  int _indexOf(StoryPage page) {
+    return story.pages.indexWhere((p) => p.id == page.id);
+  }
+
+  double get _progress => (_indexOf(page) + 1) / story.pages.length;
+  
+  StoryPage? _nextPage() {
+    final index = _indexOf(page);
+    if (index < 0) return null;
+    final nextIndex = (index + 1) % story.pages.length;
+    return story.pages[nextIndex];
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) =>
@@ -29,7 +39,12 @@ class StoryPageWidget extends ConsumerWidget {
               SingleChildScrollView(scrollDirection: Axis.vertical,
                   child: GestureDetector(child:
                     Image.network(page.imageURL),
-                    onTap: () => StoryEx.setCurrentPage(ref, _nextPage)
+                    onTap: () {
+                      final next = _nextPage();
+                      if (next != null) {
+                        storiesProvider.setCurrentPage(ref, next.id);
+                      }
+                    }
                   )
               )
             )

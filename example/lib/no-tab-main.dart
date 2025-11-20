@@ -1,11 +1,10 @@
-import 'package:example/src/dal/books_data_access.dart';
-import 'package:example/src/screens/counter_screen.dart';
+import 'package:example/src/providers/books_provider.dart';
+import 'package:example/src/providers/counter_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:example/src/routing/book_details_path.dart';
 import 'package:example/src/routing/book_list_path.dart';
 import 'package:example/theme.dart';
 import 'package:flutter_nav2_oop/all.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Run this file to see NON-tab-based navigation demo
 void main() {
@@ -41,7 +40,7 @@ NavAwareApp get theApp => NavAwareApp (
     ],
 
     globalRestorableProviders: [
-      ...booksProvider.ephemerals,
-      ...CounterScreen.ephemerals
+      restorableSelectedBookIdProvider,
+      restorableCounterProvider,
     ]
 );

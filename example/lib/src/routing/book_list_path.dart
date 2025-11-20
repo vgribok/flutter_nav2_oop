@@ -1,6 +1,5 @@
 import 'package:example/src/dal/books_data_access.dart';
 import 'package:flutter_nav2_oop/all.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class BookListPath extends RoutePath {
   static const String resourceName = 'books';
@@ -12,7 +11,7 @@ class BookListPath extends RoutePath {
 
   @override
   bool configureStateFromUri(WidgetRef ref) {
-    booksProvider.setSelectedBook(ref, null);
+    booksProvider.setSelectedBookId(ref, null);
     return true;
   }
 }

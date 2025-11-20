@@ -2,7 +2,7 @@ part of '../../all.dart';
 
 class NavAwareApp extends _NavAwareAppBase<NavModel> {
   /// A singleton of [TabNavModel] accessible via [Provider]
-  static late RestorableProvider<_NavStateRestorer> _privateNavModelProvider;
+  static late NotifierProvider<Notifier<_NavStateRestorer>, _NavStateRestorer> _privateNavModelProvider;
 
   NavAwareApp({
     /// Used for state restoration
@@ -24,15 +24,15 @@ class NavAwareApp extends _NavAwareAppBase<NavModel> {
     super.appGlobalStateInitProvider,
     super.key
   }) {
-    _privateNavModelProvider = RestorableProvider(
-        (_) => _NavStateRestorer(NavModel(rootScreenFactory, routeParsers, initialPath)),
+    _privateNavModelProvider = restorableProvider<_NavStateRestorer>(
+        create: (_) => _NavStateRestorer(NavModel(rootScreenFactory, routeParsers, initialPath)),
         restorationId: "nav-state-restorer"
       );
   }
 
   @override
   @protected
-  RestorableProvider get navModelProvider => _privateNavModelProvider;
+  NotifierProvider get navModelProvider => _privateNavModelProvider;
 
   static NavModel navModelFactory(WidgetRef ref) =>
       ref.read(_privateNavModelProvider).value;
@@ -62,13 +62,13 @@ abstract class _NavAwareAppBase<T extends NavModelBase> extends ConsumerWidget {
   final ThemeData? _theme;
   final ThemeData? _darkTheme;
 
-  final List<RestorableProvider<RestorableProperty?>>? globalRestorableProviders;
+  final List<NotifierProvider>? globalRestorableProviders;
   static late FutureProvider<bool> appInitProvider;
 
   static late NavModelBase Function(WidgetRef) navModelFactory;
 
   @protected
-  RestorableProvider get navModelProvider;
+  NotifierProvider get navModelProvider;
 
   @protected
   Iterable<Locale>? get supportedLocales => null;
@@ -136,7 +136,7 @@ abstract class _NavAwareAppBase<T extends NavModelBase> extends ConsumerWidget {
         // analyzed the framework source code. The real child supplier is still the
         // RouterDelegate's Build() method. You're welcome :-).
         builder: (context, router) =>
-            RestorableProviderRegister(
+            RestorableProviderScope(
                 restorationId: 'application-ephemeral-state',
                 providers: restorableProviders,
                 child: router!
@@ -145,7 +145,7 @@ abstract class _NavAwareAppBase<T extends NavModelBase> extends ConsumerWidget {
 
   @protected
   @mustCallSuper
-  List<RestorableProvider<RestorableProperty?>> get restorableProviders =>
+  List<NotifierProvider> get restorableProviders =>
     [
       navModelProvider,
       ... globalRestorableProviders ?? []

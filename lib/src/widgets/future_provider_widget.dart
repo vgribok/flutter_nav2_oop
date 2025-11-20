@@ -22,11 +22,11 @@ class FutureProviderBuilder<T> extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) =>
       AsyncValueAwaiter<T>(
-          asyncData: provider.watchAsyncValue(ref),
+          asyncData: ref.watch(provider),
           onRetry: () => _refreshData(ref),
           builder: builder,
           waitIndicatorColor: waitIndicatorColor,
       );
 
-  void _refreshData(WidgetRef ref) => (refreshProvider ?? provider).invalidate(ref);
+  void _refreshData(WidgetRef ref) => ref.invalidate(refreshProvider ?? provider);
 }

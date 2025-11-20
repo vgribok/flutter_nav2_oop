@@ -1,7 +1,6 @@
 import 'package:example/src/dal/books_data_access.dart';
 import 'package:flutter_nav2_oop/all.dart';
 import 'book_list_path.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class BookDetailsPath extends DetailsRoutePath {
 
@@ -19,6 +18,6 @@ class BookDetailsPath extends DetailsRoutePath {
     });
 
   @override
-  Future<bool> configureStateFromUriFuture(WidgetRef ref) =>
-      booksProvider.validateAndSetSelectedBookId(ref, id);
+  Future<bool> configureStateFromUriFuture(WidgetRef ref) async =>
+      booksProvider.selectBookIfExists(ref, id);
 }

@@ -4,7 +4,6 @@ import 'package:example/src/routing/story/story_path.dart';
 import 'package:example/src/widgets/story/story.dart';
 import 'package:example/src/widgets/story/story_layout.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_nav2_oop/all.dart';
 
 class StoryScreen extends TabNavScreen {
@@ -20,13 +19,13 @@ class StoryScreen extends TabNavScreen {
   )
     : super(screenTitle: "The Story");
 
-  int? get currentPageIndex => selectedStory.indexOf(currentPage);
+  int? get currentPageIndex {
+    if (currentPage == null) return null;
+    return selectedStory.pages.indexWhere((p) => p.id == currentPage!.id);
+  }
 
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) {
-
-    selectedStory.scheduleNextStoryPage(ref, currentPage);
-
     return StoryLayout(stories, selectedStoryId: selectedStory.id,
         childWidget: currentPage == null ? const Text(
             "The story is waiting to begin..")

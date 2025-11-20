@@ -3,10 +3,19 @@ part of '../../../all.dart';
 class TabNavAwareApp extends _NavAwareAppBase<TabNavModel> {
 
   /// A singleton of [TabNavModel] accessible via [Provider]
-  static late RestorableProvider<_TabNavStateRestorer> _privateNavModelProvider;
+  static late NotifierProvider<Notifier<_TabNavStateRestorer>, _TabNavStateRestorer> _privateNavModelProvider;
 
   /// A singleton of the [NavControlType] accessible via [RestorableProvider]
-  static late RestorableEnumProviderFacadeN<NavControlType> navControlTypeProvider;
+  static late NotifierProvider<Notifier<RestorableIntN>, RestorableIntN> _navControlTypeProvider;
+  
+  static NavControlType? getNavControlType(WidgetRef ref) {
+    final value = ref.watch(_navControlTypeProvider).value;
+    return value == null ? null : NavControlType.values[value];
+  }
+  
+  static void setNavControlType(WidgetRef ref, NavControlType? type) {
+    ref.read(_navControlTypeProvider).value = type?.index;
+  }
 
   TabNavAwareApp({
     /// Application navigation tab definitions
@@ -29,28 +38,27 @@ class TabNavAwareApp extends _NavAwareAppBase<TabNavModel> {
     super.key
   })
   {
-    _privateNavModelProvider = RestorableProvider(
-      (_) => _TabNavStateRestorer(TabNavModel(tabs, initialPath)),
+    _privateNavModelProvider = restorableProvider<_TabNavStateRestorer>(
+      create: (_) => _TabNavStateRestorer(TabNavModel(tabs, initialPath)),
       restorationId: "nav-state-restorer"
     );
 
-    navControlTypeProvider = RestorableEnumProviderFacadeN<NavControlType>(
-        NavControlType.values,
-        initialValue: navType,
+    _navControlTypeProvider = restorableProvider<RestorableIntN>(
+        create: (_) => RestorableIntN(navType?.index),
         restorationId: "nav-control-type"
     );
   }
 
   @override
   @protected
-  RestorableProvider get navModelProvider => _privateNavModelProvider;
+  NotifierProvider get navModelProvider => _privateNavModelProvider;
 
   @override
   @protected
   @mustCallSuper
-  List<RestorableProvider<RestorableProperty?>> get restorableProviders =>
+  List<NotifierProvider> get restorableProviders =>
     [
-      navControlTypeProvider.restorableProvider,
+      _navControlTypeProvider,
       ...super.restorableProviders
     ];
 

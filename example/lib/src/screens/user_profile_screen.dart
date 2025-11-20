@@ -1,7 +1,6 @@
 import 'package:example/src/routing/user_profile_path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nav2_oop/all.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class UserProfileScreen extends TabNavScreen { // Subclass NavScreen to enable non-tab navigation
 

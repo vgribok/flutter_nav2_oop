@@ -10,7 +10,7 @@ This application starter abstracts away main sources of Flutter application boil
 
 This application starter reins in the issues stemming from the difficulty of making [declarative navigation](https://medium.com/flutter/learning-flutters-new-navigation-and-routing-system-7c9068155ade), [application state, and ephemeral state](https://docs.flutter.dev/development/data-and-backend/state-mgmt/ephemeral-vs-app) work together. Most intro-level samples will show you how to use them in isolation, but in reality it's quite challenging to get these concerns implemented in a way that does not bog the developer down in an ocean of hacks and interdependencies.
 
-Clone and evolve your own application if you don't want to fight the boilerplate war. For the state management it uses [Riverpod](https://riverpod.dev/) - the successor of the popular [Provider](https://github.com/rrousselGit/provider) package, both created by the same person. The [Riverpod Restorable](https://pub.dev/packages/flutter_riverpod_restorable) extends the Riverpod state management model to dealing with the ephemeral state, which is crucial to the UX for users of low-RAM, older Android phones.
+Clone and evolve your own application if you don't want to fight the boilerplate war. For the state management it uses [Riverpod v3](https://riverpod.dev/) - the successor of the popular [Provider](https://github.com/rrousselGit/provider) package, both created by the same person. The [Riverpod Restorable v3](https://pub.dev/packages/flutter_riverpod_restorable) extends the Riverpod state management model to dealing with the ephemeral state, which is crucial to the UX for users of low-RAM, older Android phones.
 
 The project goes past the typical PoC/HelloWorld and showcases more real-world-ish approach, where the app has its state restored after it gets evicted on Android when user switches between apps and back, where the async application initialization code has a clear place with the corresponding waiting UI, and where the application state gets rebuilt when the web browser user jumps to a bookmark.
 
@@ -22,11 +22,11 @@ Features delivered by this library out-of-the-box are:
   See the [main.dart](./example/lib/main.dart) example below for a minimal setup.
 - **Tab-based and non-tabbed navigation using Flutter Router**  
   Utilizes Flutter's Router API instead of the classic Navigator, enabling both tabbed and non-tabbed navigation patterns.
-- **Flutter v2 declarative navigation approach**  
+- **Flutter declarative navigation approach**  
   Crucial for supporting Web: enables parsing and routing for user-typed (Web) URLs, direct URL pasting, and bookmarking.
-- **Properly wired [Riverpod](https://pub.dev/packages/flutter_riverpod) app state management**  
-  Ensures robust, testable, and maintainable state management across the app.
-- **Ephemeral state restoration with [Riverpod Restorable](https://pub.dev/packages/flutter_riverpod_restorable)**  
+- **Properly wired [Riverpod v3](https://pub.dev/packages/flutter_riverpod) app state management**  
+  Ensures robust, testable, and maintainable state management across the app using the latest Riverpod patterns.
+- **Ephemeral state restoration with [Riverpod Restorable v3](https://pub.dev/packages/flutter_riverpod_restorable)**  
   Supports restoring ephemeral state, which is essential for a smooth UX, especially on low-RAM devices.
 - **Responsive handling of navigation controls**  
   Navigation adapts seamlessly when device screen orientation changes.
@@ -63,8 +63,9 @@ Your application `main.dart` will look like this:
     <summary>Click to show imports...</summary>
 
 ```dart
-import 'package:example/src/dal/books_data_access.dart';
-import 'package:example/src/dal/stories_data_access.dart';
+import 'package:example/src/providers/counter_provider.dart';
+import 'package:example/src/providers/books_provider.dart';
+import 'package:example/src/providers/stories_provider.dart';
 import 'package:example/src/routing/counter_path.dart';
 import 'package:example/src/routing/story/stories_path.dart';
 import 'package:example/src/routing/story/story_path.dart';
@@ -81,7 +82,6 @@ import 'package:example/src/screens/settings_screen.dart';
 import 'package:example/src/screens/user_profile_screen.dart';
 import 'package:example/theme.dart';
 import 'package:flutter_nav2_oop/all.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 ```
 </details>
 
@@ -102,16 +102,17 @@ Future<void> _appInitSimulator(Ref ref) async {
 TabNavAwareApp get theApp => TabNavAwareApp(
     applicationId: "nav-aware-books-sample",
     appTitle: 'Books With Navigation',
-    theme: myTheme,
+    theme: mainColor.toTheme(),
+    darkTheme: mainColor.toDarkTheme(),
     initialPath: CounterPath(),
     appGlobalStateInitProvider: FutureProvider(_appInitSimulator),
     key: const ValueKey("books-sample-app"),
 
     globalRestorableProviders: [
-      ...booksProvider.ephemerals,
-      ...CounterScreen.ephemerals,
-      ...Stories.ephemerals,
-      ...StoryEx.ephemerals
+      restorableCounterProvider,
+      restorableSelectedBookIdProvider,
+      restorableCurrentStoryIdProvider,
+      restorableCurrentPageIdProvider,
     ],
 
     tabs: [
@@ -149,17 +150,51 @@ you get your app looking like this on Android, iPhone or Web.
 ![web UI screenshot](./doc/images/nav_2_app_web.png)
 Windows app has been run successfully too.
 
+### State Management with Riverpod v3
+
+The project uses Riverpod v3 with code generation for clean, type-safe state management:
+
+```dart
+// Define restorable state
+final restorableCounterProvider = restorableProvider<RestorableInt>(
+  create: (ref) => RestorableInt(0),
+  restorationId: 'counter',
+);
+
+// Create notifier with code generation
+@riverpod
+class Counter extends _$Counter {
+  @override
+  int build() => ref.watch(restorableCounterProvider).value;
+
+  void increment() => ref.read(restorableCounterProvider).value++;
+}
+```
+
+Key benefits:
+- **Code generation** eliminates boilerplate
+- **Type safety** with compile-time checks
+- **State restoration** for seamless UX on low-RAM devices
+- **Clean separation** between state definition and business logic
+
+## Requirements
+
+- Flutter SDK 3.0.0 or higher
+- Dart SDK 3.0.0 or higher
+- Riverpod 3.0.0 or higher
+- Code generation setup (`build_runner`, `riverpod_generator`)
+
 ## Challenge to Overcome
 
-Navigator 2, as a part of Flutter 2.0, is quite [complex](https://miro.medium.com/max/2400/1*hNt4Bc8FZBp_Gqh7iED3FA.png), is [scarcely-documented](https://flutter.dev/docs/development/ui/navigation) by an in-depth but somewhat outdated [Medium post](https://medium.com/flutter/learning-flutters-new-navigation-and-routing-system-7c9068155ade), and requires significant mind-shift to adopt its  declarative style of rendering UI.
+Flutter's declarative navigation (Navigator 2.0) is quite [complex](https://miro.medium.com/max/2400/1*hNt4Bc8FZBp_Gqh7iED3FA.png), is [scarcely-documented](https://flutter.dev/docs/development/ui/navigation) by an in-depth but somewhat outdated [Medium post](https://medium.com/flutter/learning-flutters-new-navigation-and-routing-system-7c9068155ade), and requires significant mind-shift to adopt its declarative style of rendering UI.
 
-> This project has started as an attempt to abstract away FN2 boilerplate code into a reusable set of library classes, and to create a simple application starter template with tabbed navigation enabled by default, and with a few more very basic features, like app state management and restoration.
+> This project has started as an attempt to abstract away declarative navigation boilerplate code into a reusable set of library classes, and to create a simple application starter template with tabbed navigation enabled by default, and with a few more very basic features, like app state management and restoration.
 
-Declarative UI is an approach where *UI widgets are not responsible for managing the state*, but instead are re-rendered on each relevant state change. This approach has become quite common, first popularized by React, and now with Flutter tpp. Still, it poses challenges to navigation flow development as with declarative UI there can *no longer* be a `screenStack.push(topScreen)` type of code. Instead, `Widget[] renderScreenNavStack(appState)` is how navigation stacks are rendered in declarative UIs.
+Declarative UI is an approach where *UI widgets are not responsible for managing the state*, but instead are re-rendered on each relevant state change. This approach has become quite common, first popularized by React, and now with Flutter too. Still, it poses challenges to navigation flow development as with declarative UI there can *no longer* be a `screenStack.push(topScreen)` type of code. Instead, `Widget[] renderScreenNavStack(appState)` is how navigation stacks are rendered in declarative UIs.
 
 To complicate matters a bit more, supporting web UIs in addition to phone and desktop ones means that routing and navigation has to render meaningful URLs in the web browser address bar, as wells as being able to do the opposite: *construct the navigation stack* state from a URL typed in by user.
 
-The [Google-sanctioned app code example](https://gist.github.com/johnpryan/430c1d3ad771c43bf249c07fa3aeef14#file-main-dart) everyone has to rely upon (as of time of writing) to learn Navigator 2 (N2) programming, is pretty opaque, has a good amount of boilerplate, but most importantly, it does not separate concerns, mixing together library/framework parts with actual end-user application logic, resulting in steep learning curve required to make sense of the FN2 and for using it efficiently.
+The [Google-sanctioned app code example](https://gist.github.com/johnpryan/430c1d3ad771c43bf249c07fa3aeef14#file-main-dart) everyone has to rely upon (as of time of writing) to learn declarative navigation programming, is pretty opaque, has a good amount of boilerplate, but most importantly, it does not separate concerns, mixing together library/framework parts with actual end-user application logic, resulting in steep learning curve required to make sense of declarative navigation and for using it efficiently.
 
 The tasks one would have to solve, with no framework to help, are:
 - Compute the screen stack based on the current app state.
@@ -179,8 +214,9 @@ The [reusable library part](./lib/) takes care of the following application UI &
 4. No need to write [spaghetti code](https://gist.github.com/johnpryan/430c1d3ad771c43bf249c07fa3aeef14#file-main-dart-L36) parsing user-entered browser URLs to set the app state. Instead, each route class has a standard `fromUri(Uri)` [factory method](example/lib/src/routing/user_profile_path.dart) that looks at the user-entered URI and decides whether it matches.
 5. Use [`topScreen()` method](example/lib/src/screens/book_list_screen.dart) override to check relevant state and tell the framework whether another "overlay" screen needs to be shown on top of the current one. **This is the famous `UI = f(state)` part in action**.
 6. Use [`removeFromNavStackTop()` method](example/lib/src/screens/book_details_screen.dart) override to update the state so that current screen would be removed from the top of the nav stack.
-7. Get consistent and straightforward access to mutable state by using Riverpod library.
-8. Use factories to customize framework-defined UI, like AppBar colors, bottom nav tabs, and the 404 screen.
+7. Get consistent and straightforward access to mutable state using Riverpod v3 with code generation.
+8. Define restorable state with `restorableProvider` for automatic state restoration.
+9. Use factories to customize framework-defined UI, like AppBar colors, bottom nav tabs, and the 404 screen.
 
 > All of the above enables transparent routing and navigation
 > implemented by the framework, leaving you with having to

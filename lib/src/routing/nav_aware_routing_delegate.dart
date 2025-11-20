@@ -32,16 +32,16 @@ abstract class _NavAwareRouterDelegateBase<T extends NavModelBase>
   _NavAwareRouterDelegateBase(this.ref);
 
   bool get appInitializationCompleted =>
-      _NavAwareAppBase.appInitProvider.watchAsyncValue(ref).value ?? false;
+      ref.watch(_NavAwareAppBase.appInitProvider).value ?? false;
 
   @override
   Widget build(BuildContext context) =>
-    _NavAwareAppBase.appInitProvider.watchAsyncValue(ref).when(
+    ref.watch(_NavAwareAppBase.appInitProvider).when(
         loading: () =>
             _buildNavigatorWidget(context, [const AppInitWaitScreen()]),
         error: (err, stack) =>
             _buildNavigatorWidget(context, [AppInitErrorScreen(err, stack,
-                onRetry: () => _NavAwareAppBase.appInitProvider.invalidate(ref)
+                onRetry: () => ref.invalidate(_NavAwareAppBase.appInitProvider)
             )]),
         data: (_) =>
             // Call the function converting state into the stack of screens.

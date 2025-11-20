@@ -1,67 +1,41 @@
-// ignore_for_file: subtype_of_sealed_class
-
-import 'package:flutter/material.dart';
-import 'package:flutter_nav2_oop/all.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:example/src/models/book.dart';
-import 'package:flutter_riverpod_restorable/flutter_riverpod_restorable.dart';
+import 'package:example/src/providers/books_provider.dart' as providers;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-extension BookEx on Book {
-  Key get key => ValueKey("book-$id");
-}
-
-final BooksProvider booksProvider = BooksProvider();
-
-class BooksProvider extends FutureProvider<List<Book>> {
-
-  BooksProvider() : super(
-    (ref) async {
-
-        // Simulate long-ish API call to retrieve data
-        await Future.delayed(const Duration(milliseconds: 750));
-        // Simulate throwing an exception
-        final int timestamp = DateTime.now().second;
-        if((timestamp % 3) == 0) {
-          throw Exception("Demo exception to simulate data retrieval failure");
-        }
-
-        return [
-          const Book(id: 0, title: 'Stranger in a Strange Land', author: 'Robert A. Heinlein'),
-          const Book(id: 1, title: 'Foundation', author: 'Isaac Asimov'),
-          const Book(id: 2, title: 'Fahrenheit 451', author: 'Ray Bradbury'),
-        ];
+class BooksDataAccess {
+  AsyncValue<List<Book>> getBooks(WidgetRef ref) => 
+      ref.watch(providers.booksProvider);
+  
+  int? getSelectedBookId(WidgetRef ref) => 
+      ref.watch(providers.restorableSelectedBookIdProvider).value;
+  
+  void setSelectedBookId(WidgetRef ref, int? id) => 
+      ref.read(providers.restorableSelectedBookIdProvider).value = id;
+  
+  Book? getSelectedBook(WidgetRef ref) {
+    final bookId = getSelectedBookId(ref);
+    if (bookId == null) return null;
+    final books = ref.watch(providers.booksProvider).value;
+    if (books == null) return null;
+    try {
+      return books.firstWhere((b) => b.id == bookId);
+    } catch (_) {
+      return null;
     }
-  );
-
-  final _selectedBookIdProvider = RestorableIntProviderFacadeN(
-      restorationId: "selected-book-id"
-  );
-
-  List<RestorableProvider> get ephemerals => [_selectedBookIdProvider.restorableProvider];
-
-  late final StateProvider<Book?> _selectedBookProvider = StateProvider<Book?>(
-      (ref) {
-        final int? selectedBookId = _selectedBookIdProvider.watchValue2(ref);
-        if(selectedBookId == null) return null;
-        final List<Book>? books = watchValue2(ref);
-        return _bookById(books, selectedBookId);
-      }
-  );
-
-  static Book? _bookById(List<Book>? books, int? bookId) =>
-      bookId == null ? null : books?.firstSafeWhere((book) => book.id == bookId);
-
-  Book? watchForSelectedBook(WidgetRef ref) =>
-      _selectedBookProvider.watchValue(ref);
-
-  void setSelectedBook(WidgetRef ref, Book? book) =>
-      _selectedBookIdProvider.setValue(ref, book?.id);
-
-  Future<bool> validateAndSetSelectedBookId(WidgetRef ref, int bookId) async {
-    final List<Book> books = await readFuture(ref);
-    final Book? selectedBook = _bookById(books, bookId);
-    if(selectedBook == null) return false;
-    setSelectedBook(ref, selectedBook);
-    return true;
   }
+
+  Future<bool> selectBookIfExists(WidgetRef ref, int bookId) async {
+    final books = await ref.read(providers.booksProvider.future);
+    final exists = books.any((b) => b.id == bookId);
+    if (exists) setSelectedBookId(ref, bookId);
+    return exists;
+  }
+
+  void invalidate(WidgetRef ref) => ref.invalidate(providers.booksProvider);
+
+  List<NotifierProvider> get ephemerals => [
+    providers.restorableSelectedBookIdProvider,
+  ];
 }
+
+final booksProvider = BooksDataAccess();

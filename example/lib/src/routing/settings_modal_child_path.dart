@@ -1,7 +1,6 @@
 import 'package:example/src/routing/settings_path.dart';
-import 'package:example/src/screens/settings_screen.dart';
+import 'package:example/src/dal/settings_data_access.dart';
 import 'package:flutter_nav2_oop/all.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SettingsModalChildPath extends RoutePath {
 
@@ -14,7 +13,7 @@ class SettingsModalChildPath extends RoutePath {
 
   @override
   bool configureStateFromUri(WidgetRef ref) {
-    SettingsScreen.showSettingsDialogProvider.setValue(ref, true);
+    SettingsDataAccess.showDialog(ref);
     return true;
   }
 }

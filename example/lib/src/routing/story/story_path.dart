@@ -1,7 +1,6 @@
 import 'package:example/src/dal/stories_data_access.dart';
 import 'package:example/src/routing/story/stories_path.dart';
 import 'package:flutter_nav2_oop/all.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Can be "/stories/123" or "/stories/123/page/456"
 class StoryPath extends NestedRoutePath {
@@ -35,6 +34,6 @@ class StoryPath extends NestedRoutePath {
   }
 
   @override
-  Future<bool> configureStateFromUriFuture(WidgetRef ref) =>
-      StoryEx.validateAndSetCurrentStoryAndPage(ref, storyId, pageId);
+  Future<bool> configureStateFromUriFuture(WidgetRef ref) async =>
+      storiesProvider.selectStoryIfExists(ref, storyId, pageId);
 }

@@ -34,7 +34,7 @@ class RefreshIndicatorProviderContainer<T> extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) =>
       RefreshIndicatorContainer(
         key: const ValueKey("refresh indicator container"),
-        onRefresh: () { refreshProvider.refresh(ref); return Future.value(); },
+        onRefresh: () { ref.invalidate(refreshProvider); return Future.value(); },
         child: child,
       );
 }
