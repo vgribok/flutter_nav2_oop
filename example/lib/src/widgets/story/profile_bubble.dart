@@ -13,7 +13,7 @@ class ProfileBubble extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) =>
       GestureDetector(
-        onTap: () => storiesDal.setCurrentStory(ref, story.id),
+        onTap: () => storiesDal.setCurrentStory(ref, story),
         child: Column(
           children: [
             CircleAvatar(

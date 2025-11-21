@@ -19,13 +19,16 @@ class StoryScreen extends TabNavScreen {
   )
     : super(screenTitle: "The Story");
 
-  int? get currentPageIndex {
-    if (currentPage == null) return null;
-    return selectedStory.pages.indexWhere((p) => p.id == currentPage!.id);
-  }
+  int? get currentPageIndex => selectedStory.indexOf(currentPage);
 
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) {
+    if (watchForInCurrentTab(ref)) {
+      selectedStory.scheduleNextStoryPage(ref, currentPage);
+    } else {
+      StoryEx.cancelNextPageOperation();
+    }
+    
     return StoryLayout(stories, selectedStoryId: selectedStory.id,
         childWidget: currentPage == null ? const Text(
             "The story is waiting to begin..")

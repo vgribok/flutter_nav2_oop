@@ -17,27 +17,30 @@ final restorableCurrentPageIdProvider = restorableProvider<RestorableIntN>(
 
 @riverpod
 Future<List<Story>> stories(Ref ref) async {
-  await Future.delayed(const Duration(milliseconds: 500));
+  await Future.delayed(const Duration(milliseconds: 750));
   return const [
     Story(
-      id: 0,
-      defaultDuration: 3.0,
-      bubble: Bubble(imageURL: 'https://picsum.photos/100/100?1', text: 'Adventure'),
-      pages: [
-        StoryPage(id: 0, imageURL: 'https://picsum.photos/400/800?1'),
-        StoryPage(id: 1, imageURL: 'https://picsum.photos/400/800?2'),
-        StoryPage(id: 2, imageURL: 'https://picsum.photos/400/800?3'),
-      ],
-    ),
-    Story(
       id: 1,
-      defaultDuration: 3.0,
-      bubble: Bubble(imageURL: 'https://picsum.photos/100/100?2', text: 'Mystery'),
+      defaultDuration: 2.0,
+      bubble: Bubble(
+        imageURL: "https://pbs.twimg.com/profile_images/2699103767/1e9cec7a8399310f4902cfff9d32f14c_400x400.jpeg",
+        text: "That's my life",
+      ),
       pages: [
-        StoryPage(id: 0, imageURL: 'https://picsum.photos/400/800?4'),
-        StoryPage(id: 1, imageURL: 'https://picsum.photos/400/800?5'),
-        StoryPage(id: 2, imageURL: 'https://picsum.photos/400/800?6'),
-      ],
-    ),
+        StoryPage(
+          id: 111,
+          imageURL: "https://3.bp.blogspot.com/-m6HW6cJbrZM/VoybblszDqI/AAAAAAAAYVU/t3pwGleRTosr5tVl7AgynRVvxFYofLVaQCKgB/w1200-h630-p-k-no-nu/IMG_4735.jpg",
+          duration: 5.0
+        ),
+        StoryPage(
+          imageURL: "https://pbs.twimg.com/media/E-YezAjXoBMYHCC.jpg",
+          id: 222
+        ),
+        StoryPage(
+          imageURL: "https://m.media-amazon.com/images/W/WEBP_402378-T1/images/I/41uPfg7sAxL._AC_SX679_.jpg",
+          id: 333
+        )
+      ]
+    )
   ];
 }

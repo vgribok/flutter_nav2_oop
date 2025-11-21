@@ -1,5 +1,4 @@
 import 'package:example/src/dal/stories_data_access.dart';
-import 'package:example/src/models/stories_models.dart';
 import 'package:example/src/routing/story/stories_path.dart';
 import 'package:example/src/screens/story/story_screen.dart';
 import 'package:example/src/widgets/story/story_layout.dart';
@@ -43,19 +42,11 @@ class StoriesListScreen extends TabNavScreen {
 
   @override
   NavScreen? topScreen(WidgetRef ref) {
-    final Story? selectedStory = storiesDal.getCurrentStory(ref);
+    final selectedStory = storiesDal.watchForCurrentStory(ref);
     if (selectedStory == null) return null;
     
-    final storiesAsync = storiesDal.getStories(ref);
-    final stories = storiesAsync.valueOrNull;
-    if (stories == null) return null;
-    
-    final pageId = storiesDal.getCurrentPageId(ref);
-    final page = pageId == null ? null :
-        selectedStory.pages.cast<StoryPage?>().firstWhere(
-          (p) => p?.id == pageId,
-          orElse: () => null,
-        );
+    final page = StoryEx.watchForCurrentPage(ref);
+    final stories = storiesDal.getStories(ref).value!;
     
     return StoryScreen(tabIndex, stories, selectedStory, page);
   }

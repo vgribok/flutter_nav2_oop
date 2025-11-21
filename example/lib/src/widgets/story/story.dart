@@ -1,5 +1,6 @@
 import 'package:example/src/dal/stories_data_access.dart';
 import 'package:example/src/models/stories_models.dart';
+import 'package:example/src/widgets/internet_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_nav2_oop/all.dart';
 
@@ -14,18 +15,8 @@ class StoryPageWidget extends ConsumerWidget {
       {super.key}
   );
 
-  int _indexOf(StoryPage page) {
-    return story.pages.indexWhere((p) => p.id == page.id);
-  }
-
-  double get _progress => (_indexOf(page) + 1) / story.pages.length;
-  
-  StoryPage? _nextPage() {
-    final index = _indexOf(page);
-    if (index < 0) return null;
-    final nextIndex = (index + 1) % story.pages.length;
-    return story.pages[nextIndex];
-  }
+  double get _progress => ((story.indexOf(page) ?? 0) + 1) / story.pages.length;
+  StoryPage? get _nextPage => story.nextPage(page, loop: true);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) =>
@@ -37,14 +28,9 @@ class StoryPageWidget extends ConsumerWidget {
             const Padding(padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5)),
             Expanded(child:
               SingleChildScrollView(scrollDirection: Axis.vertical,
-                  child: GestureDetector(child:
-                    Image.network(page.imageURL),
-                    onTap: () {
-                      final next = _nextPage();
-                      if (next != null) {
-                        storiesDal.setCurrentPage(ref, next.id);
-                      }
-                    }
+                  child: GestureDetector(
+                    child: InternetImageWidget(page.imageURL),
+                    onTap: () => StoryEx.setCurrentPage(ref, _nextPage)
                   )
               )
             )

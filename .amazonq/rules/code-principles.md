@@ -4,6 +4,15 @@ This is a Flutter application using declarative navigation (Navigator 2.0), Rive
 
 # Code Quality Principles
 
+## Testing & Migration
+- Test critical user flows after ANY framework upgrade (Riverpod, Flutter, etc.)
+- Pay special attention to:
+  - Async operations (timers, network calls)
+  - Background operations (polling, auto-refresh)
+  - Tab switching behavior
+  - State restoration
+- When migrating, compare behavior with previous version, not just compilation
+
 ## Minimal Code
 - Write ONLY the absolute minimal code needed
 - Ensure every line directly contributes to the solution
@@ -73,6 +82,7 @@ ref.read(currentStoryIdProvider.notifier).select(id)
 - Make button handlers call facade methods to update state, NOTHING ELSE
 - Let state changes trigger automatic UI re-renders via `topScreen()`
 - Use `topScreen()` to compute overlay screens from current state
+- For background operations (timers, polling), cancel when screen/tab becomes inactive
 
 **Correct pattern:**
 ```dart
@@ -108,6 +118,15 @@ onPressed: () {
 - Access restorable providers directly: `ref.watch(provider).value` and `ref.read(provider).value = x`
 - DO NOT create separate `@riverpod` functions for computed state
 - DO NOT put validation logic in routes or screens
+
+### Async Operations (Riverpod 3)
+- DO NOT use `ref` inside async callbacks (Future.delayed, network calls, etc.)
+- Capture provider references BEFORE async operation:
+  ```dart
+  final provider = ref.read(myProvider);
+  Future.delayed(..., () => provider.value = x);  // Safe
+  ```
+- For tab-based navigation, check `watchForInCurrentTab(ref)` before starting background operations
 
 ### Routes and Facades
 - Make routes call single facade methods (e.g., `selectBookIfExists(ref, id)`)
