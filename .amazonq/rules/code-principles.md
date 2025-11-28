@@ -31,6 +31,53 @@ This is a Flutter application using declarative navigation (Navigator 2.0), Rive
 - DO NOT chain method calls (e.g., `ref.read().notifier.select()`)
 - Follow the Law of Demeter - objects should only talk to immediate neighbors
 
+## Proper Encapsulation
+- Methods should operate on their own class members, not on unrelated data passed as parameters
+- If a method primarily operates on data from another type, move it there (as instance method or extension)
+- Use extension methods to add behavior to types you don't own (e.g., `List<Story>`, `AsyncValue<T>`)
+- Encapsulate framework API complexity behind clean abstractions
+- Hide provider implementation details (`.future`, `.value`, `.notifier`) behind helper methods or extensions
+
+**WRONG - method operates on unrelated data:**
+```dart
+class Stories {
+  static Story? _getById(List<Story>? stories, int? storyId) =>
+    stories?.firstSafeWhere((s) => s.id == storyId);
+}
+```
+
+**CORRECT - use extension on the actual type:**
+```dart
+extension StoryListEx on List<Story> {
+  Story? getById(int? storyId) =>
+    storyId == null ? null : firstSafeWhere((s) => s.id == storyId);
+}
+```
+
+**WRONG - exposing provider implementation details:**
+```dart
+final stories = await ref.read(storiesProvider.future);
+```
+
+**CORRECT - encapsulate in facade or extension:**
+```dart
+// In facade:
+Future<List<Story>> getStoriesAsync(WidgetRef ref) =>
+  ref.read(storiesProvider.future);
+
+// Or as extension:
+extension AsyncProviderEx<T> on AsyncValue<T> {
+  Future<T> get future => ...; // encapsulate .future access
+}
+```
+
+## Dependency Management
+- Prefer tree-like dependency structures over graphs
+- Avoid bidirectional dependencies between classes
+- Dependencies should flow in one direction (typically: UI → Facades → Providers → Models)
+- If two classes need each other, extract shared logic to a third class or use events/callbacks
+- Use dependency injection to break circular dependencies
+
 ## Separation of Concerns
 - **Screens**: UI rendering ONLY - no business logic, no state management
 - **Routes**: URL parsing and navigation paths ONLY - no business logic

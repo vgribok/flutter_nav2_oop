@@ -103,8 +103,8 @@ extension StoryEx on Story {
   }
 
   static Future<bool> validateAndSetCurrentStoryAndPage(WidgetRef ref, int storyId, int? pageId) async {
-    final stories = await ref.read(providers.storiesProvider.future);
-    final story = Stories._getById(stories, storyId);
+    final List<Story> stories = await ref.read(providers.storiesProvider.future);
+    final Story? story = Stories._getById(stories, storyId);
     if (story == null) return false;
 
     StoryPage? page = story.getPageById(pageId);
