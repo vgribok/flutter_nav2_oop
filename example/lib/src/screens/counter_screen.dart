@@ -15,7 +15,7 @@ class CounterScreen extends TabNavScreen {
 
   Widget _buildFloatingActionButton(BuildContext context, WidgetRef ref) =>
       FloatingActionButton(
-          onPressed: () => CounterDataAccess.increment(ref),
+          onPressed: () => counterDal.increment(ref),
           tooltip: 'Increment',
           foregroundColor: context.colorScheme.onPrimary,
           backgroundColor: context.colorScheme.primary,
@@ -24,7 +24,7 @@ class CounterScreen extends TabNavScreen {
 
   @override
   Widget buildBody(BuildContext context, WidgetRef ref) {
-    final count = CounterDataAccess.getValue(ref);
+    final count = counterDal.getValue(ref);
     return Scaffold(
       body: Center(
         child: Column(

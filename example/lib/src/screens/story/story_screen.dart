@@ -26,7 +26,7 @@ class StoryScreen extends TabNavScreen {
     if (watchForInCurrentTab(ref)) {
       selectedStory.scheduleNextStoryPage(ref, currentPage);
     } else {
-      StoryEx.cancelNextPageOperation();
+      storiesDal.cancelNextPageOperation();
     }
     
     return StoryLayout(stories, selectedStoryId: selectedStory.id,

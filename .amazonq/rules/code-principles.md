@@ -32,44 +32,29 @@ This is a Flutter application using declarative navigation (Navigator 2.0), Rive
 - Follow the Law of Demeter - objects should only talk to immediate neighbors
 
 ## Proper Encapsulation
-- Methods should operate on their own class members, not on unrelated data passed as parameters
-- If a method primarily operates on data from another type, move it there (as instance method or extension)
-- Use extension methods to add behavior to types you don't own (e.g., `List<Story>`, `AsyncValue<T>`)
-- Encapsulate framework API complexity behind clean abstractions
-- Hide provider implementation details (`.future`, `.value`, `.notifier`) behind helper methods or extensions
 
-**WRONG - method operates on unrelated data:**
-```dart
-class Stories {
-  static Story? _getById(List<Story>? stories, int? storyId) =>
-    stories?.firstSafeWhere((s) => s.id == storyId);
-}
-```
+### Core Principle: Methods Operate on Their Own Data
+- If a method primarily operates on data from another type, it belongs to that type (as instance method or extension)
+- Methods taking unrelated data as parameters indicate misplaced responsibility
+- Ask: "Does this method need the class's state, or just the parameters?" If just parameters, move it
 
-**CORRECT - use extension on the actual type:**
-```dart
-extension StoryListEx on List<Story> {
-  Story? getById(int? storyId) =>
-    storyId == null ? null : firstSafeWhere((s) => s.id == storyId);
-}
-```
+### Extensions vs Facades: The Decision Criteria
+**Use Extensions when:**
+- Adding behavior based solely on the type's own data/members
+- The operation is a pure function of the type's state
+- No external dependencies (like WidgetRef, providers, services) are needed
 
-**WRONG - exposing provider implementation details:**
-```dart
-final stories = await ref.read(storiesProvider.future);
-```
+**Use Facade Methods when:**
+- Dealing with cross-cutting concerns (ref access, provider coordination, state management)
+- Orchestrating multiple objects or providers
+- Business logic that spans multiple domains
 
-**CORRECT - encapsulate in facade or extension:**
-```dart
-// In facade:
-Future<List<Story>> getStoriesAsync(WidgetRef ref) =>
-  ref.read(storiesProvider.future);
+**Critical Rule:** Never create extensions that take external dependencies as parameters - this violates Law of Demeter and indicates the logic belongs in a facade
 
-// Or as extension:
-extension AsyncProviderEx<T> on AsyncValue<T> {
-  Future<T> get future => ...; // encapsulate .future access
-}
-```
+### Framework Detail Encapsulation
+- Hide ALL framework implementation details (`.future`, `.value`, `.notifier`, etc.) behind facade methods
+- Callers should never know what provider type or framework API is being used
+- This enables changing implementations without affecting callers
 
 ## Dependency Management
 - Prefer tree-like dependency structures over graphs
@@ -98,52 +83,17 @@ extension AsyncProviderEx<T> on AsyncValue<T> {
 
 ## Facade Pattern
 - Encapsulate ALL framework/library implementation details in facades
-- Make routes and screens call facade methods ONLY
-- DO NOT let routes or screens access providers directly
-- Provide utility methods in facades (e.g., `invalidate(ref)`)
-- Access restorable providers directly from facades - NO intermediate notifiers
-
-**Correct pattern:**
-```dart
-// In screen/route:
-storiesProvider.setCurrentStory(ref, id)
-
-// Inside facade:
-ref.read(restorableCurrentStoryIdProvider).value = id
-```
-
-**WRONG pattern:**
-```dart
-// DO NOT do this:
-ref.read(currentStoryIdProvider.notifier).select(id)
-```
+- Routes and screens call facade methods ONLY - never access providers directly
+- Facades provide clean business-focused APIs that hide technical implementation
+- Access restorable providers directly from facades - avoid unnecessary intermediate layers
+- Provide utility methods (invalidation, refresh, etc.) as needed
 
 ## Declarative UI = f(state)
-- Derive UI purely from state
-- ONLY change state - let the framework render UI automatically
-- DO NOT imperatively manipulate navigation:
-  - NO `stack.push()`
-  - NO `context.showModal()`
-  - NO `Navigator.of(context).push()`
-  - NO similar imperative calls
-- Make button handlers call facade methods to update state, NOTHING ELSE
-- Let state changes trigger automatic UI re-renders via `topScreen()`
-- Use `topScreen()` to compute overlay screens from current state
+- Derive UI purely from state - never imperatively manipulate navigation
+- Button handlers ONLY change state via facade methods - framework handles rendering
+- Avoid imperative navigation calls (stack.push, context.showModal, Navigator.push, etc.)
+- Use `topScreen()` to compute overlay screens declaratively from current state
 - For background operations (timers, polling), cancel when screen/tab becomes inactive
-
-**Correct pattern:**
-```dart
-onPressed: () => facade.showDialog(ref)
-```
-
-**WRONG pattern:**
-```dart
-// DO NOT do this:
-onPressed: () {
-  facade.showDialog(ref);
-  context.showModal(...);
-}
-```
 
 ## State Management
 
@@ -159,58 +109,62 @@ onPressed: () {
 - Register ALL restorable providers in `globalRestorableProviders` list
 
 ### Facades
-- Put ALL business logic in facades
-- Put ALL computed state logic in facade methods
-- Put ALL validation logic in facades
-- Access restorable providers directly: `ref.watch(provider).value` and `ref.read(provider).value = x`
+- Put ALL business logic, computed state, and validation in facades
 - DO NOT create separate `@riverpod` functions for computed state
 - DO NOT put validation logic in routes or screens
 
+**Eliminating Boilerplate:**
+- Encapsulate repetitive provider access patterns (like `.value` unwrapping) in private helper methods
+- Keep public API clean and focused on business operations
+- Private helpers handle technical details (watch vs read, value unwrapping, etc.)
+- This maintains encapsulation while reducing repetition
+
 ### Async Operations (Riverpod 3)
-- DO NOT use `ref` inside async callbacks (Future.delayed, network calls, etc.)
-- Capture provider references BEFORE async operation:
-  ```dart
-  final provider = ref.read(myProvider);
-  Future.delayed(..., () => provider.value = x);  // Safe
-  ```
-- For tab-based navigation, check `watchForInCurrentTab(ref)` before starting background operations
+- Never use `ref` inside async callbacks (Future.delayed, network calls, etc.)
+- Capture provider references BEFORE async operations to avoid lifecycle issues
+- For tab-based navigation, check if still in current tab before executing background operations
 
 ### Routes and Facades
-- Make routes call single facade methods (e.g., `selectBookIfExists(ref, id)`)
-- Return meaningful results from facades (e.g., bool for existence checks)
-- Use proper lookup methods - IDs are NOT array indices
-
-**Example:**
-```dart
-// Restorable provider:
-final restorableCounterProvider = restorableProvider<RestorableInt>(
-  create: (ref) => RestorableInt(0),
-  restorationId: 'counter',
-);
-
-// Facade:
-class CounterDataAccess {
-  static int getValue(WidgetRef ref) => 
-      ref.watch(restorableCounterProvider).value;
-  
-  static void increment(WidgetRef ref) => 
-      ref.read(restorableCounterProvider).value++;
-}
-```
+- Routes call single facade methods with meaningful return values (bool for existence checks, etc.)
+- Facades handle all validation and state updates
+- Use proper lookup methods - never treat IDs as array indices
 
 ## Leverage Existing Code
-- Use existing framework widgets (e.g., `AsyncValueAwaiter`) instead of verbose `.when()` calls
-- DO NOT reinvent what exists in the codebase
+- Use existing framework widgets and utilities instead of reinventing
 - Check for helper widgets/utilities BEFORE writing boilerplate
 - Reuse patterns consistently across the codebase
 - Look for existing abstractions before creating new ones
 
 ## Preserving Functionality
-- DO NOT remove important details:
-  - Widget keys
-  - Validation logic
-  - State restoration registration
-  - Error handling
+- DO NOT remove important details: widget keys, validation logic, state restoration registration, error handling
 - Verify functional equivalence when replacing methods
 - Test critical paths after refactoring
-- Breaking changes are acceptable ONLY if they improve maintainability significantly
+- Breaking changes are acceptable ONLY if they significantly improve maintainability
+
+## Senior-Level Thinking
+
+### Analyze, Don't Just Follow
+- Understand WHY a principle exists, not just WHAT it says
+- Identify patterns and anti-patterns proactively across the entire codebase
+- Fix systemic issues, not just symptoms
+- Ensure consistency - if you fix something in one place, check if the same issue exists elsewhere
+
+### Question and Improve
+- If a method takes data as a parameter instead of using class members, ask: "Should this be an extension on that type?"
+- If you see repetitive code, ask: "Can this be encapsulated in a helper method?"
+- If you see external dependencies in extensions, ask: "Should this be a facade method instead?"
+- If you see circular dependencies, ask: "How can I restructure this into a tree?"
+
+### Apply Principles Holistically
+- Don't just fix the example shown - analyze the entire codebase for similar issues
+- Maintain architectural consistency - all facades should follow the same patterns
+- Think about maintainability, testability, and extensibility
+- Balance purity with pragmatism - perfect is the enemy of good
+
+### Key Questions to Ask
+1. **Encapsulation**: Does this method operate on its own class's data?
+2. **Responsibility**: Does this class/method have a single, clear purpose?
+3. **Dependencies**: Are dependencies unidirectional? Any circular references?
+4. **Abstraction**: Are framework details hidden behind clean interfaces?
+5. **Consistency**: Does this follow the same pattern as similar code elsewhere?
+6. **Simplicity**: Is this the minimal code needed, or am I over-engineering?

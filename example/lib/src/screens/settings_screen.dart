@@ -47,9 +47,7 @@ class SettingsScreen extends TabNavScreen {
               const Divider(thickness: 1, indent: 50, endIndent: 50),
               ElevatedButton(
                   child: const Text('Show Modal Dialog'),
-                  onPressed: () {
-                    SettingsDataAccess.showDialog(ref);
-                  }
+                  onPressed: () => settingsDal.showDialog(ref)
               )
             ]
     );
@@ -64,7 +62,7 @@ class SettingsScreen extends TabNavScreen {
 
   @override
   NavScreen? topScreen(WidgetRef ref) {
-    final showDialog = SettingsDataAccess.shouldShowDialog(ref);
+    final showDialog = settingsDal.shouldShowDialog(ref);
     return showDialog ? const SettingsChildModalDialog() : null;
   }
 }

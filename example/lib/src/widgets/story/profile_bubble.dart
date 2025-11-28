@@ -17,7 +17,7 @@ class ProfileBubble extends ConsumerWidget {
         child: Column(
           children: [
             CircleAvatar(
-                radius: selected ? 30 : 40,
+                radius: selected ? 40 : 30,
                 backgroundImage: NetworkImage(story.bubble.imageURL)
             ),
             if(selected) Text(story.bubble.text)

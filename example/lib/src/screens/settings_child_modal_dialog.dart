@@ -68,7 +68,7 @@ class SettingsChildModalDialog extends FullScreenModalDialog {
   @override
   void updateStateOnScreenRemovalFromNavStackTop(WidgetRef ref) {
     super.updateStateOnScreenRemovalFromNavStackTop(ref);
-    SettingsDataAccess.hideDialog(ref);
+    settingsDal.hideDialog(ref);
   }
 
   @override

@@ -2,30 +2,105 @@ import 'package:example/src/models/stories_models.dart';
 import 'package:example/src/providers/stories_provider.dart' as providers;
 import 'package:flutter_nav2_oop/all.dart';
 
+extension StoryListEx on List<Story> {
+  Story? getById(int? storyId) =>
+      storyId == null ? null : firstSafeWhere((s) => s.id == storyId);
+}
+
 class Stories {
+  // Provider access helpers - encapsulate .value boilerplate
+  int? _watchCurrentStoryId(WidgetRef ref) => 
+      ref.watch(providers.restorableCurrentStoryIdProvider).value;
+  
+  void _setCurrentStoryId(WidgetRef ref, int? id) => 
+      ref.read(providers.restorableCurrentStoryIdProvider).value = id;
+  
+  int? _watchCurrentPageId(WidgetRef ref) => 
+      ref.watch(providers.restorableCurrentPageIdProvider).value;
+  
+  int? _readCurrentPageId(WidgetRef ref) => 
+      ref.read(providers.restorableCurrentPageIdProvider).value;
+  
+  void _setCurrentPageId(WidgetRef ref, int? id) => 
+      ref.read(providers.restorableCurrentPageIdProvider).value = id;
+  
+  // Public API - clean, no boilerplate
   AsyncValue<List<Story>> getStories(WidgetRef ref) => 
       ref.watch(providers.storiesProvider);
   
+  Future<List<Story>> getStoriesAsync(WidgetRef ref) async =>
+      await ref.read(providers.storiesProvider.future);
+  
   Story? watchForCurrentStory(WidgetRef ref) {
-    final int? storyId = ref.watch(providers.restorableCurrentStoryIdProvider).value;
+    final storyId = _watchCurrentStoryId(ref);
     if (storyId == null) return null;
     final stories = ref.watch(providers.storiesProvider).value;
-    return _getById(stories, storyId);
+    return stories?.getById(storyId);
+  }
+  
+  StoryPage? watchForCurrentPage(WidgetRef ref) {
+    final pageId = _watchCurrentPageId(ref);
+    if (pageId == null) return null;
+    final story = watchForCurrentStory(ref);
+    return story?.getPageById(pageId);
   }
 
-  static Story? _getById(List<Story>? stories, int? storyId) =>
-      storyId == null ? null : stories?.firstSafeWhere((s) => s.id == storyId);
-
   void setCurrentStory(WidgetRef ref, Story? story) {
-    ref.read(providers.restorableCurrentStoryIdProvider).value = story?.id;
+    _setCurrentStoryId(ref, story?.id);
     
     if (story == null) {
-      StoryEx.cancelNextPageOperation();
+      cancelNextPageOperation();
     } else {
-      final currentPageId = ref.read(providers.restorableCurrentPageIdProvider).value;
+      final currentPageId = _readCurrentPageId(ref);
       final currentPage = story.getPageById(currentPageId) ?? story[0];
-      StoryEx.setCurrentPage(ref, currentPage);
+      setCurrentPage(ref, currentPage);
     }
+  }
+  
+  void setCurrentPage(WidgetRef ref, StoryPage? page) {
+    _setCurrentPageId(ref, page?.id);
+    cancelNextPageOperation();
+  }
+  
+  void cancelNextPageOperation() {
+    _cancellationToken?.cancel();
+    _cancellationToken = null;
+  }
+  
+  CancellationToken? _cancellationToken;
+  
+  Future<bool> validateAndSetCurrentStoryAndPage(WidgetRef ref, int storyId, int? pageId) async {
+    final stories = await getStoriesAsync(ref);
+    final story = stories.getById(storyId);
+    if (story == null) return false;
+
+    StoryPage? page = story.getPageById(pageId);
+    if (page == null) {
+      if (pageId != null) return false;
+      if (story.pages.isNotEmpty) page = story[0];
+    }
+
+    setCurrentStory(ref, story);
+    setCurrentPage(ref, page);
+    return true;
+  }
+  
+  void scheduleStoryPage(WidgetRef ref, Story story, int delayMilliseconds, StoryPage? pageToShow) {
+    if (story.pages.isEmpty || pageToShow == null) return;
+
+    cancelNextPageOperation();
+    final pageId = pageToShow.id;
+    _cancellationToken = CancellationToken();
+    final token = _cancellationToken!;
+    
+    token.run(() => Future.delayed(
+      Duration(milliseconds: delayMilliseconds),
+      () {
+        if (!token.isCancelled) {
+          _setCurrentPageId(ref, pageId);
+        }
+      }
+    ));
   }
 
   void invalidate(WidgetRef ref) => ref.invalidate(providers.storiesProvider);
@@ -34,15 +109,6 @@ class Stories {
 final storiesDal = Stories();
 
 extension StoryEx on Story {
-  static CancellationToken? _cancellationToken;
-
-  static StoryPage? watchForCurrentPage(WidgetRef ref) {
-    final int? pageId = ref.watch(providers.restorableCurrentPageIdProvider).value;
-    if (pageId == null) return null;
-    final story = storiesDal.watchForCurrentStory(ref);
-    return story?.getPageById(pageId);
-  }
-
   int getPageDurationMilliseconds(StoryPage? page) {
     final duration = page?.duration ?? defaultDuration;
     return (duration * 1000).toInt();
@@ -67,55 +133,10 @@ extension StoryEx on Story {
   StoryPage? operator [](int? index) =>
       index == null || index < 0 || index >= pages.length ? null : pages[index];
 
-  static void setCurrentPage(WidgetRef ref, StoryPage? page) {
-    ref.read(providers.restorableCurrentPageIdProvider).value = page?.id;
-    cancelNextPageOperation();
-  }
-
-  static void cancelNextPageOperation() {
-    _cancellationToken?.cancel();
-    _cancellationToken = null;
-  }
-
   void scheduleNextStoryPage(WidgetRef ref, StoryPage? currentPage) {
     final delay = getPageDurationMilliseconds(currentPage);
     final nextPage = this.nextPage(currentPage, loop: true);
-    scheduleStoryPage(ref, delay, nextPage);
-  }
-
-  void scheduleStoryPage(WidgetRef ref, int delayMilliseconds, StoryPage? pageToShow) {
-    if (pages.isEmpty || pageToShow == null) return;
-
-    cancelNextPageOperation();
-    final pageIdProvider = ref.read(providers.restorableCurrentPageIdProvider);
-    final pageId = pageToShow.id;
-    _cancellationToken = CancellationToken();
-    final token = _cancellationToken!;
-    
-    token.run(() => Future.delayed(
-      Duration(milliseconds: delayMilliseconds),
-      () {
-        if (!token.isCancelled) {
-          pageIdProvider.value = pageId;
-        }
-      }
-    ));
-  }
-
-  static Future<bool> validateAndSetCurrentStoryAndPage(WidgetRef ref, int storyId, int? pageId) async {
-    final List<Story> stories = await ref.read(providers.storiesProvider.future);
-    final Story? story = Stories._getById(stories, storyId);
-    if (story == null) return false;
-
-    StoryPage? page = story.getPageById(pageId);
-    if (page == null) {
-      if (pageId != null) return false;
-      if (story.pages.isNotEmpty) page = story[0];
-    }
-
-    storiesDal.setCurrentStory(ref, story);
-    setCurrentPage(ref, page);
-    return true;
+    storiesDal.scheduleStoryPage(ref, this, delay, nextPage);
   }
 }
 

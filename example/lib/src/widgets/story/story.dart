@@ -30,7 +30,7 @@ class StoryPageWidget extends ConsumerWidget {
               SingleChildScrollView(scrollDirection: Axis.vertical,
                   child: GestureDetector(
                     child: InternetImageWidget(page.imageURL),
-                    onTap: () => StoryEx.setCurrentPage(ref, _nextPage)
+                    onTap: () => storiesDal.setCurrentPage(ref, _nextPage)
                   )
               )
             )
